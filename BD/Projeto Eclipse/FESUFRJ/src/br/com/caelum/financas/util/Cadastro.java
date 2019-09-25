@@ -1,5 +1,7 @@
 package br.com.caelum.financas.util;
 
+
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,7 +14,7 @@ import br.com.caelum.financas.modelo.Professor;
 
 public class Cadastro {
 	
-	public static void cadastraAluno(String nome, String data_nascimento, String cpf, String endereco, String email) {
+	public static void cadastraAluno(String nome, LocalDate data_nascimento, String cpf, String endereco, String email) {
 		
 		Pessoa pessoa = new Pessoa(nome, data_nascimento, cpf, endereco, email);
 		Aluno aluno = new Aluno(pessoa);
@@ -55,7 +57,7 @@ public class Cadastro {
 		
 	}
 	
-	public static void cadastraProfessor(String nome, String data_nascimento, String cpf, String endereco, String email) {
+	public static void cadastraProfessor(String nome, LocalDate data_nascimento, String cpf, String endereco, String email) {
 		
 		Pessoa pessoa = new Pessoa(nome, data_nascimento, cpf, endereco, email);
 		Professor professor = new Professor(pessoa);

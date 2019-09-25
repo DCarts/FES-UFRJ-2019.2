@@ -23,6 +23,8 @@ public class Disciplina {
 		this.descricao = descricao;
 	}
 	
+	public Disciplina() {}
+	
 	
 	public Integer getId() {
 		return id;

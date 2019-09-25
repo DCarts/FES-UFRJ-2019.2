@@ -15,9 +15,8 @@ public class PopulaConta {
 
 		//Conta conta1 = new Conta();
 		
-		Disciplina conta1 = new Disciplina();
-		conta1.setDescricao("Conserta PC");
-		conta1.setNome("Informatica");
+		//Disciplina conta1 = new Disciplina("Calculo 1", "Calculo infinitesimal");
+		//Cadastro.cadastraDisciplina(conta1.getNome(), conta1.getDescricao());
 
 		//conta1.setBanco("001 - BANCO DO BRASIL");
 		//conta1.setNumero("16987-8");
@@ -27,7 +26,7 @@ public class PopulaConta {
 
 
 		// persistindo as contas
-		manager.persist(conta1);
+		//manager.persist(conta1);
 
 		manager.getTransaction().commit();
 

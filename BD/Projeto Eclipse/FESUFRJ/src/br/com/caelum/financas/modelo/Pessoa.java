@@ -1,12 +1,15 @@
 package br.com.caelum.financas.modelo;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Pessoa {
@@ -15,16 +18,21 @@ public class Pessoa {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-	private String data_nascimento;
-	@Column(unique = true)
+	
+
+	private LocalDate data_nascimento;
+	
+	
+	@Column(unique = true, length = 12)
 	private String cpf;
+	
 	private String endereco;
 	private String email;
 	
 	
 	
 	
-	public Pessoa(String nome, String data_nascimento, String cpf, String endereco, String email) {
+	public Pessoa(String nome, java.time.LocalDate data_nascimento, String cpf, String endereco, String email) {
 		this.nome = nome;
 		this.data_nascimento = data_nascimento;
 		this.cpf = cpf;
@@ -53,11 +61,11 @@ public class Pessoa {
 		this.nome = nome;
 	}
 
-	public String getData_nascimento() {
+	public java.time.LocalDate getData_nascimento() {
 		return data_nascimento;
 	}
 
-	public void setData_nascimento(String data_nascimento) {
+	public void setData_nascimento(java.time.LocalDate data_nascimento) {
 		this.data_nascimento = data_nascimento;
 	}
 
