@@ -9,9 +9,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.CadastroAlunoController">
+<VBox minHeight="180.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.CadastroAlunoController">
    <children>
       <MenuBar>
         <menus>
@@ -32,73 +32,52 @@
           </Menu>
         </menus>
       </MenuBar>
-      <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" spacing="20.0">
+      <HBox prefHeight="200.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label text="Nome" />
-            <TextField fx:id="campoNome" />
+            <VBox alignment="TOP_RIGHT" prefHeight="375.0" prefWidth="130.0" spacing="20.0">
+               <children>
+                  <Label text="Nome" />
+                  <Label text="Data de nascimento" />
+                  <Label text="CPF" />
+                  <Label text="Endereço" />
+                  <Label text="Email" />
+               </children>
+               <padding>
+                  <Insets right="10.0" top="20.0" />
+               </padding>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="12.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <TextField fx:id="campoNome" promptText="Nome e sobrenome" />
+                  <TextField fx:id="campoDataNasc" promptText="ano-mes-dia" />
+                  <TextField fx:id="campoCPF" promptText="___.___.___-__">
+                     <font>
+                        <Font name="Calibri" size="12.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="campoEndereco" />
+                  <TextField fx:id="campoEmail" />
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" top="16.0" />
+               </padding>
+            </VBox>
          </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
+      </HBox>
+      <HBox alignment="CENTER" prefWidth="600.0">
+         <children>
+            <Button fx:id="botaoEnviar" mnemonicParsing="false" onAction="#onEnviar" text="Cadastrar">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+         </children>
          <VBox.margin>
-            <Insets />
+            <Insets bottom="20.0" />
          </VBox.margin>
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" spacing="20.0">
-         <children>
-            <Label text="Data de Nascimento" />
-            <TextField fx:id="campoDataNasc" />
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" spacing="20.0">
-         <children>
-            <Label text="CPF" />
-            <TextField fx:id="campoCPF" />
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" spacing="20.0">
-         <children>
-            <Label text="Endereço" />
-            <TextField fx:id="campoEndereco" />
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" spacing="20.0">
-         <children>
-            <Label text="E-mail" />
-            <TextField fx:id="campoEmail" />
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="83.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
-         <children>
-            <Button fx:id="botaoEnviar" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#onEnviar" text="Button" />
-         </children>
       </HBox>
    </children>
 </VBox>

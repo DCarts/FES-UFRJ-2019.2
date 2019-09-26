@@ -62,4 +62,10 @@ public class CadastroAlunoController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
+
+/*    @FXML
+    public void metodoX() {
+        throw new UnsupportedOperationException("Nao foi implementado ainda.");
+    }*/
 }
