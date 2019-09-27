@@ -1,12 +1,11 @@
-package br.com.caelum.financas.teste;
+package br.com.fes.scoa.teste;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-
-import br.com.caelum.financas.modelo.Pessoa;
-import br.com.caelum.financas.util.JPAUtil;
+import br.com.fes.scoa.modelo.Pessoa;
+import br.com.fes.scoa.util.JPAUtil;
 
 import java.time.LocalDate;
 

@@ -10,9 +10,11 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import java.sql.Date;
+import br.com.fes.scoa.util.*;
 
-import models.Aluno;
+
+import java.time.format.DateTimeFormatter;
+
 import utils.MaskedTextField;
 
 public class CadastroAlunoController implements Initializable {
@@ -53,18 +55,17 @@ public class CadastroAlunoController implements Initializable {
         alert.initOwner(botaoEnviar.getScene().getWindow());
         Optional<ButtonType> result = alert.showAndWait();
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
-            Aluno novoAluno = new Aluno(
+        	AlunoDAO.cadastraAluno(
                     campoNome.getCharacters().toString(),
+                    campoDataNasc.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                     campoCPF.getPlainText(),
-                    campoEmail.getCharacters().toString(),
                     campoEndereco.getCharacters().toString(),
-                    Date.valueOf(campoDataNasc.getValue()));
+                    campoEmail.getCharacters().toString());
             try {
-                novoAluno.save();
                 Alert errAlert = new Alert(Alert.AlertType.INFORMATION);
                 errAlert.setTitle("Aluno Cadastrado");
                 errAlert.setHeaderText("Aluno Cadastrado:");
-                errAlert.setContentText("O aluno \"" + novoAluno.toString() + "\" foi cadastrado com sucesso.");
+                errAlert.setContentText("O aluno foi cadastrado com sucesso.");
                 errAlert.show();
             } catch (Exception err) {
                 Alert errAlert = new Alert(Alert.AlertType.ERROR);

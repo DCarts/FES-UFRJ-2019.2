@@ -1,4 +1,4 @@
-package br.com.caelum.financas.modelo;
+package br.com.fes.scoa.modelo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
