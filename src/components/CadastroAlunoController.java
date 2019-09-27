@@ -1,6 +1,5 @@
-package sample;
+package components;
 
-import br.com.caelum.financas.util.Cadastro;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,9 +7,13 @@ import javafx.scene.control.*;
 import javafx.stage.StageStyle;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import java.sql.Date;
+
+import models.Aluno;
+import utils.MaskedTextField;
 
 public class CadastroAlunoController implements Initializable {
 
@@ -18,10 +21,10 @@ public class CadastroAlunoController implements Initializable {
     public TextField campoNome;
 
     @FXML
-    public TextField campoDataNasc;
+    public DatePicker campoDataNasc;
 
     @FXML
-    public TextField campoCPF;
+    public MaskedTextField campoCPF;
 
     @FXML
     public TextField campoEndereco;
@@ -36,7 +39,7 @@ public class CadastroAlunoController implements Initializable {
     public void onEnviar(ActionEvent event) {
         StringBuilder sb = new StringBuilder(); sb.append('\n');
         sb.append(campoNome.getCharacters()); sb.append('\n');
-        sb.append(campoDataNasc.getCharacters()); sb.append('\n');
+        sb.append(campoDataNasc); sb.append('\n');
         sb.append(campoCPF.getCharacters()); sb.append('\n');
         sb.append(campoEndereco.getCharacters()); sb.append('\n');
         sb.append(campoEmail.getCharacters()); sb.append('\n');
@@ -50,11 +53,27 @@ public class CadastroAlunoController implements Initializable {
         alert.initOwner(botaoEnviar.getScene().getWindow());
         Optional<ButtonType> result = alert.showAndWait();
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
-            Cadastro.cadastraAluno(campoNome.getCharacters().toString(),
-                    LocalDate.parse(campoDataNasc.getCharacters()),
-                    campoCPF.getCharacters().toString(),
+            Aluno novoAluno = new Aluno(
+                    campoNome.getCharacters().toString(),
+                    campoCPF.getPlainText(),
+                    campoEmail.getCharacters().toString(),
                     campoEndereco.getCharacters().toString(),
-                    campoEmail.getCharacters().toString());
+                    Date.valueOf(campoDataNasc.getValue()));
+            try {
+                novoAluno.save();
+                Alert errAlert = new Alert(Alert.AlertType.INFORMATION);
+                errAlert.setTitle("Aluno Cadastrado");
+                errAlert.setHeaderText("Aluno Cadastrado:");
+                errAlert.setContentText("O aluno \"" + novoAluno.toString() + "\" foi cadastrado com sucesso.");
+                errAlert.show();
+            } catch (Exception err) {
+                Alert errAlert = new Alert(Alert.AlertType.ERROR);
+                errAlert.setTitle("Erro no cadastro");
+                errAlert.setHeaderText("Segue o erro no cadastro");
+                errAlert.setContentText(err.getLocalizedMessage());
+                errAlert.show();
+            }
+
         }
     }
 
