@@ -45,6 +45,7 @@ public static void cadastraProfessor(String nome, String str_data_nascimento, St
 				em.persist(professor);
 			}
 			else {
+				// @TODO reportar isso ao usuário de alguma forma quando ele tenta cadastrar um professor que ja esta cadastrado
 				System.out.println(resultado2.get(0).getPessoa().getNome() + " ja esta cadastrado(a) como professor(a)\n CPF: " + 
 						resultado2.get(0).getPessoa().getCpf());
 			}

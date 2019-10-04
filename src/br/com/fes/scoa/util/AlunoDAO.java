@@ -46,6 +46,8 @@ public class AlunoDAO {
 				em.persist(aluno);
 			}
 			else {
+				// @TODO reportar isso ao usuário de alguma forma quando ele tenta cadastrar um aluno que ja esta cadastrado
+
 				System.out.println(resultado2.get(0).getPessoa().getNome() + " ja esta cadastrado(a) como aluno(a)\n CPF: " + 
 						resultado2.get(0).getPessoa().getCpf());
 			}
