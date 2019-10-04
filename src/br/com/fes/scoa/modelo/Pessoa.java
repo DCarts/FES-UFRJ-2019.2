@@ -1,15 +1,13 @@
 package br.com.fes.scoa.modelo;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableBooleanValue;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 @Entity
 public class Pessoa {
@@ -28,9 +26,10 @@ public class Pessoa {
 	
 	private String endereco;
 	private String email;
-	
-	
-	
+
+	@Transient
+	private BooleanProperty checked = new SimpleBooleanProperty(false);
+
 	
 	public Pessoa(String nome, java.time.LocalDate data_nascimento, String cpf, String endereco, String email) {
 		this.nome = nome;
@@ -42,8 +41,10 @@ public class Pessoa {
 	
 	public Pessoa() {}
 
-
-
+	@Override
+	public String toString() {
+		return this.getNome();
+	}
 
 	public Integer getId() {
 		return id;
@@ -92,10 +93,19 @@ public class Pessoa {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
-	
-	
-	
 
+	@Transient
+	public ObservableBooleanValue getChecked() {
+		return checked;
+	}
+
+	@Transient
+	public Boolean isChecked() {
+		return getChecked().getValue();
+	}
+
+	@Transient
+	public void setChecked(Boolean checked) {
+		this.checked.set(checked);
+	}
 }

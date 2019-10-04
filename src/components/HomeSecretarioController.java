@@ -22,6 +22,9 @@ public class HomeSecretarioController implements Initializable {
     public Button botaoNovoAluno;
 
     @FXML
+    public Button botaoListaAlunos;
+
+    @FXML
     public Button botaoNovoProfessor;
 
     @FXML
@@ -34,6 +37,21 @@ public class HomeSecretarioController implements Initializable {
                     Objects.requireNonNull(getClass().getClassLoader().getResource("components/cadastro_aluno.fxml")));
             Stage stage = new Stage();
             stage.setTitle("Cadastrar aluno");
+            stage.setScene(new Scene(root, 400, 400));
+            stage.show();
+            Platform.runLater(stage::requestFocus);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onListaAlunos(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("components/lista_alunos.fxml")));
+            Stage stage = new Stage();
+            stage.setTitle("Alunos");
             stage.setScene(new Scene(root, 400, 400));
             stage.show();
             Platform.runLater(stage::requestFocus);
