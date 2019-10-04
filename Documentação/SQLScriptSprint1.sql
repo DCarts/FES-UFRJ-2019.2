@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS `scoadb`.`Aluno` (
   PRIMARY KEY (`pessoa_id`),
   CONSTRAINT `FKdhmnlbjhg21llgs46ekorgswx`
     FOREIGN KEY (`pessoa_id`)
-    REFERENCES `scoadb`.`Pessoa` (`id`))
+    REFERENCES `scoadb`.`Pessoa` (`id`)
+	ON DELETE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -73,7 +74,9 @@ CREATE TABLE IF NOT EXISTS `scoadb`.`Professor` (
   PRIMARY KEY (`pessoa_id`),
   CONSTRAINT `FKhdx7tr0f98w7q50nwskcakga2`
     FOREIGN KEY (`pessoa_id`)
-    REFERENCES `scoadb`.`Pessoa` (`id`))
+    REFERENCES `scoadb`.`Pessoa` (`id`)
+	ON DELETE CASCADE)
+	
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;

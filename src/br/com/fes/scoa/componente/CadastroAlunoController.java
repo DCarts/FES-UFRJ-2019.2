@@ -1,6 +1,8 @@
-package components;
+package br.com.fes.scoa.componente;
 
 import com.sun.org.apache.xpath.internal.functions.FuncFalse;
+
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,6 +13,8 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import br.com.fes.scoa.modelo.Aluno;
+import br.com.fes.scoa.modelo.Pessoa;
 import br.com.fes.scoa.util.*;
 
 
@@ -37,12 +41,14 @@ public class CadastroAlunoController implements Initializable {
 
     @FXML
     public Button botaoEnviar;
+    
+    private ObservableList<Pessoa> lista = null;
 
     @FXML
     public void onEnviar(ActionEvent event) {
         String s = "\n" +
                 campoNome.getCharacters() + '\n' +
-                campoDataNasc + '\n' +
+                campoDataNasc.getValue().toString() + '\n' +
                 campoCPF.getCharacters() + '\n' +
                 campoEndereco.getCharacters() + '\n' +
                 campoEmail.getCharacters() + '\n';
@@ -58,12 +64,13 @@ public class CadastroAlunoController implements Initializable {
         setEditable(false);
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             try {
-                AlunoDAO.cadastraAluno(
+                Aluno aluno = AlunoDAO.cadastraAluno(
                         campoNome.getCharacters().toString(),
-                        campoDataNasc.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                        campoDataNasc.getValue().toString(),
                         campoCPF.getPlainText(),
                         campoEndereco.getCharacters().toString(),
                         campoEmail.getCharacters().toString());
+                lista.add(aluno.getPessoa());
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Aluno cadastrado");
                 successAlert.setHeaderText("Aluno cadastrado:");
@@ -100,6 +107,11 @@ public class CadastroAlunoController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
+	public void setLista(ObservableList<Pessoa> items) {
+		lista = items;
+		
+	}
 
 
 /*    @FXML

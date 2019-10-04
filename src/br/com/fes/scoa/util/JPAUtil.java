@@ -13,14 +13,14 @@ public class JPAUtil {
 	}
 	
 	public static EntityManager abreConexao() {
+		
 		EntityManager em = new JPAUtil().getEntityManager();
 		em.getTransaction().begin();
 		return em;
 	}
 	
-	public static void commitEFechaConexao(EntityManager em) {
+	public static void commit(EntityManager em) {
 		em.getTransaction().commit();
-		em.close();
 	}
 
 }

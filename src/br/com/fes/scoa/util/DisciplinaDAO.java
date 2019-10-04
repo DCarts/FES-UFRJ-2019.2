@@ -14,7 +14,7 @@ public class DisciplinaDAO {
 		
 		em.persist(disciplina);
 		
-		JPAUtil.commitEFechaConexao(em);
+		JPAUtil.commit(em);
 		
 		
 	}

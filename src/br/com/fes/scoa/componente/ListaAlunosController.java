@@ -1,4 +1,4 @@
-package components;
+package br.com.fes.scoa.componente;
 
 import br.com.fes.scoa.modelo.Pessoa;
 import javafx.application.Platform;
@@ -72,6 +72,7 @@ public class ListaAlunosController implements Initializable {
         tabela.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         tabela.setItems(listar());
+        
     }
 
     private ObservableList<Pessoa> listar() {
@@ -89,13 +90,18 @@ public class ListaAlunosController implements Initializable {
 
     public void onCriar(ActionEvent actionEvent) {
         try {
-            Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("components/cadastro_aluno.fxml")));
+        	FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("componente/cadastro_aluno.fxml")));
+        	Parent root = loader.load();
+        	CadastroAlunoController controller = loader.getController();
+        	controller.setLista(tabela.getItems());
             Stage stage = new Stage();
             stage.setTitle("Cadastrar aluno");
             stage.setScene(new Scene(root, 400, 400));
+            stage.initOwner(titleLabel.getScene().getWindow());
             stage.show();
             Platform.runLater(stage::requestFocus);
+           
         } catch (IOException e) {
             e.printStackTrace();
         }

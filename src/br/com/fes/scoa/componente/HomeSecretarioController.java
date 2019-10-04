@@ -1,4 +1,4 @@
-package components;
+package br.com.fes.scoa.componente;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -34,7 +34,7 @@ public class HomeSecretarioController implements Initializable {
     public void onNovoAluno(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("components/cadastro_aluno.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("componente/cadastro_aluno.fxml")));
             Stage stage = new Stage();
             stage.setTitle("Cadastrar aluno");
             stage.setScene(new Scene(root, 400, 400));
@@ -49,7 +49,7 @@ public class HomeSecretarioController implements Initializable {
     public void onListaAlunos(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("components/lista_alunos.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("componente/lista_alunos.fxml")));
             Stage stage = new Stage();
             stage.setTitle("Alunos");
             stage.setScene(new Scene(root, 400, 400));
@@ -64,7 +64,7 @@ public class HomeSecretarioController implements Initializable {
     public void onNovoProfessor(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("components/cadastro_professor.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("componente/cadastro_professor.fxml")));
             Stage stage = new Stage();
             stage.setTitle("Cadastrar professor");
             stage.setScene(new Scene(root, 400, 400));
@@ -79,7 +79,7 @@ public class HomeSecretarioController implements Initializable {
     public void onNovaDisciplina(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("components/cadastro_disciplina.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("componente/cadastro_disciplina.fxml")));
             Stage stage = new Stage();
             stage.setTitle("Cadastrar disciplina");
             stage.setScene(new Scene(root, 400, 400));

@@ -52,7 +52,7 @@ public static void cadastraProfessor(String nome, String str_data_nascimento, St
 			
 		}
 		
-		JPAUtil.commitEFechaConexao(em);
+		JPAUtil.commit(em);
 		
 		
 	}
