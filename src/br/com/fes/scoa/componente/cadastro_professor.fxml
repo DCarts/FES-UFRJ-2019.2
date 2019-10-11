@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import utils.MaskedTextField?>
 
-<VBox minHeight="180.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="componente.CadastroProfessorController">
+<VBox minHeight="180.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.fes.scoa.componente.CadastroProfessorController">
     <MenuBar>
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" text="Close" />

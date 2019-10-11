@@ -91,7 +91,7 @@ public class ListaAlunosController implements Initializable {
     public void onCriar(ActionEvent actionEvent) {
         try {
         	FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("componente/cadastro_aluno.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_aluno.fxml")));
         	Parent root = loader.load();
         	CadastroAlunoController controller = loader.getController();
         	controller.setLista(tabela.getItems());

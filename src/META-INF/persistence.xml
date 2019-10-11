@@ -11,27 +11,26 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!-- Aqui são listadas todas as entidades -->
-        <class>br.com.caelum.financas.modelo.Pessoa</class>
-        <class>br.com.caelum.financas.modelo.Aluno</class>
-        <class>br.com.caelum.financas.modelo.Professor</class>
-        <class>br.com.caelum.financas.modelo.Disciplina</class>
+        <class>br.com.fes.scoa.modelo.Pessoa</class>
+        <class>br.com.fes.scoa.modelo.Aluno</class>
+        <class>br.com.fes.scoa.modelo.Professor</class>
+        <class>br.com.fes.scoa.modelo.Disciplina</class>
 
         <properties>    
             <!-- Propriedades JDBC -->
             <property name="javax.persistence.jdbc.driver" 
-                value="com.mysql.jdbc.Driver" />
+                value="org.sqlite.JDBC" />
 
             <property name="javax.persistence.jdbc.url" 
-                value="jdbc:mysql://db4free.net:3306/scoadb" />
+                value="jdbc:sqlite:SCOA.db" />
 
             <property name="javax.persistence.jdbc.user" value="fes20192" />
             <property name="javax.persistence.jdbc.password" value="fes20192" />
 
             <!-- Configurações específicas do Hibernate -->
             <property name="hibernate.dialect" 
-                value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+                value="org.hibernate.dialect.SQLiteDialect" />
 
-            <property name="hibernate.hbm2ddl.auto" value="update" />
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
         </properties>

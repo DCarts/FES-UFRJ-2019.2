@@ -14,7 +14,7 @@
 <?import utils.MaskedTextField?>
 
 <VBox minHeight="180.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="componente.CadastroAlunoController">
+      fx:controller="br.com.fes.scoa.componente.CadastroAlunoController">
     <MenuBar>
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" text="Close"/>

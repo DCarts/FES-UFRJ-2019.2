@@ -29,7 +29,7 @@ public class Main extends Application {
     	t1.start();
   		
     	
-        Parent root = FXMLLoader.load(getClass().getResource("componente/home_secretario.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("./componente/home_secretario.fxml"));
         primaryStage.setTitle("SCOA");
         primaryStage.setScene(new Scene(root));
         primaryStage.onCloseRequestProperty().setValue(evt -> {em.close(); Platform.exit();});
