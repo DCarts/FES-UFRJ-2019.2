@@ -92,9 +92,8 @@ public class ListaAlunosController implements Initializable {
         try {
         	FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_aluno.fxml")));
+        	loader.setControllerFactory((t) -> new CadastroAlunoController(tabela.getItems()));
         	Parent root = loader.load();
-        	CadastroAlunoController controller = loader.getController();
-        	controller.setLista(tabela.getItems());
             Stage stage = new Stage();
             stage.setTitle("Cadastrar aluno");
             stage.setScene(new Scene(root, 400, 400));

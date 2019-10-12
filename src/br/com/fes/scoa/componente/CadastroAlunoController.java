@@ -42,7 +42,16 @@ public class CadastroAlunoController implements Initializable {
     @FXML
     public Button botaoEnviar;
     
-    private ObservableList<Pessoa> lista = null;
+    private final ObservableList<Pessoa> lista;
+
+    public CadastroAlunoController(ObservableList<Pessoa> items) {
+        lista = items;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
 
     @FXML
     public void onEnviar(ActionEvent event) {
@@ -103,19 +112,4 @@ public class CadastroAlunoController implements Initializable {
             botaoEnviar.setDisable(!edit);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
-	public void setLista(ObservableList<Pessoa> items) {
-		lista = items;
-		
-	}
-
-
-/*    @FXML
-    public void metodoX() {
-        throw new UnsupportedOperationException("Nao foi implementado ainda.");
-    }*/
 }

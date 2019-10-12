@@ -19,8 +19,11 @@ public class JPAUtil {
 		return em;
 	}
 	
-	public static void commit(EntityManager em) {
-		em.getTransaction().commit();
+	static void commit(EntityManager em) {
+		if (em.getTransaction().isActive()) {
+            em.getTransaction().commit();
+            em.getTransaction().begin();
+        }
 	}
 
 }

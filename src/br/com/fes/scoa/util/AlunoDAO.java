@@ -82,7 +82,7 @@ public class AlunoDAO {
 			}
 
 		}
-		
+
 		JPAUtil.commit(em);
 		return aluno;
 
