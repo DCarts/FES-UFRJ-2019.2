@@ -22,6 +22,7 @@ public class JPAUtil {
 	static void commit(EntityManager em) {
 		if (em.getTransaction().isActive()) {
             em.getTransaction().commit();
+            em.clear(); // @TODO resolver inconsistências entre o model (hibernate) e o banco de dados (sqlite)
             em.getTransaction().begin();
         }
 	}

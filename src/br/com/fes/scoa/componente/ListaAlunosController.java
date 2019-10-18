@@ -46,11 +46,15 @@ public class ListaAlunosController implements Initializable {
     private TableColumn<Pessoa, String> enderecoCol;
     @FXML
     private TableColumn<Pessoa, String> data_nascimentoCol;
+    
+    @FXML
+    private TextField campoBuscar;
+    
+    @FXML
+    private Button botaoBuscar;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        titleLabel.setFont(new Font("Arial", 24));
-        titleLabel.setPadding(new Insets(0, 0, 20, 0));
         selectCol.setCellValueFactory(
                 param -> param.getValue().getChecked());
         nomeCol.setCellValueFactory(
@@ -88,6 +92,7 @@ public class ListaAlunosController implements Initializable {
         AlunoDAO.remover(selecionados);
     }
 
+    @FXML
     public void onCriar(ActionEvent actionEvent) {
         try {
         	FXMLLoader loader = new FXMLLoader(
@@ -104,5 +109,11 @@ public class ListaAlunosController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    @FXML
+    public void onBuscar(ActionEvent evt) {
+    	throw new UnsupportedOperationException("falta fazer");
+    	// @ TODO Implementar busca
     }
 }
