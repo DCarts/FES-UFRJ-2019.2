@@ -36,7 +36,7 @@ public class HomeSecretarioController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_aluno.fxml")));
-            loader.setControllerFactory((t) -> new CadastroAlunoController(FXCollections.observableArrayList()));
+            loader.setControllerFactory((t) -> new CadastroAlunoController(FXCollections.observableArrayList(), null));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Cadastrar aluno");

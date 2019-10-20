@@ -24,6 +24,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 
 public class ListaAlunosController implements Initializable {
@@ -35,6 +36,8 @@ public class ListaAlunosController implements Initializable {
     private TableView<Pessoa> tabela;
     @FXML
     private TableColumn<Pessoa, Boolean> selectCol;
+    @FXML
+    private TableColumn<Pessoa, String> editCol;
     @FXML
     private TableColumn<Pessoa, String> nomeCol;
     @FXML
@@ -55,22 +58,47 @@ public class ListaAlunosController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         selectCol.setCellValueFactory(
-                param -> param.getValue().getChecked());
+            param -> param.getValue().getChecked());
+        editCol.setCellValueFactory(
+            new PropertyValueFactory<>("nome"));
         nomeCol.setCellValueFactory(
-                new PropertyValueFactory<>("nome"));
+            new PropertyValueFactory<>("nome"));
         cpfCol.setCellValueFactory(
-                new PropertyValueFactory<>("cpf"));
+            new PropertyValueFactory<>("cpf"));
         emailCol.setCellValueFactory(
-                new PropertyValueFactory<>("email"));
+            new PropertyValueFactory<>("email"));
         enderecoCol.setCellValueFactory(
-                new PropertyValueFactory<>("endereco"));
+            new PropertyValueFactory<>("endereco"));
         data_nascimentoCol.setCellValueFactory(
-                new PropertyValueFactory<>("data_nascimento"));
+            new PropertyValueFactory<>("data_nascimento"));
 
         selectCol.setCellFactory(
-                CheckBoxTableCell.forTableColumn(selectCol));
-        tabela.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
+            CheckBoxTableCell.forTableColumn(selectCol));
+        editCol.setCellFactory(
+            new Callback<>() {
+                @Override
+                public TableCell call(final TableColumn<Pessoa, String> param) {
+                    final TableCell<Pessoa, String> cell = new TableCell<>() {
+                        final Button btn = new Button("Editar");
+                        @Override
+                        public void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                                setText(null);
+                            } else {
+                                btn.setOnAction(event -> {
+                                    Pessoa pessoa = getTableView().getItems().get(getIndex());
+                                    onEditar(pessoa);
+                                });
+                                setGraphic(btn);
+                                setText(null);
+                            }
+                        }
+                    };
+                    return cell;
+                }
+        });
         atualizarLista();
     }
 
@@ -88,7 +116,7 @@ public class ListaAlunosController implements Initializable {
         try {
         	FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_aluno.fxml")));
-        	loader.setControllerFactory((t) -> new CadastroAlunoController(tabela.getItems()));
+        	loader.setControllerFactory((t) -> new CadastroAlunoController(tabela.getItems(),null));
         	Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Cadastrar aluno");
@@ -112,6 +140,24 @@ public class ListaAlunosController implements Initializable {
         } else {
             if (!botaoBuscar.isDisabled()) botaoBuscar.setDisable(true);
             atualizarLista();
+        }
+    }
+
+    @FXML
+    public void onEditar(Pessoa pessoa) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_aluno.fxml")));
+            loader.setControllerFactory((t) -> new CadastroAlunoController(tabela.getItems(), pessoa));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Editar aluno");
+            stage.setScene(new Scene(root, 400, 400));
+            stage.initOwner(titleLabel.getScene().getWindow());
+            stage.show();
+            Platform.runLater(stage::requestFocus);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

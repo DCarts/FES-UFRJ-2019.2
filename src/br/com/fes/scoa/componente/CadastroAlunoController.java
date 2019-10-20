@@ -1,7 +1,5 @@
 package br.com.fes.scoa.componente;
 
-import com.sun.org.apache.xpath.internal.functions.FuncFalse;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,40 +15,59 @@ import br.com.fes.scoa.modelo.Aluno;
 import br.com.fes.scoa.modelo.Pessoa;
 import br.com.fes.scoa.util.*;
 
-
-import java.time.format.DateTimeFormatter;
-
 import utils.MaskedTextField;
 
 public class CadastroAlunoController implements Initializable {
-
     @FXML
     public TextField campoNome;
-
     @FXML
     public DatePicker campoDataNasc;
-
     @FXML
     public MaskedTextField campoCPF;
-
     @FXML
     public TextField campoEndereco;
-
     @FXML
     public TextField campoEmail;
-
     @FXML
     public Button botaoEnviar;
-    
-    private final ObservableList<Pessoa> lista;
 
-    public CadastroAlunoController(ObservableList<Pessoa> items) {
+    private final ObservableList<Pessoa> lista;
+    private Boolean modoEditar = false;
+    private Pessoa editarPessoa = null;
+    private String confirmDialogTitle = "Confirmar cadastro";
+    private String confirmDialogHeader = "Confirmar cadastro de aluno";
+    private String confirmDialogContent = "Tem certeza que deseja cadastrar o aluno?";
+    private String successDialogTitle = "Aluno cadastrado";
+    private String successDialogHeader = "Aluno cadastrado:";
+    private String successDialogContent = "O aluno foi cadastrado com sucesso.";
+    private String errorDialogTitle = "Erro no cadastro";
+    private String errorDialogContent = "Cheque o console para mais informações.";
+
+    public CadastroAlunoController(ObservableList<Pessoa> items, Pessoa pessoa) {
         lista = items;
+        editarPessoa = pessoa;
+        modoEditar = pessoa != null;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (modoEditar) {
+            campoNome.setText(editarPessoa.getNome());
+            campoDataNasc.setValue(editarPessoa.getData_nascimento());
+            campoCPF.setPlainText(editarPessoa.getCpf());
+            campoEndereco.setText(editarPessoa.getEndereco());
+            campoEmail.setText(editarPessoa.getEmail());
 
+            confirmDialogTitle = "Editar aluno";
+            confirmDialogHeader = "Confirmar atualização do aluno";
+            confirmDialogContent = "Tem certeza que deseja atualizar o aluno?";
+            successDialogTitle = "Aluno atualizado";
+            successDialogHeader = "Aluno atualizado:";
+            successDialogContent = "O aluno foi atualizado com sucesso.";
+            errorDialogTitle = "Erro na atualização";
+            errorDialogContent = "Cheque o console para mais informações.";
+            botaoEnviar.setText("Salvar");
+        }
     }
 
     @FXML
@@ -58,38 +75,53 @@ public class CadastroAlunoController implements Initializable {
         String s = "\n" +
                 campoNome.getCharacters() + '\n' +
                 campoDataNasc.getValue().toString() + '\n' +
-                campoCPF.getCharacters() + '\n' +
+                campoCPF.getPlainText() + '\n' +
                 campoEndereco.getCharacters() + '\n' +
                 campoEmail.getCharacters() + '\n';
         System.out.println(s);
-
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmar cadastro");
-        alert.setHeaderText("Confirmar cadastro de aluno");
-        alert.setContentText("Tem certeza que deseja cadastrar o aluno " + campoNome.getCharacters() + " ?");
+        alert.setTitle(confirmDialogTitle);
+        alert.setHeaderText(confirmDialogHeader);
+        alert.setContentText(confirmDialogContent);
         alert.initStyle(StageStyle.UTILITY);
         alert.initOwner(botaoEnviar.getScene().getWindow());
         Optional<ButtonType> result = alert.showAndWait();
         setEditable(false);
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             try {
-                Aluno aluno = AlunoDAO.cadastraAluno(
+                if (modoEditar) {
+                    Aluno aluno = AlunoDAO.editarAluno(
+                        editarPessoa.getId(),
                         campoNome.getCharacters().toString(),
                         campoDataNasc.getValue().toString(),
                         campoCPF.getPlainText(),
                         campoEndereco.getCharacters().toString(),
                         campoEmail.getCharacters().toString());
-                lista.add(aluno.getPessoa());
+                    for (int i = 0; i < lista.size(); i++) {
+                        if (lista.get(i).getId().equals(aluno.getPessoa().getId())) {
+                            lista.set(i,aluno.getPessoa());
+                            break;
+                        }
+                    }
+                } else {
+                    Aluno aluno = AlunoDAO.cadastraAluno(
+                        campoNome.getCharacters().toString(),
+                        campoDataNasc.getValue().toString(),
+                        campoCPF.getPlainText(),
+                        campoEndereco.getCharacters().toString(),
+                        campoEmail.getCharacters().toString());
+                    lista.add(aluno.getPessoa());
+                }
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Aluno cadastrado");
-                successAlert.setHeaderText("Aluno cadastrado:");
-                successAlert.setContentText("O aluno foi cadastrado com sucesso.");
+                successAlert.setTitle(successDialogTitle);
+                successAlert.setHeaderText(successDialogHeader);
+                successAlert.setContentText(successDialogContent);
                 successAlert.show();
             } catch (Exception err) {
                 Alert errAlert = new Alert(Alert.AlertType.ERROR);
-                errAlert.setTitle("Erro no cadastro");
+                errAlert.setTitle(errorDialogTitle);
                 errAlert.setHeaderText(err.toString());
-                errAlert.setContentText("Cheque o console para mais informações.");
+                errAlert.setContentText(errorDialogContent);
                 err.printStackTrace();
                 errAlert.show();
             }
@@ -111,5 +143,4 @@ public class CadastroAlunoController implements Initializable {
             campoEndereco.setEditable(edit);
             botaoEnviar.setDisable(!edit);
     }
-
 }

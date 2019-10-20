@@ -102,4 +102,33 @@ public class AlunoDAO {
 		JPAUtil.commit(em);
 		return lista;
 	}
+
+    public static Aluno editarAluno(
+			Integer id,
+			String nome,
+			String str_data_nascimento,
+			String cpf,
+			String endereco,
+			String email
+	) {
+		LocalDate data_nascimento = LocalDate.parse(str_data_nascimento);
+
+		EntityManager em = Main.em;
+		System.out.println("cpf: " + cpf);
+		Pessoa pessoa = em.find(Pessoa.class, id);
+		if (!pessoa.getNome().equals(nome))
+			pessoa.setNome(nome);
+		if (!pessoa.getCpf().equals(cpf))
+			pessoa.setCpf(cpf);
+		if (!pessoa.getData_nascimento().equals(data_nascimento))
+			pessoa.setData_nascimento(data_nascimento);
+		if (!pessoa.getEmail().equals(email))
+			pessoa.setEmail(email);
+		if (!pessoa.getEndereco().equals(endereco))
+			pessoa.setEndereco(endereco);
+		JPAUtil.commit(em);
+		Aluno aluno = new Aluno(pessoa);
+
+		return aluno;
+    }
 }
