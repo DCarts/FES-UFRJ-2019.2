@@ -16,14 +16,13 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 import br.com.fes.scoa.util.*;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.text.Font;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 
@@ -67,20 +66,12 @@ public class ListaAlunosController implements Initializable {
                 new PropertyValueFactory<>("endereco"));
         data_nascimentoCol.setCellValueFactory(
                 new PropertyValueFactory<>("data_nascimento"));
-        // EDITAR NOME
-        // nomeCol.setCellFactory(
-        //         TextFieldTableCell.forTableColumn());
 
         selectCol.setCellFactory(
                 CheckBoxTableCell.forTableColumn(selectCol));
         tabela.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        tabela.setItems(listar());
-        
-    }
-
-    private ObservableList<Pessoa> listar() {
-        return AlunoDAO.listar();
+        atualizarLista();
     }
 
     public void onRemoverSelecionados(ActionEvent actionEvent) {
@@ -112,8 +103,27 @@ public class ListaAlunosController implements Initializable {
     }
     
     @FXML
-    public void onBuscar(ActionEvent evt) {
-    	throw new UnsupportedOperationException("falta fazer");
-    	// @ TODO Implementar busca
+    public void onBuscar(KeyEvent evt) {
+        String busca = campoBuscar.getText();
+        System.out.println("busca: "+busca);
+        if (busca.length() > 0) {
+            if (botaoBuscar.isDisabled()) botaoBuscar.setDisable(false);
+            if (evt.getCode() == KeyCode.ENTER) atualizarLista();
+        } else {
+            if (!botaoBuscar.isDisabled()) botaoBuscar.setDisable(true);
+            atualizarLista();
+        }
+    }
+
+    @FXML
+    public void atualizarLista() {
+        String text = campoBuscar.getText();
+        ObservableList<Pessoa> lista;
+        if (text.length() > 0) {
+            lista = AlunoDAO.buscar(text);
+        } else {
+            lista = AlunoDAO.listar();
+        }
+        tabela.setItems(lista);
     }
 }

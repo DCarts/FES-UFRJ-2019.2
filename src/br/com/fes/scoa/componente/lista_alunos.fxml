@@ -22,19 +22,19 @@
         <right>
             <Button fx:id="botaoCriar" mnemonicParsing="false" onAction="#onCriar" text="Criar Aluno" />
         </right>
-      <padding>
-         <Insets bottom="10.0" />
-      </padding>
+        <padding>
+            <Insets bottom="10.0" />
+        </padding>
     </BorderPane>
-   <HBox spacing="20.0">
-      <children>
-         <TextField fx:id="campoBuscar" promptText="Busca..." HBox.hgrow="ALWAYS" />
-         <Button fx:id="botaoBuscar" mnemonicParsing="false" onAction="#onBuscar" text="Buscar" />
-      </children>
-      <padding>
-         <Insets bottom="10.0" top="10.0" />
-      </padding>
-   </HBox>
+    <HBox spacing="20.0">
+        <children>
+            <TextField fx:id="campoBuscar" onKeyReleased="#onBuscar" promptText="Busca..." HBox.hgrow="ALWAYS" />
+            <Button fx:id="botaoBuscar" mnemonicParsing="false" disable="true" onAction="#atualizarLista" text="Buscar" />
+        </children>
+        <padding>
+            <Insets bottom="10.0" top="10.0" />
+        </padding>
+    </HBox>
 
     <TableView fx:id="tabela" editable="true">
         <columnResizePolicy>

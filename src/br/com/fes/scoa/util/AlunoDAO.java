@@ -16,7 +16,7 @@ public class AlunoDAO {
 	public static void remover(List<Pessoa> pessoas) {
 		EntityManager em = Main.em;
 
-		String jpql = "delete from Pessoa p where p in (:pessoas)";
+		String jpql = "DELETE FROM Pessoa p WHERE p IN (:pessoas)";
 		Query query = em.createQuery(jpql);
 		query.setParameter("pessoas", pessoas);
 		int result = query.executeUpdate();
@@ -30,9 +30,9 @@ public class AlunoDAO {
 
 	public static ObservableList<Pessoa> listar() {
 		EntityManager em = Main.em;
-		String jpql = "select DISTINCT p from Pessoa p inner join Aluno a ON a.pessoa = p";
+		String jpql = "SELECT DISTINCT p FROM Pessoa p INNER JOIN Aluno a ON a.pessoa = p";
 		Query query = em.createQuery(jpql);
-		List<Pessoa> resultado = (List<Pessoa>) query.getResultList();
+		List<Pessoa> resultado = (List<Pessoa>) query.setMaxResults(10).getResultList();
 		System.out.println("Lista:");
 		resultado.forEach(System.out::println);
 		ObservableList<Pessoa> lista = FXCollections.observableArrayList(resultado);
@@ -88,4 +88,18 @@ public class AlunoDAO {
 
 	}
 
+	public static ObservableList<Pessoa> buscar(String str) {
+		String busca = "%"+str.trim().toLowerCase()+"%";
+		EntityManager em = Main.em;
+		String jpql = "SELECT DISTINCT p FROM Pessoa p INNER JOIN Aluno a ON a.pessoa = p WHERE LOWER(p.nome) LIKE :busca OR LOWER(p.email) LIKE :busca OR LOWER(p.cpf) LIKE :busca";
+		Query query = em.createQuery(jpql);
+		query.setParameter("busca", busca);
+		List<Pessoa> resultado = (List<Pessoa>) query.setMaxResults(10).getResultList();
+		System.out.println("Lista:");
+		resultado.forEach(System.out::println);
+		ObservableList<Pessoa> lista = FXCollections.observableArrayList(resultado);
+
+		JPAUtil.commit(em);
+		return lista;
+	}
 }
