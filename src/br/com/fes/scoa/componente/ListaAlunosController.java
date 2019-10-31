@@ -75,10 +75,10 @@ public class ListaAlunosController implements Initializable {
         selectCol.setCellFactory(
             CheckBoxTableCell.forTableColumn(selectCol));
         editCol.setCellFactory(
-            new Callback<>() {
+            new Callback<TableColumn<Pessoa, String>, TableCell<Pessoa, String>>() {
                 @Override
                 public TableCell call(final TableColumn<Pessoa, String> param) {
-                    final TableCell<Pessoa, String> cell = new TableCell<>() {
+                    final TableCell<Pessoa, String> cell = new TableCell<Pessoa, String>() {
                         final Button btn = new Button("Editar");
                         @Override
                         public void updateItem(String item, boolean empty) {
