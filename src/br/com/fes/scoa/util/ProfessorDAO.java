@@ -11,7 +11,7 @@ import br.com.fes.scoa.modelo.Professor;
 
 public class ProfessorDAO {
 	
-public static void cadastraProfessor(String nome, String str_data_nascimento, String cpf, String endereco, String email) {
+public static Professor cadastraProfessor(String nome, String str_data_nascimento, String cpf, String endereco, String email) {
 		
 		LocalDate data_nascimento = LocalDate.parse(str_data_nascimento);
 		
@@ -43,6 +43,7 @@ public static void cadastraProfessor(String nome, String str_data_nascimento, St
 			if(resultado2.isEmpty()) {
 				professor.setPessoa(resultado.get(0));
 				em.persist(professor);
+
 			}
 			else {
 				// @TODO reportar isso ao usuário de alguma forma quando ele tenta cadastrar um professor que ja esta cadastrado
@@ -54,7 +55,7 @@ public static void cadastraProfessor(String nome, String str_data_nascimento, St
 		
 		JPAUtil.commitEFechaConexao(em);
 		
-		
+		return professor;
 	}
 
 }

@@ -11,10 +11,14 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!-- Aqui são listadas todas as entidades -->
-        <class>br.com.caelum.financas.modelo.Pessoa</class>
-        <class>br.com.caelum.financas.modelo.Aluno</class>
-        <class>br.com.caelum.financas.modelo.Professor</class>
-        <class>br.com.caelum.financas.modelo.Disciplina</class>
+        <class>br.com.fes.scoa.modelo.Pessoa</class>
+        <class>br.com.fes.scoa.modelo.Aluno</class>
+        <class>br.com.fes.scoa.modelo.Professor</class>
+        <class>br.com.fes.scoa.modelo.Disciplina</class>
+        <class>br.com.fes.scoa.modelo.Turma</class>
+        <class>br.com.fes.scoa.modelo.TurmasAlunos</class>
+        <class>br.com.fes.scoa.modelo.Sala</class>
+        <class>br.com.fes.scoa.modelo.SalasTurmas</class>
 
         <properties>    
             <!-- Propriedades JDBC -->
