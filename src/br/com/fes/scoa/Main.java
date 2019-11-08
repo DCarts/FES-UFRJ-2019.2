@@ -18,7 +18,7 @@ public class Main extends Application {
 	public static EntityManager em;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
     	
     	
     	Thread t1 = new Thread(new Runnable() {
@@ -35,7 +35,12 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("./componente/home_secretario.fxml"));
         primaryStage.setTitle("SCOA");
         primaryStage.setScene(new Scene(root));
-        primaryStage.onCloseRequestProperty().setValue(evt -> {em.close(); Platform.exit();});
+        primaryStage.onCloseRequestProperty().setValue(evt -> {
+            try {
+                em.close();
+            } catch (Exception err) {}
+            Platform.exit();
+        });
         primaryStage.show();
         Platform.runLater(primaryStage::requestFocus);
     }
