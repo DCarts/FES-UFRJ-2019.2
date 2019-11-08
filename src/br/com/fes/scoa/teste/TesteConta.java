@@ -17,12 +17,16 @@ public class TesteConta {
 
 		EntityManager em = JPAUtil.abreConexao();
 
-		Sala sala = SalaDAO.cadastraSala("CCMNF0223");
+		Sala sala = SalaDAO.cadastraSala("CCMNF::2::F02-23");
 		Turma turma = em.find(Turma.class, 3);
 		SalaDAO.alocaTurmaNaSala(sala, turma, TipoHoraDoDia.H8);
 		SalaDAO.alocaTurmaNaSala(sala, turma, TipoHoraDoDia.H9);
 
-		JPAUtil.commitEFechaConexao(em);
+
+		em.getTransaction().commit();
+
+		em.clear();
+		em.close();
 
 		
 	}

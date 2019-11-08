@@ -2,6 +2,7 @@ package br.com.fes.scoa.util;
 
 import javax.persistence.EntityManager;
 
+import br.com.fes.scoa.Main;
 import br.com.fes.scoa.modelo.*;
 
 public class TurmaDAO {
@@ -10,11 +11,11 @@ public class TurmaDAO {
 
         Turma turma = new Turma(disciplina, professor);
 
-        EntityManager em = JPAUtil.abreConexao();
+        EntityManager em = Main.em;
 
         em.persist(turma);
 
-        JPAUtil.commitEFechaConexao(em);
+        JPAUtil.commit(em);
 
         return turma;
 
@@ -24,11 +25,11 @@ public class TurmaDAO {
 
         TurmasAlunos tAlunos = new TurmasAlunos(turma, pessoa);
 
-        EntityManager em = JPAUtil.abreConexao();
+        EntityManager em = Main.em;
 
         em.persist(tAlunos);
 
-        JPAUtil.commitEFechaConexao(em);
+        JPAUtil.commit(em);
 
     }
 
