@@ -2,12 +2,21 @@ package br.com.fes.scoa.util;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
+import br.com.fes.scoa.Main;
 import br.com.fes.scoa.modelo.Pessoa;
 import br.com.fes.scoa.modelo.Professor;
+import br.com.fes.scoa.modelo.Sala;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.hibernate.Session;
 
 public class ProfessorDAO {
 	
@@ -56,6 +65,46 @@ public static Professor cadastraProfessor(String nome, String str_data_nasciment
 		JPAUtil.commit(em);
 		
 		return professor;
+	}
+
+	public static void remover(List<Pessoa> pessoas) {
+		EntityManager em = Main.em;
+		Session session = (Session) Main.em.getDelegate();
+		for (Pessoa p : pessoas) {
+			em.remove(p);
+		}
+		JPAUtil.commit(em);
+	}
+
+	public static void atualiza(Pessoa professor) {
+		EntityManager em = Main.em;
+		Session session = (Session) Main.em.getDelegate();
+		session.saveOrUpdate(professor);
+
+		JPAUtil.commit(em);
+	}
+
+	public static ObservableList<Pessoa> buscar(String text) {
+		EntityManager em = Main.em;
+		Session session = (Session) Main.em.getDelegate();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Professor> cr = em.getCriteriaBuilder().createQuery(Professor.class);
+		Root<Professor> root = cr.from(Professor.class);
+		cr.select(root).where(cb.like(root.get("codLocalizacao"), text));
+
+		org.hibernate.query.Query<Professor> query = session.createQuery(cr);
+		return FXCollections.observableArrayList(query.getResultList().stream().map(Professor::getPessoa).collect(Collectors.toList()));
+	}
+
+	public static ObservableList<Pessoa> listar() {
+		EntityManager em = Main.em;
+		Session session = (Session) Main.em.getDelegate();
+		CriteriaQuery<Professor> cr = em.getCriteriaBuilder().createQuery(Professor.class);
+		Root<Professor> root = cr.from(Professor.class);
+		cr.select(root);
+
+		org.hibernate.query.Query<Professor> query = session.createQuery(cr);
+		return FXCollections.observableArrayList(query.getResultList().stream().map(Professor::getPessoa).collect(Collectors.toList()));
 	}
 
 }

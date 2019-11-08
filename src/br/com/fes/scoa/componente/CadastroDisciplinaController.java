@@ -1,5 +1,6 @@
 package br.com.fes.scoa.componente;
 
+import br.com.fes.scoa.modelo.Disciplina;
 import br.com.fes.scoa.util.AlunoDAO;
 import br.com.fes.scoa.util.DisciplinaDAO;
 import javafx.event.ActionEvent;
@@ -25,37 +26,87 @@ public class CadastroDisciplinaController implements Initializable {
     @FXML
     public Button botaoEnviar;
 
+    private final Disciplina original;
+    private Disciplina novo = null;
+
+    private final String confirmDialogTitle;
+    private final String confirmDialogHeader;
+    private final String confirmDialogContent;
+    private final String successDialogTitle;
+    private final String successDialogHeader;
+    private final String successDialogContent;
+    private final String errorDialogTitle;
+    private final String errorDialogContent;
+
+    public CadastroDisciplinaController(Disciplina original) {
+        this.original = original;
+        if (original != null) {
+            confirmDialogTitle = "Editar disciplina";
+            confirmDialogHeader = "Confirmar atualização da disciplina";
+            confirmDialogContent = "Tem certeza que deseja atualizar a disciplina?";
+            successDialogTitle = "Disciplina atualizada";
+            successDialogHeader = "Disciplina atualizada:";
+            successDialogContent = "A disciplina foi atualizada com sucesso.";
+            errorDialogTitle = "Erro na atualização";
+            errorDialogContent = "Cheque o console para mais informações.";
+        }
+        else {
+            confirmDialogTitle = "Confirmar cadastro";
+            confirmDialogHeader = "Confirmar cadastro de disciplina";
+            confirmDialogContent = "Tem certeza que deseja cadastrar a disciplina?";
+            successDialogTitle = "Disciplina cadastrada";
+            successDialogHeader = "Disciplina cadastrada:";
+            successDialogContent = "A disciplina foi cadastrada com sucesso.";
+            errorDialogTitle = "Erro no cadastro";
+            errorDialogContent = "Cheque o console para mais informações.";
+        }
+    }
+
+    public Disciplina getNovo() {
+        return novo;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        if (original != null) {
+            campoNome.setText(original.getNome());
+            campoDescricao.setText(original.getDescricao());
+        }
+    }
+
     @FXML
     public void onEnviar(ActionEvent event) {
-        String s = "\n" +
-                campoNome.getCharacters() + '\n' +
-                campoDescricao + '\n';
-        System.out.println(s);
-
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmar cadastro");
-        alert.setHeaderText("Confirmar cadastro de disciplina");
-        alert.setContentText("Tem certeza que deseja cadastrar a disciplina " + campoNome.getCharacters() + " ?");
+        alert.setTitle(confirmDialogTitle);
+        alert.setHeaderText(confirmDialogHeader);
+        alert.setContentText(confirmDialogContent);
         alert.initStyle(StageStyle.UTILITY);
         alert.initOwner(botaoEnviar.getScene().getWindow());
-        Optional<ButtonType> result = alert.showAndWait();
         setEditable(false);
+        Optional<ButtonType> result = alert.showAndWait();
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
-
             try {
-                DisciplinaDAO.cadastraDisciplina(
-                        campoNome.getCharacters().toString(),
-                        campoDescricao.getText());
+                if (original == null) {
+                    novo = DisciplinaDAO.cadastraDisciplina(
+                            campoNome.getCharacters().toString(),
+                            campoDescricao.getText());
+                }
+                else {
+                    original.setNome(campoNome.getCharacters().toString());
+                    original.setDescricao(campoDescricao.getText());
+                    DisciplinaDAO.atualiza(original);
+                    novo = original;
+                }
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Disciplina cadastrada");
-                successAlert.setHeaderText("Disciplina cadastrada:");
-                successAlert.setContentText("A disciplina foi cadastrado com sucesso.");
+                successAlert.setTitle(successDialogTitle);
+                successAlert.setHeaderText(successDialogHeader);
+                successAlert.setContentText(successDialogContent);
                 successAlert.show();
             } catch (Exception err) {
                 Alert errAlert = new Alert(Alert.AlertType.ERROR);
-                errAlert.setTitle("Erro no cadastro");
+                errAlert.setTitle(errorDialogTitle);
                 errAlert.setHeaderText(err.toString());
-                errAlert.setContentText("Cheque o console para mais informações.");
+                errAlert.setContentText(errorDialogContent);
                 err.printStackTrace();
                 errAlert.show();
             }
@@ -72,9 +123,5 @@ public class CadastroDisciplinaController implements Initializable {
         campoNome.setEditable(edit);
         campoDescricao.setEditable(edit);
         botaoEnviar.setDisable(!edit);
-    }
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
     }
 }

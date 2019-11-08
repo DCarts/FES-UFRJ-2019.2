@@ -85,8 +85,8 @@ public class CadastroAlunoController implements Initializable {
         alert.setContentText(confirmDialogContent);
         alert.initStyle(StageStyle.UTILITY);
         alert.initOwner(botaoEnviar.getScene().getWindow());
-        Optional<ButtonType> result = alert.showAndWait();
         setEditable(false);
+        Optional<ButtonType> result = alert.showAndWait();
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             try {
                 if (modoEditar) {

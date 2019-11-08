@@ -4,6 +4,7 @@ import br.com.fes.scoa.modelo.Aluno;
 import br.com.fes.scoa.modelo.Pessoa;
 import br.com.fes.scoa.modelo.Sala;
 import br.com.fes.scoa.util.AlunoDAO;
+import br.com.fes.scoa.util.DisciplinaDAO;
 import br.com.fes.scoa.util.SalaDAO;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,81 +28,80 @@ public class CadastroSalaController implements Initializable {
     @FXML
     public Button botaoEnviar;
 
-    private final ObservableList<Sala> lista;
-    private final Boolean modoEditar;
-    private final Sala editarSala;
-    private String confirmDialogTitle = "Confirmar cadastro";
-    private String confirmDialogHeader = "Confirmar cadastro de sala";
-    private String confirmDialogContent = "Tem certeza que deseja cadastrar a sala?";
-    private String successDialogTitle = "Sala cadastrada";
-    private String successDialogHeader = "Sala cadastrada:";
-    private String successDialogContent = "A sala foi cadastrada com sucesso.";
-    private String errorDialogTitle = "Erro no cadastro";
-    private String errorDialogContent = "Cheque o console para mais informações.";
+    private final Sala original;
+    private Sala novo = null;
 
-    public CadastroSalaController(ObservableList<Sala> items, Sala sala) {
-        lista = items;
-        editarSala = sala;
-        modoEditar = sala != null;
-    }
+    private final String confirmDialogTitle;
+    private final String confirmDialogHeader;
+    private final String confirmDialogContent;
+    private final String successDialogTitle;
+    private final String successDialogHeader;
+    private final String successDialogContent;
+    private final String errorDialogTitle;
+    private final String errorDialogContent;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        if (modoEditar) {
-            String[] codigos = editarSala.getCodLocalizacao().split("::");
-            campoPredio.setText(codigos[0]);
-            campoAndar.setText(codigos[1]);
-            campoNome.setText(codigos[2]);
-
+    public CadastroSalaController(Sala original) {
+        this.original = original;
+        if (original != null) {
             confirmDialogTitle = "Editar sala";
-            confirmDialogHeader = "Confirmar atualização de sala";
+            confirmDialogHeader = "Confirmar atualização da sala";
             confirmDialogContent = "Tem certeza que deseja atualizar a sala?";
             successDialogTitle = "Sala atualizada";
             successDialogHeader = "Sala atualizada:";
             successDialogContent = "A sala foi atualizada com sucesso.";
             errorDialogTitle = "Erro na atualização";
             errorDialogContent = "Cheque o console para mais informações.";
-            botaoEnviar.setText("Salvar");
+        }
+        else {
+            confirmDialogTitle = "Confirmar cadastro";
+            confirmDialogHeader = "Confirmar cadastro de sala";
+            confirmDialogContent = "Tem certeza que deseja cadastrar a sala?";
+            successDialogTitle = "Sala cadastrada";
+            successDialogHeader = "Sala cadastrada:";
+            successDialogContent = "A sala foi cadastrada com sucesso.";
+            errorDialogTitle = "Erro no cadastro";
+            errorDialogContent = "Cheque o console para mais informações.";
+        }
+    }
+
+    public Sala getNovo() {
+        return novo;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        if (original != null) {
+            String[] codigos = original.getCodLocalizacao().split("::");
+            campoPredio.setText(codigos[0]);
+            campoAndar.setText(codigos[1]);
+            campoNome.setText(codigos[2]);
         }
     }
 
     @FXML
     public void onEnviar(ActionEvent event) {
-        String s = "\n" +
-                campoPredio.getCharacters() + '\n' +
-                campoAndar.getCharacters() + '\n' +
-                campoNome.getCharacters() + '\n';
-        System.out.println(s);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(confirmDialogTitle);
         alert.setHeaderText(confirmDialogHeader);
         alert.setContentText(confirmDialogContent);
         alert.initStyle(StageStyle.UTILITY);
         alert.initOwner(botaoEnviar.getScene().getWindow());
-        Optional<ButtonType> result = alert.showAndWait();
         setEditable(false);
+        Optional<ButtonType> result = alert.showAndWait();
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             try {
-                if (modoEditar) {
-                    Sala sala = SalaDAO.editarSala(
-                        editarSala.getId(),
-                            campoPredio.getCharacters().toString() + "::" +
+                if (original != null) {
+                    original.setCodLocalizacao(campoPredio.getCharacters().toString() + "::" +
                             campoAndar.getCharacters().toString() + "::" +
-                            campoNome.getCharacters().toString()
-                    );
-                    for (int i = 0; i < lista.size(); i++) {
-                        if (lista.get(i).getId().equals(sala.getId())) {
-                            lista.set(i,sala);
-                            break;
-                        }
-                    }
+                            campoNome.getCharacters().toString());
+                    SalaDAO.atualiza(original);
+                    novo = original;
                 } else {
-                    Sala sala = SalaDAO.cadastraSala(
+                    novo = SalaDAO.cadastraSala(
                             campoPredio.getCharacters().toString() + "::" +
                                     campoAndar.getCharacters().toString() + "::" +
                                     campoNome.getCharacters().toString()
                     );
-                    lista.add(sala);
                 }
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle(successDialogTitle);

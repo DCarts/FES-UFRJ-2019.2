@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableBooleanValue;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -16,10 +17,14 @@ public class Pessoa {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-	
+
+	@OneToMany(orphanRemoval=true)
+	private List<Aluno> alunos;
+
+	@OneToMany(orphanRemoval=true)
+	private List<Professor> professores;
 
 	private LocalDate data_nascimento;
-	
 	
 	@Column(unique = true, length = 12)
 	private String cpf;
@@ -29,7 +34,6 @@ public class Pessoa {
 
 	@Transient
 	private BooleanProperty checked = new SimpleBooleanProperty(false);
-
 	
 	public Pessoa(String nome, java.time.LocalDate data_nascimento, String cpf, String endereco, String email) {
 		this.nome = nome;
