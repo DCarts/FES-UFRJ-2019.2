@@ -17,7 +17,7 @@ public class SalaDAO {
 
         em.persist(sala);
 
-        JPAUtil.commitEFechaConexao(em);
+        JPAUtil.commit(em);
 
         return sala;
     }
@@ -30,7 +30,8 @@ public class SalaDAO {
 
         em.persist(alocacao);
 
-        JPAUtil.commitEFechaConexao(em);
+        JPAUtil.commit(em);
+
 
     }
 

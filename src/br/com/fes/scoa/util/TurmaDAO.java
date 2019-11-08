@@ -14,7 +14,7 @@ public class TurmaDAO {
 
         em.persist(turma);
 
-        JPAUtil.commitEFechaConexao(em);
+        JPAUtil.commit(em);
 
         return turma;
 
@@ -28,7 +28,7 @@ public class TurmaDAO {
 
         em.persist(tAlunos);
 
-        JPAUtil.commitEFechaConexao(em);
+        JPAUtil.commit(em);
 
     }
 

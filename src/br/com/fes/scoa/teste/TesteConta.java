@@ -22,9 +22,8 @@ public class TesteConta {
 		SalaDAO.alocaTurmaNaSala(sala, turma, TipoHoraDoDia.H8);
 		SalaDAO.alocaTurmaNaSala(sala, turma, TipoHoraDoDia.H9);
 
-		JPAUtil.commitEFechaConexao(em);
+		JPAUtil.commit(em);
 
-		
 	}
 
 }
