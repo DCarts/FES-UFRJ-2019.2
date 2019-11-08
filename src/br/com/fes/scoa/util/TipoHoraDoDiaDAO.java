@@ -2,11 +2,7 @@ package br.com.fes.scoa.util;
 
 import br.com.fes.scoa.Main;
 import br.com.fes.scoa.componente.CadastroHorarioController.Dia;
-import br.com.fes.scoa.modelo.Sala;
-import br.com.fes.scoa.modelo.SalasTurmas;
-import br.com.fes.scoa.modelo.TipoHoraDoDia;
-import br.com.fes.scoa.modelo.Turma;
-import org.hibernate.Criteria;
+import br.com.fes.scoa.modelo.HorarioDeAula;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -18,22 +14,22 @@ import java.util.List;
 
 public class TipoHoraDoDiaDAO {
 
-    public static TipoHoraDoDia cadastraHorario(Dia dia, LocalTime horarioInicio, LocalTime horarioFim){
+    public static HorarioDeAula cadastraHorario(Dia dia, LocalTime horarioInicio, LocalTime horarioFim){
 
         EntityManager em = Main.em;
         Session session = (Session)em.getDelegate();
 
-        CriteriaQuery<TipoHoraDoDia> query = em.getCriteriaBuilder().createQuery(TipoHoraDoDia.class);
-        Root<TipoHoraDoDia> root = query.from(TipoHoraDoDia.class);
+        CriteriaQuery<HorarioDeAula> query = em.getCriteriaBuilder().createQuery(HorarioDeAula.class);
+        Root<HorarioDeAula> root = query.from(HorarioDeAula.class);
         query.select(root).where(em.getCriteriaBuilder().equal(root.get("dia"), dia));
         query.select(root).where(em.getCriteriaBuilder().equal(root.get("horarioInicio"), horarioInicio));
         query.select(root).where(em.getCriteriaBuilder().equal(root.get("horarioFim"), horarioFim));
-        Query<TipoHoraDoDia> q = session.createQuery(query);
-        List<TipoHoraDoDia> horarios = q.getResultList();
+        Query<HorarioDeAula> q = session.createQuery(query);
+        List<HorarioDeAula> horarios = q.getResultList();
 
-        TipoHoraDoDia horario;
+        HorarioDeAula horario;
         if (horarios.isEmpty()) {
-            horario = new TipoHoraDoDia(dia, horarioInicio, horarioFim);
+            horario = new HorarioDeAula(dia, horarioInicio, horarioFim);
             em.persist(horario);
             JPAUtil.commit(em);
         }

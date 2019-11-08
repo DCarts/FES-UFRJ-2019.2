@@ -28,7 +28,7 @@ public class SalaDAO {
         return sala;
     }
 
-    public static void alocaTurmaNaSala(Sala sala, Turma turma, TipoHoraDoDia hora){
+    public static void alocaTurmaNaSala(Sala sala, Turma turma, HorarioDeAula hora){
 
         SalasTurmas alocacao = new SalasTurmas(sala, turma, hora);
 

@@ -1,6 +1,6 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.modelo.TipoHoraDoDia;
+import br.com.fes.scoa.modelo.HorarioDeAula;
 import br.com.fes.scoa.util.TipoHoraDoDiaDAO;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -27,8 +27,8 @@ public class CadastroHorarioController implements Initializable {
     public TimeSpinner campoFim;
     @FXML
     public Button botaoEnviar;
-    private final TipoHoraDoDia original;
-    private TipoHoraDoDia novo = null;
+    private final HorarioDeAula original;
+    private HorarioDeAula novo = null;
 
     public static enum Dia {
         DOMINGO("Domingo"),
@@ -77,7 +77,7 @@ public class CadastroHorarioController implements Initializable {
     private String errorDialogTitle = "Erro no cadastro";
     private String errorDialogContent = "Cheque o console para mais informações.";
 
-    public CadastroHorarioController(TipoHoraDoDia original) {
+    public CadastroHorarioController(HorarioDeAula original) {
         this.original = original;
     }
 
@@ -102,7 +102,7 @@ public class CadastroHorarioController implements Initializable {
         }
     }
 
-    public TipoHoraDoDia getNovo() {
+    public HorarioDeAula getNovo() {
         return novo;
     }
 

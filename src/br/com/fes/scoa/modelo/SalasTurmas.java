@@ -16,14 +16,14 @@ public class SalasTurmas implements Serializable {
     private Sala sala;
 
     @Id
-    private TipoHoraDoDia hora;
+    private HorarioDeAula hora;
 
     @Id
     @ManyToOne
     @JoinColumn(name="turma_id")
     private Turma turma;
 
-    public SalasTurmas(Sala sala, Turma turma, TipoHoraDoDia hora) {
+    public SalasTurmas(Sala sala, Turma turma, HorarioDeAula hora) {
         this.sala = sala;
         this.turma = turma;
         this.hora = hora;
@@ -47,11 +47,11 @@ public class SalasTurmas implements Serializable {
         } catch (Exception e) {}
         return new SimpleStringProperty(hour);
     }
-    public TipoHoraDoDia getHora() {
+    public HorarioDeAula getHora() {
         return hora;
     }
 
-    public void setHora(TipoHoraDoDia hora) {
+    public void setHora(HorarioDeAula hora) {
         this.hora = hora;
     }
 

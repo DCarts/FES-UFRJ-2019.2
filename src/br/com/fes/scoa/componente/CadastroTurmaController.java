@@ -48,8 +48,8 @@ public class CadastroTurmaController implements Initializable {
     public Button botaoAdicionarHorario;
 
     @FXML
-    public ListView<TipoHoraDoDia> horariosSelecionadosView;
-    private final ObservableList<TipoHoraDoDia> horariosSelecionados = FXCollections.observableArrayList();
+    public ListView<HorarioDeAula> horariosSelecionadosView;
+    private final ObservableList<HorarioDeAula> horariosSelecionados = FXCollections.observableArrayList();
 
     @FXML
     public Button botaoEnviar;
@@ -143,7 +143,7 @@ public class CadastroTurmaController implements Initializable {
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
             CadastroHorarioController controller = loader.getController();
-            TipoHoraDoDia novo = controller.getNovo();
+            HorarioDeAula novo = controller.getNovo();
             if (novo != null) {
                 if (horariosSelecionados.contains(novo)) {
                     // @TODO este horario ja esta selecionado
@@ -177,7 +177,7 @@ public class CadastroTurmaController implements Initializable {
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
             CadastroHorarioController controller = loader.getController();
-            TipoHoraDoDia novo = controller.getNovo();
+            HorarioDeAula novo = controller.getNovo();
             if (novo != null) {
                 if (horariosSelecionados.contains(novo)) {
                     // @TODO este horario ja esta selecionado
@@ -211,7 +211,7 @@ public class CadastroTurmaController implements Initializable {
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
             CadastroHorarioController controller = loader.getController();
-            TipoHoraDoDia novo = controller.getNovo();
+            HorarioDeAula novo = controller.getNovo();
             if (novo != null) {
                 if (horariosSelecionados.contains(novo)) {
                     // @TODO este horario ja esta selecionado

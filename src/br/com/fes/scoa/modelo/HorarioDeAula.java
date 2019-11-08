@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import java.time.LocalTime;
 import java.util.Objects;
 
-public class TipoHoraDoDia {
+public class HorarioDeAula {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -23,7 +23,7 @@ public class TipoHoraDoDia {
     @Column
     private LocalTime horarioFim;
 
-    public TipoHoraDoDia(Dia dia, LocalTime horarioInicio, LocalTime horarioFim) {
+    public HorarioDeAula(Dia dia, LocalTime horarioInicio, LocalTime horarioFim) {
         this.dia = dia;
         this.horarioInicio = horarioInicio;
         this.horarioFim = horarioFim;
@@ -69,8 +69,8 @@ public class TipoHoraDoDia {
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        if (!(obj instanceof TipoHoraDoDia)) return false;
-        TipoHoraDoDia casted = (TipoHoraDoDia)obj;
+        if (!(obj instanceof HorarioDeAula)) return false;
+        HorarioDeAula casted = (HorarioDeAula)obj;
         return Objects.equals(casted.id, id) &&
                 casted.dia == dia &&
                 casted.horarioInicio == horarioInicio &&
