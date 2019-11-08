@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableBooleanValue;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -111,5 +112,13 @@ public class Pessoa {
 	@Transient
 	public void setChecked(Boolean checked) {
 		this.checked.set(checked);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof Pessoa)) return false;
+        Pessoa casted = (Pessoa)obj;
+        return Objects.equals(casted.id, id);
 	}
 }

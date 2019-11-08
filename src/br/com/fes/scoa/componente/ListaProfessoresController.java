@@ -40,6 +40,8 @@ public class ListaProfessoresController implements Initializable {
     @FXML
     private TableColumn<Pessoa, String> editCol;
     @FXML
+    private TableColumn<Pessoa, String> classesCol;
+    @FXML
     private TableColumn<Pessoa, String> nomeCol;
     @FXML
     private TableColumn<Pessoa, String> cpfCol;
@@ -79,6 +81,31 @@ public class ListaProfessoresController implements Initializable {
                 new PropertyValueFactory<>("endereco"));
         data_nascimentoCol.setCellValueFactory(
                 new PropertyValueFactory<>("data_nascimento"));
+        classesCol.setCellFactory(
+                new Callback<TableColumn<Pessoa, String>, TableCell<Pessoa, String>>() {
+                    @Override
+                    public TableCell call(final TableColumn<Pessoa, String> param) {
+                        final TableCell<Pessoa, String> cell = new TableCell<Pessoa, String>() {
+                            final Button btn = new Button("Turmas");
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                    setText(null);
+                                } else {
+                                    btn.setOnAction(event -> {
+                                        Pessoa pessoa = getTableView().getItems().get(getIndex());
+                                        onClasses(pessoa);
+                                    });
+                                    setGraphic(btn);
+                                    setText(null);
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+            });
         if (doSelect) {
             botaoRemover.setDisable(true);
             botaoRemover.setText("Selecionar");
@@ -97,6 +124,8 @@ public class ListaProfessoresController implements Initializable {
                     param -> param.getValue().getChecked());
             editCol.setCellValueFactory(
                     new PropertyValueFactory<>("edit"));
+            classesCol.setCellValueFactory(
+                    new PropertyValueFactory<>("nome"));
             selectCol.setCellFactory(
                     CheckBoxTableCell.forTableColumn(selectCol));
             editCol.setCellFactory(
@@ -124,6 +153,7 @@ public class ListaProfessoresController implements Initializable {
                             return cell;
                         }
                     });
+            
         }
 
         atualizarLista();
@@ -199,6 +229,24 @@ public class ListaProfessoresController implements Initializable {
                 tabela.getItems().remove(pessoa);
                 tabela.getItems().add(novo);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @FXML
+    public void onClasses(Pessoa pessoa) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/turmas_professor.fxml")));
+            loader.setControllerFactory((t) -> new TurmasProfessorController(pessoa));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Turmas do " + pessoa.getNome());
+            stage.setScene(new Scene(root));
+            stage.initOwner(titleLabel.getScene().getWindow());
+            stage.show();
+            Platform.runLater(stage::requestFocus);
         } catch (IOException e) {
             e.printStackTrace();
         }

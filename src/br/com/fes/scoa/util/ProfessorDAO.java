@@ -15,6 +15,7 @@ import br.com.fes.scoa.modelo.Pessoa;
 import br.com.fes.scoa.modelo.Professor;
 import br.com.fes.scoa.modelo.Sala;
 import br.com.fes.scoa.modelo.SalasTurmas;
+import br.com.fes.scoa.modelo.Turma;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.hibernate.Session;
@@ -28,7 +29,7 @@ public class ProfessorDAO {
 		CriteriaQuery<Professor> cr = em.getCriteriaBuilder().createQuery(Professor.class);
 		Root<Professor> root = cr.from(Professor.class);
 		cr.select(root).where(cb.equal(root.get("pessoa"), pessoa));
-
+		
 		org.hibernate.query.Query<Professor> query = session.createQuery(cr);
 		return query.getSingleResult();
 	}
@@ -118,22 +119,22 @@ public static Professor cadastraProfessor(String nome, String str_data_nasciment
 		return FXCollections.observableArrayList(query.getResultList().stream().map(Professor::getPessoa).collect(Collectors.toList()));
 	}
 
-    public static ObservableList<SalasTurmas> turmas(Pessoa pessoa) {
-        EntityManager em = Main.em;
-        Professor professor = new Professor(pessoa);
-        String jpql = "select st from Turma t left join SalasTurmas st on st.turma = t where t.professor = :pessoa";
-        Query query = em.createQuery(jpql);
-        query.setParameter("pessoa", professor);
-        List<SalasTurmas> resultado = (List<SalasTurmas>) query.setMaxResults(10).getResultList();
-        System.out.println("Turmas:");
-        resultado.forEach(r -> {System.out.println(r.getTurma().getDisciplina().getNome());});
-        ObservableList<SalasTurmas> lista = FXCollections.observableArrayList(resultado);
+    public static ObservableList<Turma> turmas(Pessoa pessoa) {
+    	EntityManager em = Main.em;
+		Session session = (Session) Main.em.getDelegate();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Turma> cr = em.getCriteriaBuilder().createQuery(Turma.class);
+		Root<Turma> root = cr.from(Turma.class);
+		cr.select(root).where(cb.equal(root.get("professor"), ProfessorDAO.fromPessoa(pessoa)));
+
+		org.hibernate.query.Query<Turma> query = session.createQuery(cr);
+		ObservableList<Turma> lista = FXCollections.observableArrayList(query.getResultList());
 
         JPAUtil.commit(em);
         return lista;
     }
 
-    public static ObservableList<SalasTurmas> buscarTurmas(String text) {
+    public static ObservableList<Turma> buscarTurmas(String text) {
         return FXCollections.observableArrayList();
     }
 

@@ -1,13 +1,16 @@
 package br.com.fes.scoa.componente;
 
 import br.com.fes.scoa.modelo.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import br.com.fes.scoa.util.*;
@@ -18,23 +21,23 @@ import javafx.util.Callback;
 
 public class TurmasProfessorController implements Initializable {
     @FXML
-    public TableColumn<SalasTurmas, String> predioCol;
+    public TableColumn<Turma, String> predioCol;
     @FXML
-    public TableColumn<SalasTurmas, String> andarCol;
+    public TableColumn<Turma, String> andarCol;
     @FXML
-    public TableColumn<SalasTurmas, String> salaNomeCol;
+    public TableColumn<Turma, String> salaNomeCol;
     @FXML
     private Label titleLabel;
     @FXML
     private Button botaoRemover;
     @FXML
-    private TableView<SalasTurmas> tabela;
+    private TableView<Turma> tabela;
     @FXML
-    private TableColumn<SalasTurmas, String> disciplinaCol;
+    private TableColumn<Turma, String> disciplinaCol;
     @FXML
-    private TableColumn<SalasTurmas, String> salaCol;
+    private TableColumn<Turma, String> salaCol;
     @FXML
-    private TableColumn<SalasTurmas, String> horaCol;
+    private TableColumn<Turma, String> horaCol;
 
     @FXML
     private TextField campoBuscar;
@@ -42,48 +45,63 @@ public class TurmasProfessorController implements Initializable {
     @FXML
     private Button botaoBuscar;
 
-    private final ObservableList<SalasTurmas> lista;
+    private final ObservableList<Turma> lista;
     private Pessoa pessoa = null;
 
-    public TurmasProfessorController(Pessoa pessoa1) {
+    public TurmasProfessorController(Pessoa pessoa) {
         lista = ProfessorDAO.turmas(pessoa);
-        pessoa = pessoa1;
+        this.pessoa = pessoa;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        disciplinaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SalasTurmas, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<SalasTurmas, String> r) {
-                return r.getValue().getTurma().getDisciplina().getNomeProperty();
+        disciplinaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
+                return r.getValue().getDisciplina().getNomeProperty();
             }
         });
-        salaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SalasTurmas, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<SalasTurmas, String> r) {
+        salaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
                 return r.getValue().getSala().getCodLocalizacaoProperty();
             }
         });
-        predioCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SalasTurmas, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<SalasTurmas, String> r) {
+        predioCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
                 return r.getValue().getSala().getSalaPredioProperty();
             }
         });
-        andarCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SalasTurmas, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<SalasTurmas, String> r) {
+        andarCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
                 return r.getValue().getSala().getSalaAndarProperty();
             }
         });
-        salaNomeCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SalasTurmas, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<SalasTurmas, String> r) {
+        salaNomeCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
                 return r.getValue().getSala().getSalaNomeProperty();
             }
         });
-        horaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SalasTurmas, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<SalasTurmas, String> r) {
-                return r.getValue().getHoraProperty();
+        horaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
+                return new SimpleStringProperty(horaAsString(r.getValue().getHorario()));
             }
         });
 
         atualizarLista();
+    }
+    
+    private String horaAsString(List<HorarioDeAula> horarios) {
+    	StringBuilder sb = new StringBuilder();
+    	
+    	int i = 0;
+    	for (; i < horarios.size()-1; i++) {
+    		sb.append(horarios.get(i).toString());
+    		sb.append('\n');
+    	}
+    	if (horarios.size() > 0) {
+    		sb.append(horarios.get(i));
+    	}
+    	
+    	return sb.toString();
     }
 
     public void onRemoverSelecionados(ActionEvent actionEvent) {}
@@ -99,7 +117,7 @@ public class TurmasProfessorController implements Initializable {
         if (pessoa == null) return;
         String text = "";
         if (campoBuscar != null) text = campoBuscar.getText();
-        ObservableList<SalasTurmas> lista;
+        ObservableList<Turma> lista;
         if (text.length() > 0) {
             lista = ProfessorDAO.buscarTurmas(text);
         } else {

@@ -30,7 +30,7 @@ public class Main extends Application {
     	t1.start();*/
         em = JPAUtil.abreConexao();
 
-        // TesteConta.main(null);
+        TesteConta.main(null);
   		
     	
         Parent root = FXMLLoader.load(getClass().getResource("./componente/home_secretario.fxml"));

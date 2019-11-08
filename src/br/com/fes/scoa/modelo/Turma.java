@@ -27,7 +27,7 @@ public class Turma {
     @ManyToMany
     private List<Aluno> aluno;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<HorarioDeAula> horario;
 
 

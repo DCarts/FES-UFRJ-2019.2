@@ -26,6 +26,8 @@ public class HorarioDeAula {
         this.horarioInicio = horarioInicio;
         this.horarioFim = horarioFim;
     }
+    
+    public HorarioDeAula() {}
 
     public Integer getId() {
         return id;
