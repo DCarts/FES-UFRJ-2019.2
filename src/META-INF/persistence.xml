@@ -15,20 +15,24 @@
         <class>br.com.fes.scoa.modelo.Aluno</class>
         <class>br.com.fes.scoa.modelo.Professor</class>
         <class>br.com.fes.scoa.modelo.Disciplina</class>
+        <class>br.com.fes.scoa.modelo.Turma</class>
+        <class>br.com.fes.scoa.modelo.TurmasAlunos</class>
+        <class>br.com.fes.scoa.modelo.Sala</class>
+        <class>br.com.fes.scoa.modelo.SalasTurmas</class>
 
-        <properties>    
+        <properties>
             <!-- Propriedades JDBC -->
-            <property name="javax.persistence.jdbc.driver" 
+            <property name="javax.persistence.jdbc.driver"
                 value="org.sqlite.JDBC" />
 
-            <property name="javax.persistence.jdbc.url" 
+            <property name="javax.persistence.jdbc.url"
                 value="jdbc:sqlite:SCOA.db" />
 
             <property name="javax.persistence.jdbc.user" value="fes20192" />
             <property name="javax.persistence.jdbc.password" value="fes20192" />
 
             <!-- Configurações específicas do Hibernate -->
-            <property name="hibernate.dialect" 
+            <property name="hibernate.dialect"
                 value="org.hibernate.dialect.SQLiteDialect" />
 
             <property name="hibernate.show_sql" value="true" />

@@ -6,7 +6,7 @@ import br.com.fes.scoa.modelo.Disciplina;
 
 public class DisciplinaDAO {
 	
-	public static void cadastraDisciplina(String nome, String descricao) {
+	public static Disciplina cadastraDisciplina(String nome, String descricao) {
 		
 		Disciplina disciplina = new Disciplina(nome, descricao);
 		
@@ -16,7 +16,7 @@ public class DisciplinaDAO {
 		
 		JPAUtil.commit(em);
 		
-		
+		return disciplina;
 	}
 
 }
