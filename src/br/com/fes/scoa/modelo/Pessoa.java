@@ -4,33 +4,32 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableBooleanValue;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.*;
 
 @Entity
 public class Pessoa {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-	
+
 
 	private LocalDate data_nascimento;
-	
-	
+
+
 	@Column(unique = true, length = 12)
 	private String cpf;
-	
+
 	private String endereco;
 	private String email;
 
 	@Transient
 	private BooleanProperty checked = new SimpleBooleanProperty(false);
 
-	
+
 	public Pessoa(String nome, java.time.LocalDate data_nascimento, String cpf, String endereco, String email) {
 		this.nome = nome;
 		this.data_nascimento = data_nascimento;
@@ -38,7 +37,7 @@ public class Pessoa {
 		this.endereco = endereco;
 		this.email = email;
 	}
-	
+
 	public Pessoa() {}
 
 	@Override

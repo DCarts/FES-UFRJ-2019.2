@@ -6,12 +6,42 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.fes.scoa.Main;
 import br.com.fes.scoa.modelo.Pessoa;
 import br.com.fes.scoa.modelo.Professor;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class ProfessorDAO {
+	public static void remover(List<Pessoa> pessoas) {
+		EntityManager em = Main.em;
+
+		String jpql = "DELETE FROM Pessoa p WHERE p IN (:pessoas)";
+		Query query = em.createQuery(jpql);
+		query.setParameter("pessoas", pessoas);
+		int result = query.executeUpdate();
+		if (result > 0) {
+			System.out.println("Removidos:");
+			pessoas.forEach(System.out::println);
+		}
+
+		JPAUtil.commit(em);
+	}
+
+	public static ObservableList<Pessoa> listar() {
+		EntityManager em = Main.em;
+		String jpql = "SELECT DISTINCT p FROM Pessoa p INNER JOIN Professor a ON a.pessoa = p";
+		Query query = em.createQuery(jpql);
+		List<Pessoa> resultado = (List<Pessoa>) query.setMaxResults(10).getResultList();
+		System.out.println("Lista:");
+		resultado.forEach(System.out::println);
+		ObservableList<Pessoa> lista = FXCollections.observableArrayList(resultado);
+
+		JPAUtil.commit(em);
+		return lista;
+	}
 	
-public static Professor cadastraProfessor(String nome, String str_data_nascimento, String cpf, String endereco, String email) {
+	public static Professor cadastrar(String nome, String str_data_nascimento, String cpf, String endereco, String email) {
 		
 		LocalDate data_nascimento = LocalDate.parse(str_data_nascimento);
 		
@@ -58,4 +88,47 @@ public static Professor cadastraProfessor(String nome, String str_data_nasciment
 		return professor;
 	}
 
+	public static ObservableList<Pessoa> buscar(String str) {
+		String busca = "%"+str.trim().toLowerCase()+"%";
+		EntityManager em = Main.em;
+		String jpql = "SELECT DISTINCT p FROM Pessoa p INNER JOIN Professor a ON a.pessoa = p WHERE LOWER(p.nome) LIKE :busca OR LOWER(p.email) LIKE :busca OR LOWER(p.cpf) LIKE :busca";
+		Query query = em.createQuery(jpql);
+		query.setParameter("busca", busca);
+		List<Pessoa> resultado = (List<Pessoa>) query.setMaxResults(10).getResultList();
+		System.out.println("Lista:");
+		resultado.forEach(System.out::println);
+		ObservableList<Pessoa> lista = FXCollections.observableArrayList(resultado);
+
+		JPAUtil.commit(em);
+		return lista;
+	}
+
+	public static Professor editar(
+			Integer id,
+			String nome,
+			String str_data_nascimento,
+			String cpf,
+			String endereco,
+			String email
+	) {
+		LocalDate data_nascimento = LocalDate.parse(str_data_nascimento);
+
+		EntityManager em = Main.em;
+		System.out.println("cpf: " + cpf);
+		Pessoa pessoa = em.find(Pessoa.class, id);
+		if (!pessoa.getNome().equals(nome))
+			pessoa.setNome(nome);
+		if (!pessoa.getCpf().equals(cpf))
+			pessoa.setCpf(cpf);
+		if (!pessoa.getData_nascimento().equals(data_nascimento))
+			pessoa.setData_nascimento(data_nascimento);
+		if (!pessoa.getEmail().equals(email))
+			pessoa.setEmail(email);
+		if (!pessoa.getEndereco().equals(endereco))
+			pessoa.setEndereco(endereco);
+		JPAUtil.commit(em);
+		Professor professor = new Professor(pessoa);
+
+		return professor;
+	}
 }

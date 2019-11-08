@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
@@ -30,6 +29,12 @@ public class HomeSecretarioController implements Initializable {
 
     @FXML
     public Button botaoNovaDisciplina;
+
+    @FXML
+    public Button botaoListaProfessores;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {}
 
     @FXML
     public void onNovoAluno(ActionEvent event) {
@@ -93,8 +98,17 @@ public class HomeSecretarioController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
+    public void onListaProfessores(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_professores.fxml")));
+            Stage stage = new Stage();
+            stage.setTitle("Professores");
+            stage.setScene(new Scene(root, 400, 400));
+            stage.show();
+            Platform.runLater(stage::requestFocus);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
