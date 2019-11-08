@@ -1,10 +1,8 @@
 package br.com.fes.scoa.modelo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Disciplina {
@@ -16,11 +14,18 @@ public class Disciplina {
 	
 	@Column(length = 2555)
 	private String descricao;
-	
-	
+
+
+	@ManyToMany
+	private List<Disciplina> disciplinasEquivalentes;
+
+
+
+
 	public Disciplina(String nome, String descricao) {
 		this.nome = nome;
 		this.descricao = descricao;
+		this.disciplinasEquivalentes = new ArrayList<Disciplina>();
 	}
 	
 	public Disciplina() {}
@@ -43,6 +48,14 @@ public class Disciplina {
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public List<Disciplina> getDisciplinasEquivalentes() {
+		return disciplinasEquivalentes;
+	}
+
+	public void setDisciplinasEquivalentes(List<Disciplina> disciplinasEquivalentes) {
+		this.disciplinasEquivalentes.add(disciplinasEquivalentes.get(0));
 	}
 
 }

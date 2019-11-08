@@ -15,6 +15,8 @@ public class Sala{
     @Column(unique = true, length = 9)
     private String codLocalizacao;
 
+    public Sala(){}
+
     public Sala(String codLocalizacao){
         this.codLocalizacao = codLocalizacao;
     }

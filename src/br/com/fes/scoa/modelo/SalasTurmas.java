@@ -20,6 +20,8 @@ public class SalasTurmas implements Serializable{
     @ManyToOne
     private Turma turma;
 
+    public SalasTurmas(){}
+
     public SalasTurmas(Sala sala, Turma turma, TipoHoraDoDia hora){
         this.sala = sala;
         this.turma = turma;

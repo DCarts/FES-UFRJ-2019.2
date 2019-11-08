@@ -1,5 +1,6 @@
 package br.com.fes.scoa;
 
+import br.com.fes.scoa.teste.TesteConta;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,8 @@ public class Main extends Application {
     	    }
     	});  
     	t1.start();
+
+        TesteConta.main(null);
   		
     	
         Parent root = FXMLLoader.load(getClass().getResource("./componente/home_secretario.fxml"));

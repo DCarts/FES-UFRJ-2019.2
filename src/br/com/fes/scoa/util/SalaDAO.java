@@ -36,7 +36,6 @@ public class SalaDAO {
     }
 
 
-
     public static Sala editarSala(
             Integer id,
             String localizacao
