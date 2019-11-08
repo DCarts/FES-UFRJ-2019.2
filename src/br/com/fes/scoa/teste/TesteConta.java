@@ -16,14 +16,14 @@ public class TesteConta {
 		//EntityManager em = JPAUtil.abreConexao();
 
 
-		Disciplina disciplina = DisciplinaDAO.cadastraDisciplina("TESTE", "SO MAIS UMA TESTE");
-		Disciplina disciplina2 = DisciplinaDAO.cadastraDisciplina("FES", "Prograaaaama");
+		Disciplina disciplina = DisciplinaDAO.cadastrar("TESTE", "SO MAIS UMA TESTE");
+		Disciplina disciplina2 = DisciplinaDAO.cadastrar("FES", "Prograaaaama");
 		DisciplinaDAO.equivalenciaDisciplinas(disciplina, disciplina2);
 
 
 
 		Sala sala = SalaDAO.cadastraSala("CCMNF::2::F02-10");
-		Professor professor = ProfessorDAO.cadastraProfessor("Gil", "1990-05-12", "11012547878", "Rua do prof", "prof@gmail.com");
+		Professor professor = ProfessorDAO.cadastrar("Gil", "1990-05-12", "11012547878", "Rua do prof", "prof@gmail.com");
 		Turma turma = TurmaDAO.cadastraTurma(disciplina2, professor);
 		Aluno aluno1 = AlunoDAO.cadastrar("Albe", "1990-05-12", "99977847878", "Rua do prof", "prof@gmail.com");
 		Aluno aluno2 = AlunoDAO.cadastrar("ju", "1990-05-12", "39877847878", "Rua do prof", "prof@gmail.com");

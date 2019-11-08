@@ -6,7 +6,9 @@ import java.util.List;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableBooleanValue;
+import javafx.beans.value.ObservableStringValue;
 
 @Entity
 public class Disciplina {
@@ -42,6 +44,9 @@ public class Disciplina {
 	}
 	public String getNome() {
 		return nome;
+	}
+	public ObservableStringValue getNomeProperty() {
+		return new SimpleStringProperty(nome);
 	}
 	public void setNome(String nome) {
 		this.nome = nome;

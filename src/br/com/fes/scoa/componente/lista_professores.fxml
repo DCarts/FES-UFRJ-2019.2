@@ -48,6 +48,7 @@
             <TableColumn fx:id="data_nascimentoCol" text="Data de Nascimento" />
             <TableColumn fx:id="enderecoCol" text="Endereço" />
             <TableColumn fx:id="editCol" maxWidth="60" minWidth="60" />
+            <TableColumn fx:id="classesCol" maxWidth="60" minWidth="60" />
         </columns>
       <VBox.margin>
          <Insets top="10.0" />

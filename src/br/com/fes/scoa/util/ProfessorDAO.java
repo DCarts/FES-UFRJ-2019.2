@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import br.com.fes.scoa.Main;
 import br.com.fes.scoa.modelo.Pessoa;
 import br.com.fes.scoa.modelo.Professor;
+import br.com.fes.scoa.modelo.SalasTurmas;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -40,34 +41,34 @@ public class ProfessorDAO {
 		JPAUtil.commit(em);
 		return lista;
 	}
-	
+
 	public static Professor cadastrar(String nome, String str_data_nascimento, String cpf, String endereco, String email) {
-		
+
 		LocalDate data_nascimento = LocalDate.parse(str_data_nascimento);
-		
+
 		Pessoa pessoa = new Pessoa(nome, data_nascimento, cpf, endereco, email);
 		Professor professor = new Professor(pessoa);
-		
+
 		EntityManager em = JPAUtil.abreConexao();
-		
+
 		String jpql = "select p from Pessoa p where p.cpf = :pCPF";
-		
+
 		Query query = em.createQuery(jpql);
 		query.setParameter("pCPF", cpf);
-		
+
 		List<Pessoa> resultado = (List<Pessoa>) query.getResultList();
-		
+
 		if(resultado.isEmpty()) {
-		
+
 			em.persist(pessoa);
 			em.persist(professor);
 		}
 		else {
-			
+
 			String jpql2 = "select a from Professor a where a.pessoa = :pPessoa";
 			Query query2 = em.createQuery(jpql2);
 			query2.setParameter("pPessoa", resultado.get(0));
-			
+
 			List<Professor> resultado2 = (List<Professor>) query2.getResultList();
 
 			if(resultado2.isEmpty()) {
@@ -77,14 +78,14 @@ public class ProfessorDAO {
 			}
 			else {
 				// @TODO reportar isso ao usuário de alguma forma quando ele tenta cadastrar um professor que ja esta cadastrado
-				System.out.println(resultado2.get(0).getPessoa().getNome() + " ja esta cadastrado(a) como professor(a)\n CPF: " + 
+				System.out.println(resultado2.get(0).getPessoa().getNome() + " ja esta cadastrado(a) como professor(a)\n CPF: " +
 						resultado2.get(0).getPessoa().getCpf());
 			}
-			
+
 		}
-		
+
 		JPAUtil.commit(em);
-		
+
 		return professor;
 	}
 
@@ -130,5 +131,24 @@ public class ProfessorDAO {
 		Professor professor = new Professor(pessoa);
 
 		return professor;
+	}
+
+	public static ObservableList<SalasTurmas> turmas(Pessoa pessoa) {
+		EntityManager em = Main.em;
+		Professor professor = new Professor(pessoa);
+		String jpql = "select st from Turma t left join SalasTurmas st on st.turma = t where t.professor = :pessoa";
+		Query query = em.createQuery(jpql);
+		query.setParameter("pessoa", professor);
+		List<SalasTurmas> resultado = (List<SalasTurmas>) query.setMaxResults(10).getResultList();
+		System.out.println("Turmas:");
+		resultado.forEach(r -> {System.out.println(r.getTurma().getDisciplina().getNome());});
+		ObservableList<SalasTurmas> lista = FXCollections.observableArrayList(resultado);
+
+		JPAUtil.commit(em);
+		return lista;
+	}
+
+	public static ObservableList<SalasTurmas> buscarTurmas(String text) {
+		return FXCollections.observableArrayList();
 	}
 }

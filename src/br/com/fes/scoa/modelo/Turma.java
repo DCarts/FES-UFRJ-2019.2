@@ -13,9 +13,11 @@ public class Turma {
     //private String nome;
 
     @OneToOne
+    @JoinColumn(name="professor_pessoa_id")
     private Professor professor;
 
     @OneToOne
+    @JoinColumn(name="disciplina_id")
     private Disciplina disciplina;
 
     @ManyToMany
