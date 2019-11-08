@@ -45,9 +45,12 @@ public class Disciplina {
 	public String getNome() {
 		return nome;
 	}
+
+	@Transient
 	public ObservableStringValue getNomeProperty() {
 		return new SimpleStringProperty(nome);
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}

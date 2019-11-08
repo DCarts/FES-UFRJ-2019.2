@@ -31,20 +31,24 @@ public class Sala {
         this.id = id;
     }
 
+    @Transient
     public ObservableStringValue getCodLocalizacaoProperty() {
         return new SimpleStringProperty(codLocalizacao);
     }
 
+    @Transient
     public ObservableStringValue getSalaPredioProperty() {
         String[] parts = codLocalizacao.split("::");
         if (parts.length > 0) return new SimpleStringProperty(parts[0]);
         return new SimpleStringProperty("");
     }
+    @Transient
     public ObservableStringValue getSalaAndarProperty() {
         String[] parts = codLocalizacao.split("::");
         if (parts.length > 1) return new SimpleStringProperty(parts[1]);
         return new SimpleStringProperty("");
     }
+    @Transient
     public ObservableStringValue getSalaNomeProperty() {
         String[] parts = codLocalizacao.split("::");
         if (parts.length > 2) return new SimpleStringProperty(parts[2]);
