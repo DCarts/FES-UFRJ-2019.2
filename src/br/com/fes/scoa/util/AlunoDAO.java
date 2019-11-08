@@ -41,7 +41,7 @@ public class AlunoDAO {
 		return lista;
 	}
 
-	public static Aluno cadastraAluno(String nome, String str_data_nascimento, String cpf, String endereco, String email) {
+	public static Aluno cadastrar(String nome, String str_data_nascimento, String cpf, String endereco, String email) {
 
 		LocalDate data_nascimento = LocalDate.parse(str_data_nascimento);
 
@@ -102,7 +102,7 @@ public class AlunoDAO {
 		return lista;
 	}
 
-    public static Aluno editarAluno(
+    public static Aluno editar(
 			Integer id,
 			String nome,
 			String str_data_nascimento,

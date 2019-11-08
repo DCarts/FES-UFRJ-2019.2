@@ -90,7 +90,7 @@ public class CadastroAlunoController implements Initializable {
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             try {
                 if (modoEditar) {
-                    Aluno aluno = AlunoDAO.editarAluno(
+                    Aluno aluno = AlunoDAO.editar(
                         editarPessoa.getId(),
                         campoNome.getCharacters().toString(),
                         campoDataNasc.getValue().toString(),
@@ -104,7 +104,7 @@ public class CadastroAlunoController implements Initializable {
                         }
                     }
                 } else {
-                    Aluno aluno = AlunoDAO.cadastraAluno(
+                    Aluno aluno = AlunoDAO.cadastrar(
                         campoNome.getCharacters().toString(),
                         campoDataNasc.getValue().toString(),
                         campoCPF.getPlainText(),

@@ -20,7 +20,7 @@
             </font></Label>
         </left>
         <right>
-            <Button fx:id="botaoCriar" mnemonicParsing="false" onAction="#onCriar" text="Criar Aluno" />
+            <Button fx:id="botaoCriar" mnemonicParsing="false" onAction="#onCriar" text="Cadastrar Aluno" />
         </right>
         <padding>
             <Insets bottom="10.0" />
