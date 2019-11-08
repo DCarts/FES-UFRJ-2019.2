@@ -33,6 +33,9 @@ public class HomeSecretarioController implements Initializable {
     @FXML
     public Button botaoListaProfessores;
 
+    @FXML
+    public Button botaoListaDisciplinas;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
@@ -104,6 +107,20 @@ public class HomeSecretarioController implements Initializable {
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_professores.fxml")));
             Stage stage = new Stage();
             stage.setTitle("Professores");
+            stage.setScene(new Scene(root, 400, 400));
+            stage.show();
+            Platform.runLater(stage::requestFocus);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onListaDisciplinas(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_disciplinas.fxml")));
+            Stage stage = new Stage();
+            stage.setTitle("Disciplinas");
             stage.setScene(new Scene(root, 400, 400));
             stage.show();
             Platform.runLater(stage::requestFocus);

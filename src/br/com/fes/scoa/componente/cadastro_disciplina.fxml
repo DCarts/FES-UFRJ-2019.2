@@ -42,7 +42,7 @@
             <padding>
                 <Insets left="10.0" right="10.0" top="16.0" />
             </padding>
-            <TextField fx:id="campoNome" promptText="Nome e sobrenome" />
+            <TextField fx:id="campoNome" promptText="Nome" />
             <TextArea fx:id="campoDescricao" />
         </VBox>
     </HBox>
