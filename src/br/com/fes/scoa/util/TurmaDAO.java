@@ -5,6 +5,8 @@ import javax.persistence.EntityManager;
 import br.com.fes.scoa.Main;
 import br.com.fes.scoa.modelo.*;
 
+import java.util.Arrays;
+
 public class TurmaDAO {
 
     public static Turma cadastraTurma(Disciplina disciplina, Professor professor) {
@@ -21,13 +23,14 @@ public class TurmaDAO {
 
     }
 
-    public static void cadastraAlunoNaTurma(Turma turma, Pessoa pessoa){
+    public static void cadastraAlunoNaTurma(Turma turma, Aluno aluno){
 
-        TurmasAlunos tAlunos = new TurmasAlunos(turma, pessoa);
+
 
         EntityManager em = Main.em;
 
-        em.persist(tAlunos);
+        turma.setAluno(Arrays.asList(aluno));
+        em.merge(turma);
 
         JPAUtil.commit(em);
 

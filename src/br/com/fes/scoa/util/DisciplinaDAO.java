@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class DisciplinaDAO {
@@ -69,4 +70,19 @@ public class DisciplinaDAO {
 		Query<Disciplina> query = session.createQuery(cr);
 		return FXCollections.observableArrayList(query.getResultList());
 	}
+
+    public static void equivalenciaDisciplinas(Disciplina disciplina1, Disciplina disciplina2){
+
+
+        EntityManager em = JPAUtil.abreConexao();
+
+        disciplina1.setDisciplinasEquivalentes(Arrays.asList(disciplina2));
+        disciplina2.setDisciplinasEquivalentes(Arrays.asList(disciplina1));
+
+        em.merge(disciplina1);
+        em.merge(disciplina2);
+
+        JPAUtil.commit(em);
+
+    }
 }

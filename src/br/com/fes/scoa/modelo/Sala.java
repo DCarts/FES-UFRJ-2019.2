@@ -1,11 +1,13 @@
 package br.com.fes.scoa.modelo;
 
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableStringValue;
+
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-public class Sala{
+public class Sala {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,9 +17,11 @@ public class Sala{
     @Column(unique = true, length = 9)
     private String codLocalizacao;
 
-    public Sala(String codLocalizacao){
+    public Sala(String codLocalizacao) {
         this.codLocalizacao = codLocalizacao;
     }
+
+    public Sala() {}
 
     public Integer getId() {
         return id;
@@ -25,6 +29,26 @@ public class Sala{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public ObservableStringValue getCodLocalizacaoProperty() {
+        return new SimpleStringProperty(codLocalizacao);
+    }
+
+    public ObservableStringValue getSalaPredioProperty() {
+        String[] parts = codLocalizacao.split("::");
+        if (parts.length > 0) return new SimpleStringProperty(parts[0]);
+        return new SimpleStringProperty("");
+    }
+    public ObservableStringValue getSalaAndarProperty() {
+        String[] parts = codLocalizacao.split("::");
+        if (parts.length > 1) return new SimpleStringProperty(parts[1]);
+        return new SimpleStringProperty("");
+    }
+    public ObservableStringValue getSalaNomeProperty() {
+        String[] parts = codLocalizacao.split("::");
+        if (parts.length > 2) return new SimpleStringProperty(parts[2]);
+        return new SimpleStringProperty("");
     }
 
     public String getCodLocalizacao() {

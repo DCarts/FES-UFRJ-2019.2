@@ -102,7 +102,7 @@ public class AlunoDAO {
 		return lista;
 	}
 
-    public static Aluno editar(
+	public static Aluno editar(
 			Integer id,
 			String nome,
 			String str_data_nascimento,
@@ -129,5 +129,5 @@ public class AlunoDAO {
 		Aluno aluno = new Aluno(pessoa);
 
 		return aluno;
-    }
+	}
 }

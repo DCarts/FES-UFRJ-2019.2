@@ -1,5 +1,6 @@
 package br.com.fes.scoa;
 
+import br.com.fes.scoa.teste.TesteConta;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,7 @@ public class Main extends Application {
 	public static EntityManager em;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
     	
     	
     	Thread t1 = new Thread(new Runnable() {
@@ -27,12 +28,19 @@ public class Main extends Application {
     	    }
     	});  
     	t1.start();
+
+        TesteConta.main(null);
   		
     	
         Parent root = FXMLLoader.load(getClass().getResource("./componente/home_secretario.fxml"));
         primaryStage.setTitle("SCOA");
         primaryStage.setScene(new Scene(root));
-        primaryStage.onCloseRequestProperty().setValue(evt -> {em.close(); Platform.exit();});
+        primaryStage.onCloseRequestProperty().setValue(evt -> {
+            try {
+                em.close();
+            } catch (Exception err) {}
+            Platform.exit();
+        });
         primaryStage.show();
         Platform.runLater(primaryStage::requestFocus);
     }

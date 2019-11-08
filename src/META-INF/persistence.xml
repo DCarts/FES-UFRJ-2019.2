@@ -16,9 +16,7 @@
         <class>br.com.fes.scoa.modelo.Professor</class>
         <class>br.com.fes.scoa.modelo.Disciplina</class>
         <class>br.com.fes.scoa.modelo.Turma</class>
-        <class>br.com.fes.scoa.modelo.TurmasAlunos</class>
         <class>br.com.fes.scoa.modelo.Sala</class>
-        <class>br.com.fes.scoa.modelo.SalasTurmas</class>
 
         <properties>
             <!-- Propriedades JDBC -->
@@ -35,6 +33,7 @@
             <property name="hibernate.dialect"
                 value="org.hibernate.dialect.SQLiteDialect" />
 
+            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.connection.foreign_keys" value="true" />

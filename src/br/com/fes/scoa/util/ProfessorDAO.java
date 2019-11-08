@@ -14,6 +14,7 @@ import br.com.fes.scoa.Main;
 import br.com.fes.scoa.modelo.Pessoa;
 import br.com.fes.scoa.modelo.Professor;
 import br.com.fes.scoa.modelo.Sala;
+import br.com.fes.scoa.modelo.SalasTurmas;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.hibernate.Session;
@@ -106,5 +107,24 @@ public static Professor cadastraProfessor(String nome, String str_data_nasciment
 		org.hibernate.query.Query<Professor> query = session.createQuery(cr);
 		return FXCollections.observableArrayList(query.getResultList().stream().map(Professor::getPessoa).collect(Collectors.toList()));
 	}
+
+    public static ObservableList<SalasTurmas> turmas(Pessoa pessoa) {
+        EntityManager em = Main.em;
+        Professor professor = new Professor(pessoa);
+        String jpql = "select st from Turma t left join SalasTurmas st on st.turma = t where t.professor = :pessoa";
+        Query query = em.createQuery(jpql);
+        query.setParameter("pessoa", professor);
+        List<SalasTurmas> resultado = (List<SalasTurmas>) query.setMaxResults(10).getResultList();
+        System.out.println("Turmas:");
+        resultado.forEach(r -> {System.out.println(r.getTurma().getDisciplina().getNome());});
+        ObservableList<SalasTurmas> lista = FXCollections.observableArrayList(resultado);
+
+        JPAUtil.commit(em);
+        return lista;
+    }
+
+    public static ObservableList<SalasTurmas> buscarTurmas(String text) {
+        return FXCollections.observableArrayList();
+    }
 
 }

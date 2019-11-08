@@ -1,6 +1,8 @@
 package br.com.fes.scoa.modelo;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Turma {
@@ -10,12 +12,16 @@ public class Turma {
     private Integer id;
     //private String nome;
 
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name="professor_pessoa_id")
     private Professor professor;
 
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name="disciplina_id")
     private Disciplina disciplina;
 
+    @ManyToMany
+    private List<Aluno> aluno;
 
 
     //@Column(length = 2555)
@@ -25,6 +31,7 @@ public class Turma {
     public Turma(Disciplina disciplina, Professor professor) {
         this.disciplina = disciplina;
         this.professor = professor;
+        this.aluno = new ArrayList<Aluno>();
     }
 
     public Turma() {}
@@ -53,4 +60,11 @@ public class Turma {
         this.id = id;
     }
 
+    public List<Aluno> getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(List<Aluno> aluno) {
+        this.aluno.add(aluno.get(0));
+    }
 }
