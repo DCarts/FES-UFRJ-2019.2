@@ -4,10 +4,7 @@ package br.com.fes.scoa.modelo;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableStringValue;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -42,6 +39,7 @@ public class SalasTurmas implements Serializable {
         this.sala = sala;
     }
 
+    @Transient
     public ObservableStringValue getHoraProperty() {
         String hour = "";
         try {
