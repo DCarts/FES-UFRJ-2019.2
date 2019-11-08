@@ -21,15 +21,16 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
     	
     	
-    	Thread t1 = new Thread(new Runnable() {
+    	/*Thread t1 = new Thread(new Runnable() {
     	    @Override
     	    public void run() {
     	    	em = JPAUtil.abreConexao();
     	    }
     	});  
-    	t1.start();
+    	t1.start();*/
+        em = JPAUtil.abreConexao();
 
-        TesteConta.main(null);
+        // TesteConta.main(null);
   		
     	
         Parent root = FXMLLoader.load(getClass().getResource("./componente/home_secretario.fxml"));

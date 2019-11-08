@@ -14,7 +14,10 @@ import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 import utils.TimeSpinner;
 
+import java.io.Serializable;
 import java.net.URL;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -30,7 +33,7 @@ public class CadastroHorarioController implements Initializable {
     private final HorarioDeAula original;
     private HorarioDeAula novo = null;
 
-    public static enum Dia {
+    public static enum Dia implements Serializable {
         DOMINGO("Domingo"),
         SEGUNDA("Segunda-feira"),
         TERCA("Terça-feira"),
@@ -85,10 +88,11 @@ public class CadastroHorarioController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         campoDia.setItems(FXCollections.observableArrayList(Dia.values()));
         campoDia.setConverter(new DiaConverter());
+        campoDia.getSelectionModel().selectFirst();
         if (original != null) {
             campoDia.getSelectionModel().select(original.getDia());
-            campoInicio.getValueFactory().setValue(original.getHorarioInicio());
-            campoFim.getValueFactory().setValue(original.getHorarioFim());
+            campoInicio.getValueFactory().setValue(original.getHorarioInicio().truncatedTo(ChronoUnit.MINUTES));
+            campoFim.getValueFactory().setValue(original.getHorarioFim().truncatedTo(ChronoUnit.MINUTES));
 
             confirmDialogTitle = "Editar sala";
             confirmDialogHeader = "Confirmar atualização do horário";
@@ -109,8 +113,8 @@ public class CadastroHorarioController implements Initializable {
     @FXML
     public void onEnviar(ActionEvent event) {
         System.out.println(campoDia.getValue());
-        System.out.println(campoInicio.getValue());
-        System.out.println(campoFim.getValue());
+        System.out.println(campoInicio.getValue().truncatedTo(ChronoUnit.MINUTES));
+        System.out.println(campoFim.getValue().truncatedTo(ChronoUnit.MINUTES));
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(confirmDialogTitle);
         alert.setHeaderText(confirmDialogHeader);
@@ -123,8 +127,8 @@ public class CadastroHorarioController implements Initializable {
             try {
                 novo = TipoHoraDoDiaDAO.cadastraHorario(
                         campoDia.getSelectionModel().getSelectedItem(),
-                        campoInicio.getValue(),
-                        campoFim.getValue()
+                        campoInicio.getValue().truncatedTo(ChronoUnit.MINUTES),
+                        campoFim.getValue().truncatedTo(ChronoUnit.MINUTES)
                 );
 
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

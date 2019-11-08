@@ -16,6 +16,8 @@ public class SalasTurmas implements Serializable {
     private Sala sala;
 
     @Id
+    @ManyToOne
+    @JoinColumn(name="hora_id")
     private HorarioDeAula hora;
 
     @Id

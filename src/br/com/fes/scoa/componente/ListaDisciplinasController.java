@@ -50,46 +50,78 @@ public class ListaDisciplinasController implements Initializable {
     @FXML
     private Button botaoBuscar;
 
+    private final boolean doSelect;
+    private Disciplina selectedItem = null;
+
+    public Disciplina getSelectedItem() {
+        return selectedItem;
+    }
+
+    public ListaDisciplinasController(boolean doSelect) {
+        this.doSelect = doSelect;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        editCol.setCellValueFactory(
-            new PropertyValueFactory<>("edit"));
         nomeCol.setCellValueFactory(
-            new PropertyValueFactory<>("nome"));
+                new PropertyValueFactory<>("nome"));
         descricaoCol.setCellValueFactory(
-            new PropertyValueFactory<>("descricao"));
-
-        selectCol.setCellFactory(
-            CheckBoxTableCell.forTableColumn(selectCol));
-        editCol.setCellFactory(
-            new Callback<TableColumn<Disciplina, String>, TableCell<Disciplina, String>>() {
-                @Override
-                public TableCell call(final TableColumn<Disciplina, String> param) {
-                    final TableCell<Disciplina, String> cell = new TableCell<Disciplina, String>() {
-                        final Button btn = new Button("Editar");
-                        @Override
-                        public void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty) {
-                                setGraphic(null);
-                                setText(null);
-                            } else {
-                                btn.setOnAction(event -> {
-                                    Disciplina disciplina = getTableView().getItems().get(getIndex());
-                                    onEditar(disciplina);
-                                });
-                                setGraphic(btn);
-                                setText(null);
-                            }
-                        }
-                    };
-                    return cell;
+                new PropertyValueFactory<>("descricao"));
+        if (doSelect) {
+            botaoRemover.setDisable(true);
+            botaoRemover.setText("Selecionar");
+            tabela.getSelectionModel().selectedItemProperty().addListener((a, b, newSelection) -> {
+                selectedItem = newSelection;
+                if (newSelection != null) {
+                    botaoRemover.setDisable(false);
                 }
-        });
+                else {
+                    botaoRemover.setDisable(true);
+                }
+            });
+        }
+        else {
+            editCol.setCellValueFactory(
+                    new PropertyValueFactory<>("edit"));
+
+            selectCol.setCellFactory(
+                    CheckBoxTableCell.forTableColumn(selectCol));
+            editCol.setCellFactory(
+                    new Callback<TableColumn<Disciplina, String>, TableCell<Disciplina, String>>() {
+                        @Override
+                        public TableCell call(final TableColumn<Disciplina, String> param) {
+                            final TableCell<Disciplina, String> cell = new TableCell<Disciplina, String>() {
+                                final Button btn = new Button("Editar");
+
+                                @Override
+                                public void updateItem(String item, boolean empty) {
+                                    super.updateItem(item, empty);
+                                    if (empty) {
+                                        setGraphic(null);
+                                        setText(null);
+                                    } else {
+                                        btn.setOnAction(event -> {
+                                            Disciplina disciplina = getTableView().getItems().get(getIndex());
+                                            onEditar(disciplina);
+                                        });
+                                        setGraphic(btn);
+                                        setText(null);
+                                    }
+                                }
+                            };
+                            return cell;
+                        }
+                    });
+        }
+
         atualizarLista();
     }
 
     public void onRemoverSelecionados(ActionEvent actionEvent) {
+        if (doSelect) {
+            botaoRemover.getScene().getWindow().hide();
+            return;
+        }
         List<Disciplina> selecionados = new ArrayList();
         tabela.getItems().forEach(item -> {
             if (selectCol.getCellData(item)) selecionados.add(item);

@@ -1,6 +1,8 @@
 package br.com.fes.scoa.componente;
 
 import br.com.fes.scoa.modelo.*;
+import br.com.fes.scoa.util.ProfessorDAO;
+import br.com.fes.scoa.util.TurmaDAO;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,10 +14,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CadastroTurmaController implements Initializable {
@@ -33,7 +37,7 @@ public class CadastroTurmaController implements Initializable {
 
     @FXML
     public Label labelProfessorSelecionado;
-    private Professor professorSelecionado = null;
+    private Pessoa professorSelecionado = null;
     private final String labelProfessorEmptyText = "Nenhum professor selecionado";
 
     @FXML
@@ -42,7 +46,7 @@ public class CadastroTurmaController implements Initializable {
     @FXML
     public Label labelSalaSelecionada;
     private Sala salaSelecionado = null;
-    private final String labelSalaEmpryText = "Nenhuma sala selecionada";
+    private final String labelSalaEmptyText = "Nenhuma sala selecionada";
 
     @FXML
     public Button botaoAdicionarHorario;
@@ -91,8 +95,10 @@ public class CadastroTurmaController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        horariosSelecionadosView.setItems(horariosSelecionados);
         if (original != null) {
             // @TODO setar valores pros originais
+
             botaoEnviar.setText("Salvar");
         }
 
@@ -102,8 +108,8 @@ public class CadastroTurmaController implements Initializable {
     public void selecionaDisciplina(ActionEvent evt) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_disciplina.fxml")));
-            loader.setControllerFactory((t) -> new ListaDisciplinasController());
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_disciplinas.fxml")));
+            loader.setControllerFactory((t) -> new ListaDisciplinasController(true));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Adicionar horário");
@@ -112,11 +118,15 @@ public class CadastroTurmaController implements Initializable {
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
             ListaDisciplinasController controller = loader.getController();
-            /*TipoHoraDoDia novo = controller;
-            if (novo != null) {
+            Disciplina selected = controller.getSelectedItem();
+            disciplinaSelecionada = selected;
+            if (selected != null) {
                 // @TODO fazer selecao
-                horariosSelecionados.add(novo);
-            }*/
+                labelDisciplinaSelecionada.setText(selected.getNome());
+            }
+            else {
+                labelDisciplinaSelecionada.setText(labelDisciplinaEmptyText);
+            }
 
         } catch (IOException err) {
             Alert errAlert = new Alert(Alert.AlertType.ERROR);
@@ -133,8 +143,8 @@ public class CadastroTurmaController implements Initializable {
     public void selecionaProfessor(ActionEvent evt) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_horario.fxml")));
-            loader.setControllerFactory((t) -> new CadastroHorarioController(null));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_professores.fxml")));
+            loader.setControllerFactory((t) -> new ListaProfessoresController(true));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Adicionar horário");
@@ -142,14 +152,15 @@ public class CadastroTurmaController implements Initializable {
             stage.initOwner(botaoEnviar.getScene().getWindow());
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
-            CadastroHorarioController controller = loader.getController();
-            HorarioDeAula novo = controller.getNovo();
-            if (novo != null) {
-                if (horariosSelecionados.contains(novo)) {
-                    // @TODO este horario ja esta selecionado
-                    return;
-                }
-                horariosSelecionados.add(novo);
+            ListaProfessoresController controller = loader.getController();
+            Pessoa selected = controller.getSelectedItem();
+            professorSelecionado = selected;
+            if (selected != null) {
+                // @TODO fazer selecao
+                labelProfessorSelecionado.setText(selected.getNome());
+            }
+            else {
+                labelProfessorSelecionado.setText(labelProfessorEmptyText);
             }
 
         } catch (IOException err) {
@@ -167,8 +178,8 @@ public class CadastroTurmaController implements Initializable {
     public void selecionaSala(ActionEvent evt) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_horario.fxml")));
-            loader.setControllerFactory((t) -> new CadastroHorarioController(null));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_salas.fxml")));
+            loader.setControllerFactory((t) -> new ListaSalasController(true));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Adicionar horário");
@@ -176,14 +187,15 @@ public class CadastroTurmaController implements Initializable {
             stage.initOwner(botaoEnviar.getScene().getWindow());
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
-            CadastroHorarioController controller = loader.getController();
-            HorarioDeAula novo = controller.getNovo();
-            if (novo != null) {
-                if (horariosSelecionados.contains(novo)) {
-                    // @TODO este horario ja esta selecionado
-                    return;
-                }
-                horariosSelecionados.add(novo);
+            ListaSalasController controller = loader.getController();
+            Sala selected = controller.getSelectedItem();
+            salaSelecionado = selected;
+            if (selected != null) {
+                // @TODO fazer selecao
+                labelSalaSelecionada.setText(selected.getCodLocalizacao().split("::")[2]);
+            }
+            else {
+                labelSalaSelecionada.setText(labelSalaEmptyText);
             }
 
         } catch (IOException err) {
@@ -232,46 +244,30 @@ public class CadastroTurmaController implements Initializable {
 
     @FXML
     public void onEnviar(ActionEvent event) {
-        throw new UnsupportedOperationException("falta implementar");
-        /*String s = "\n" +
-                campoNome.getCharacters() + '\n' +
-                campoDataNasc.getValue().toString() + '\n' +
-                campoCPF.getPlainText() + '\n' +
-                campoEndereco.getCharacters() + '\n' +
-                campoEmail.getCharacters() + '\n';
-        System.out.println(s);
+        // @TODO testar selecao
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(confirmDialogTitle);
         alert.setHeaderText(confirmDialogHeader);
         alert.setContentText(confirmDialogContent);
         alert.initStyle(StageStyle.UTILITY);
         alert.initOwner(botaoEnviar.getScene().getWindow());
-        Optional<ButtonType> result = alert.showAndWait();
         setEditable(false);
+        Optional<ButtonType> result = alert.showAndWait();
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             try {
-                if (modoEditar) {
-                    Aluno aluno = AlunoDAO.editar(
-                            editarPessoa.getId(),
-                            campoNome.getCharacters().toString(),
-                            campoDataNasc.getValue().toString(),
-                            campoCPF.getPlainText(),
-                            campoEndereco.getCharacters().toString(),
-                            campoEmail.getCharacters().toString());
-                    for (int i = 0; i < lista.size(); i++) {
-                        if (lista.get(i).getId().equals(aluno.getPessoa().getId())) {
-                            lista.set(i,aluno.getPessoa());
-                            break;
-                        }
-                    }
+                if (original != null) {
+                    original.setProfessor(ProfessorDAO.fromPessoa(professorSelecionado));
+                    original.setDisciplina(disciplinaSelecionada);
+                    original.setSala(salaSelecionado);
+                    original.setHorario(horariosSelecionados);
+                    TurmaDAO.atualiza(original);
                 } else {
-                    Aluno aluno = AlunoDAO.cadastrar(
-                            campoNome.getCharacters().toString(),
-                            campoDataNasc.getValue().toString(),
-                            campoCPF.getPlainText(),
-                            campoEndereco.getCharacters().toString(),
-                            campoEmail.getCharacters().toString());
-                    lista.add(aluno.getPessoa());
+                    TurmaDAO.cadastraTurma(
+                            disciplinaSelecionada,
+                            ProfessorDAO.fromPessoa(professorSelecionado),
+                            salaSelecionado,
+                            horariosSelecionados
+                    );
                 }
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle(successDialogTitle);
@@ -293,7 +289,7 @@ public class CadastroTurmaController implements Initializable {
         }
         else {
             setEditable(true);
-        }*/
+        }
     }
 
     private void setEditable(boolean edit) {

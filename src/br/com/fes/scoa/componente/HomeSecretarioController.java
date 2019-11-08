@@ -37,8 +37,10 @@ public class HomeSecretarioController implements Initializable {
     @FXML
     public void onListaAlunos(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(
+            FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_alunos.fxml")));
+            loader.setControllerFactory((t) -> new ListaAlunosController(false));
+            Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Alunos");
             stage.setScene(new Scene(root, 400, 400));
@@ -52,10 +54,12 @@ public class HomeSecretarioController implements Initializable {
     @FXML
     public void onListaProfessores(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(
+            FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_professores.fxml")));
+            loader.setControllerFactory((t) -> new ListaProfessoresController(false));
+            Parent root = loader.load();
             Stage stage = new Stage();
-            stage.setTitle("Alunos");
+            stage.setTitle("Professores");
             stage.setScene(new Scene(root, 400, 400));
             stage.show();
             Platform.runLater(stage::requestFocus);
@@ -67,10 +71,12 @@ public class HomeSecretarioController implements Initializable {
     @FXML
     public void onListaDisciplinas(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(
+            FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_disciplinas.fxml")));
+            loader.setControllerFactory((t) -> new ListaDisciplinasController(false));
+            Parent root = loader.load();
             Stage stage = new Stage();
-            stage.setTitle("Alunos");
+            stage.setTitle("Disciplinas");
             stage.setScene(new Scene(root, 400, 400));
             stage.show();
             Platform.runLater(stage::requestFocus);
@@ -82,10 +88,12 @@ public class HomeSecretarioController implements Initializable {
     @FXML
     public void onListaSalas(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(
+            FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_salas.fxml")));
+            loader.setControllerFactory((t) -> new ListaSalasController(false));
+            Parent root = loader.load();
             Stage stage = new Stage();
-            stage.setTitle("Alunos");
+            stage.setTitle("Salas");
             stage.setScene(new Scene(root, 400, 400));
             stage.show();
             Platform.runLater(stage::requestFocus);
@@ -97,13 +105,17 @@ public class HomeSecretarioController implements Initializable {
     @FXML
     public void onAlocaTurma(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(
+            FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_turma.fxml")));
+            loader.setControllerFactory((t) -> new CadastroTurmaController(null));
+            Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Alocar turma");
             stage.setScene(new Scene(root, 400, 400));
+            stage.initOwner(botaoAlocarTurma.getScene().getWindow());
             stage.show();
             Platform.runLater(stage::requestFocus);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

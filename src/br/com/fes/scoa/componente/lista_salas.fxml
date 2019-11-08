@@ -14,13 +14,13 @@
 <VBox minHeight="180.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.fes.scoa.componente.ListaSalasController">
     <BorderPane>
         <left>
-            <Label fx:id="titleLabel" text="Alunos">
+            <Label fx:id="titleLabel" text="Salas">
             <font>
                <Font name="Arial" size="24.0" />
             </font></Label>
         </left>
         <right>
-            <Button fx:id="botaoCriar" mnemonicParsing="false" onAction="#onCriar" text="Cadastrar Aluno" />
+            <Button fx:id="botaoCriar" mnemonicParsing="false" onAction="#onCriar" text="Cadastrar Sala" />
         </right>
         <padding>
             <Insets bottom="10.0" />

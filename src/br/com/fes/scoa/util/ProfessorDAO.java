@@ -20,52 +20,62 @@ import javafx.collections.ObservableList;
 import org.hibernate.Session;
 
 public class ProfessorDAO {
-	
+
+	public static Professor fromPessoa(Pessoa pessoa) {
+		EntityManager em = Main.em;
+		Session session = (Session) Main.em.getDelegate();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Professor> cr = em.getCriteriaBuilder().createQuery(Professor.class);
+		Root<Professor> root = cr.from(Professor.class);
+		cr.select(root).where(cb.equal(root.get("pessoa"), pessoa));
+
+		org.hibernate.query.Query<Professor> query = session.createQuery(cr);
+		return query.getSingleResult();
+	}
+
 public static Professor cadastraProfessor(String nome, String str_data_nascimento, String cpf, String endereco, String email) {
-		
-		LocalDate data_nascimento = LocalDate.parse(str_data_nascimento);
-		
-		Pessoa pessoa = new Pessoa(nome, data_nascimento, cpf, endereco, email);
-		Professor professor = new Professor(pessoa);
-		
-		EntityManager em = JPAUtil.abreConexao();
-		
-		String jpql = "select p from Pessoa p where p.cpf = :pCPF";
-		
-		Query query = em.createQuery(jpql);
-		query.setParameter("pCPF", cpf);
-		
-		List<Pessoa> resultado = (List<Pessoa>) query.getResultList();
-		
-		if(resultado.isEmpty()) {
-		
-			em.persist(pessoa);
+
+	LocalDate data_nascimento = LocalDate.parse(str_data_nascimento);
+
+	Pessoa pessoa = new Pessoa(nome, data_nascimento, cpf, endereco, email);
+	Professor professor = new Professor(pessoa);
+
+	EntityManager em = Main.em;
+
+	String jpql = "select p from Pessoa p where p.cpf = :pCPF";
+
+	Query query = em.createQuery(jpql);
+	query.setParameter("pCPF", cpf);
+
+	List<Pessoa> resultado = (List<Pessoa>) query.getResultList();
+
+	if (resultado.isEmpty()) {
+
+		em.persist(pessoa);
+		em.persist(professor);
+	} else {
+
+		String jpql2 = "select a from Professor a where a.pessoa = :pPessoa";
+		Query query2 = em.createQuery(jpql2);
+		query2.setParameter("pPessoa", resultado.get(0));
+
+		List<Professor> resultado2 = (List<Professor>) query2.getResultList();
+
+		if (resultado2.isEmpty()) {
+			professor.setPessoa(resultado.get(0));
 			em.persist(professor);
-		}
-		else {
-			
-			String jpql2 = "select a from Professor a where a.pessoa = :pPessoa";
-			Query query2 = em.createQuery(jpql2);
-			query2.setParameter("pPessoa", resultado.get(0));
-			
-			List<Professor> resultado2 = (List<Professor>) query2.getResultList();
+		} else {
+			// @TODO reportar isso ao usuário de alguma forma quando ele tenta cadastrar um
+			// aluno que ja esta cadastrado
 
-			if(resultado2.isEmpty()) {
-				professor.setPessoa(resultado.get(0));
-				em.persist(professor);
-
-			}
-			else {
-				// @TODO reportar isso ao usuário de alguma forma quando ele tenta cadastrar um professor que ja esta cadastrado
-				System.out.println(resultado2.get(0).getPessoa().getNome() + " ja esta cadastrado(a) como professor(a)\n CPF: " + 
-						resultado2.get(0).getPessoa().getCpf());
-			}
-			
+			System.out.println(resultado2.get(0).getPessoa().getNome()
+					+ " ja esta cadastrado(a) como professor(a)\n CPF: " + resultado2.get(0).getPessoa().getCpf());
 		}
-		
-		JPAUtil.commit(em);
-		
-		return professor;
+
+	}
+
+	JPAUtil.commit(em);
+	return professor;
 	}
 
 	public static void remover(List<Pessoa> pessoas) {

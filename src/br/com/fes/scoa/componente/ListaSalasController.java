@@ -5,6 +5,7 @@ import br.com.fes.scoa.modelo.Sala;
 import br.com.fes.scoa.util.AlunoDAO;
 import br.com.fes.scoa.util.SalaDAO;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,48 +53,78 @@ public class ListaSalasController implements Initializable {
     @FXML
     private Button botaoBuscar;
 
+    private final boolean doSelect;
+    private Sala selectedItem = null;
+
+    public Sala getSelectedItem() {
+        return selectedItem;
+    }
+
+    public ListaSalasController(boolean doSelect) {
+        this.doSelect = doSelect;
+    }
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        editCol.setCellValueFactory(
-                new PropertyValueFactory<>("edit"));
-        predioCol.setCellValueFactory(
-                new PropertyValueFactory<>("predio"));
-        andarCol.setCellValueFactory(
-                new PropertyValueFactory<>("andar"));
-        nomeCol.setCellValueFactory(
-                new PropertyValueFactory<>("nome"));
-
-        selectCol.setCellFactory(
-            CheckBoxTableCell.forTableColumn(selectCol));
-        editCol.setCellFactory(
-            new Callback<TableColumn<Sala, String>, TableCell<Sala, String>>() {
-                @Override
-                public TableCell call(final TableColumn<Sala, String> param) {
-                    final TableCell<Sala, String> cell = new TableCell<Sala, String>() {
-                        final Button btn = new Button("Editar");
-                        @Override
-                        public void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty) {
-                                setGraphic(null);
-                                setText(null);
-                            } else {
-                                btn.setOnAction(event -> {
-                                    Sala sala = getTableView().getItems().get(getIndex());
-                                    onEditar(sala);
-                                });
-                                setGraphic(btn);
-                                setText(null);
-                            }
-                        }
-                    };
-                    return cell;
+        predioCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCodLocalizacao().split("::")[0]));
+        andarCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCodLocalizacao().split("::")[1]));
+        nomeCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCodLocalizacao().split("::")[2]));
+        if (doSelect) {
+            botaoRemover.setDisable(true);
+            botaoRemover.setText("Selecionar");
+            tabela.getSelectionModel().selectedItemProperty().addListener((a, b, newSelection) -> {
+                selectedItem = newSelection;
+                if (newSelection != null) {
+                    botaoRemover.setDisable(false);
                 }
-        });
+                else {
+                    botaoRemover.setDisable(true);
+                }
+            });
+        }
+        else {
+            editCol.setCellValueFactory(
+                    new PropertyValueFactory<>("edit"));
+
+            selectCol.setCellFactory(
+                    CheckBoxTableCell.forTableColumn(selectCol));
+            editCol.setCellFactory(
+                    new Callback<TableColumn<Sala, String>, TableCell<Sala, String>>() {
+                        @Override
+                        public TableCell call(final TableColumn<Sala, String> param) {
+                            final TableCell<Sala, String> cell = new TableCell<Sala, String>() {
+                                final Button btn = new Button("Editar");
+
+                                @Override
+                                public void updateItem(String item, boolean empty) {
+                                    super.updateItem(item, empty);
+                                    if (empty) {
+                                        setGraphic(null);
+                                        setText(null);
+                                    } else {
+                                        btn.setOnAction(event -> {
+                                            Sala sala = getTableView().getItems().get(getIndex());
+                                            onEditar(sala);
+                                        });
+                                        setGraphic(btn);
+                                        setText(null);
+                                    }
+                                }
+                            };
+                            return cell;
+                        }
+                    });
+        }
         atualizarLista();
     }
 
     public void onRemoverSelecionados(ActionEvent actionEvent) {
+        if (doSelect) {
+            botaoRemover.getScene().getWindow().hide();
+            return;
+        }
         List<Sala> selecionados = new ArrayList();
         tabela.getItems().forEach(item -> {
             if (selectCol.getCellData(item)) selecionados.add(item);
@@ -118,6 +149,7 @@ public class ListaSalasController implements Initializable {
             CadastroSalaController controller = loader.getController();
             Sala novo = controller.getNovo();
             if (novo != null) {
+                System.out.println("chegou aqui");
                 tabela.getItems().add(novo);
             }
            
@@ -154,10 +186,6 @@ public class ListaSalasController implements Initializable {
             stage.showAndWait();
             CadastroSalaController controller = loader.getController();
             Sala novo = controller.getNovo();
-            if (novo != null) {
-                tabela.getItems().remove(sala);
-                tabela.getItems().add(novo);
-            }
             if (novo != null) {
                 tabela.getItems().remove(sala);
                 tabela.getItems().add(novo);

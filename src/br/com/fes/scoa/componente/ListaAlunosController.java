@@ -55,54 +55,84 @@ public class ListaAlunosController implements Initializable {
     @FXML
     private Button botaoBuscar;
 
+    private final boolean doSelect;
+    private Pessoa selectedItem = null;
+
+    public Pessoa getSelectedItem() {
+        return selectedItem;
+    }
+
+    public ListaAlunosController(boolean doSelect) {
+        this.doSelect = doSelect;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        selectCol.setCellValueFactory(
-            param -> param.getValue().getChecked());
-        editCol.setCellValueFactory(
-            new PropertyValueFactory<>("nome"));
         nomeCol.setCellValueFactory(
-            new PropertyValueFactory<>("nome"));
+                new PropertyValueFactory<>("nome"));
         cpfCol.setCellValueFactory(
-            new PropertyValueFactory<>("cpf"));
+                new PropertyValueFactory<>("cpf"));
         emailCol.setCellValueFactory(
-            new PropertyValueFactory<>("email"));
+                new PropertyValueFactory<>("email"));
         enderecoCol.setCellValueFactory(
-            new PropertyValueFactory<>("endereco"));
+                new PropertyValueFactory<>("endereco"));
         data_nascimentoCol.setCellValueFactory(
-            new PropertyValueFactory<>("data_nascimento"));
-
-        selectCol.setCellFactory(
-            CheckBoxTableCell.forTableColumn(selectCol));
-        editCol.setCellFactory(
-            new Callback<TableColumn<Pessoa, String>, TableCell<Pessoa, String>>() {
-                @Override
-                public TableCell call(final TableColumn<Pessoa, String> param) {
-                    final TableCell<Pessoa, String> cell = new TableCell<Pessoa, String>() {
-                        final Button btn = new Button("Editar");
-                        @Override
-                        public void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty) {
-                                setGraphic(null);
-                                setText(null);
-                            } else {
-                                btn.setOnAction(event -> {
-                                    Pessoa pessoa = getTableView().getItems().get(getIndex());
-                                    onEditar(pessoa);
-                                });
-                                setGraphic(btn);
-                                setText(null);
-                            }
-                        }
-                    };
-                    return cell;
+                new PropertyValueFactory<>("data_nascimento"));
+        if (doSelect) {
+            botaoRemover.setDisable(true);
+            botaoRemover.setText("Selecionar");
+            tabela.getSelectionModel().selectedItemProperty().addListener((a, b, newSelection) -> {
+                selectedItem = newSelection;
+                if (newSelection != null) {
+                    botaoRemover.setDisable(false);
                 }
-        });
+                else {
+                    botaoRemover.setDisable(true);
+                }
+            });
+        }
+        else {
+            selectCol.setCellValueFactory(
+                    param -> param.getValue().getChecked());
+            editCol.setCellValueFactory(
+                    new PropertyValueFactory<>("edit"));
+            selectCol.setCellFactory(
+                    CheckBoxTableCell.forTableColumn(selectCol));
+            editCol.setCellFactory(
+                    new Callback<TableColumn<Pessoa, String>, TableCell<Pessoa, String>>() {
+                        @Override
+                        public TableCell call(final TableColumn<Pessoa, String> param) {
+                            final TableCell<Pessoa, String> cell = new TableCell<Pessoa, String>() {
+                                final Button btn = new Button("Editar");
+                                @Override
+                                public void updateItem(String item, boolean empty) {
+                                    super.updateItem(item, empty);
+                                    if (empty) {
+                                        setGraphic(null);
+                                        setText(null);
+                                    } else {
+                                        btn.setOnAction(event -> {
+                                            Pessoa pessoa = getTableView().getItems().get(getIndex());
+                                            onEditar(pessoa);
+                                        });
+                                        setGraphic(btn);
+                                        setText(null);
+                                    }
+                                }
+                            };
+                            return cell;
+                        }
+                    });
+        }
+
         atualizarLista();
     }
 
     public void onRemoverSelecionados(ActionEvent actionEvent) {
+        if (doSelect) {
+            botaoRemover.getScene().getWindow().hide();
+            return;
+        }
         List<Pessoa> selecionados = new ArrayList();
         tabela.getItems().forEach(item -> {
             if (item.isChecked()) selecionados.add(item);

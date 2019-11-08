@@ -2,19 +2,17 @@ package br.com.fes.scoa.modelo;
 
 import br.com.fes.scoa.componente.CadastroHorarioController.Dia;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.Objects;
 
+@Entity
 public class HorarioDeAula {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Enumerated(EnumType.STRING)
     private Dia dia;
 
     @Column

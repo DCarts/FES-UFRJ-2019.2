@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.time.LocalTime;
@@ -19,11 +20,12 @@ public class TipoHoraDoDiaDAO {
         EntityManager em = Main.em;
         Session session = (Session)em.getDelegate();
 
-        CriteriaQuery<HorarioDeAula> query = em.getCriteriaBuilder().createQuery(HorarioDeAula.class);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<HorarioDeAula> query = cb.createQuery(HorarioDeAula.class);
         Root<HorarioDeAula> root = query.from(HorarioDeAula.class);
-        query.select(root).where(em.getCriteriaBuilder().equal(root.get("dia"), dia));
-        query.select(root).where(em.getCriteriaBuilder().equal(root.get("horarioInicio"), horarioInicio));
-        query.select(root).where(em.getCriteriaBuilder().equal(root.get("horarioFim"), horarioFim));
+        query.select(root).where(cb.and(cb.equal(root.get("dia"), dia),
+                cb.equal(root.get("horarioInicio"), horarioInicio),
+                cb.equal(root.get("horarioFim"), horarioFim)));
         Query<HorarioDeAula> q = session.createQuery(query);
         List<HorarioDeAula> horarios = q.getResultList();
 

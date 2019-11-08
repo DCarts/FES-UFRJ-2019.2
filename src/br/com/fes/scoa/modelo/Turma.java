@@ -12,9 +12,13 @@ public class Turma {
     private Integer id;
     //private String nome;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="professor_pessoa_id")
     private Professor professor;
+
+    @ManyToOne
+    @JoinColumn(name="sala_id")
+    private Sala sala;
 
     @OneToOne
     @JoinColumn(name="disciplina_id")
@@ -23,19 +27,22 @@ public class Turma {
     @ManyToMany
     private List<Aluno> aluno;
 
+    @ManyToMany
+    private List<HorarioDeAula> horario;
+
 
     //@Column(length = 2555)
     //private String descricao;
 
-
-    public Turma(Disciplina disciplina, Professor professor) {
+    public Turma(Disciplina disciplina, Professor professor, Sala sala, List<HorarioDeAula> horario) {
         this.disciplina = disciplina;
         this.professor = professor;
+        this.sala = sala;
+        this.horario = horario;
         this.aluno = new ArrayList<Aluno>();
     }
 
     public Turma() {}
-
 
     public Professor getProfessor() {
         return professor;
@@ -66,5 +73,21 @@ public class Turma {
 
     public void setAluno(List<Aluno> aluno) {
         this.aluno.add(aluno.get(0));
+    }
+
+    public Sala getSala() {
+        return sala;
+    }
+
+    public void setSala(Sala sala) {
+        this.sala = sala;
+    }
+
+    public List<HorarioDeAula> getHorario() {
+        return horario;
+    }
+
+    public void setHorario(List<HorarioDeAula> horario) {
+        this.horario = horario;
     }
 }
