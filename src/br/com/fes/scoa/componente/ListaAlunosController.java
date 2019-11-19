@@ -95,7 +95,7 @@ public class ListaAlunosController implements Initializable {
             selectCol.setCellValueFactory(
                     param -> param.getValue().getChecked());
             editCol.setCellValueFactory(
-                    new PropertyValueFactory<>("edit"));
+                    new PropertyValueFactory<>("nome"));
             selectCol.setCellFactory(
                     CheckBoxTableCell.forTableColumn(selectCol));
             editCol.setCellFactory(

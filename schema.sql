@@ -6,7 +6,7 @@
 DROP TABLE IF EXISTS `aluno`;
 CREATE TABLE `aluno` (
   `pessoa_id` INTEGER PRIMARY KEY NOT NULL,
-  CONSTRAINT `FKdhmnlbjhg21llgs46ekorgswx` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`)
+  CONSTRAINT `FKdhmnlbjhg21llgs46ekorgswx` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`) ON DELETE CASCADE
 );
 
 --
@@ -89,7 +89,7 @@ CREATE TABLE `pessoa_professor` (
 DROP TABLE IF EXISTS `professor`;
 CREATE TABLE `professor` (
   `pessoa_id` INTEGER PRIMARY KEY NOT NULL,
-  CONSTRAINT `FKhdx7tr0f98w7q50nwskcakga2` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`)
+  CONSTRAINT `FKhdx7tr0f98w7q50nwskcakga2` FOREIGN KEY (`pessoa_id`) REFERENCES `pessoa` (`id`) ON DELETE CASCADE
 );
 
 --

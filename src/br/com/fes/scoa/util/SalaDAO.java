@@ -48,22 +48,21 @@ public class SalaDAO {
         JPAUtil.commit(em);
     }
 
-    public static void remover(List<Sala> salas) {
+    public static void remover(List<Sala> lista) {
         EntityManager em = Main.em;
-        Session session = (Session) Main.em.getDelegate();
-        for (Sala s : salas) {
-            em.remove(s);
-        }
+        lista.replaceAll(l -> em.find(l.getClass(),l.getId()));
+        lista.forEach(em::remove);
         JPAUtil.commit(em);
     }
 
     public static ObservableList<Sala> buscar(String text) {
+        String busca = "%"+text.trim().toLowerCase()+"%";
         EntityManager em = Main.em;
         Session session = (Session) Main.em.getDelegate();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Sala> cr = em.getCriteriaBuilder().createQuery(Sala.class);
         Root<Sala> root = cr.from(Sala.class);
-        cr.select(root).where(cb.like(root.get("codLocalizacao"), text));
+        cr.select(root).where(cb.like(root.get("codLocalizacao"), busca));
 
         Query<Sala> query = session.createQuery(cr);
         return FXCollections.observableArrayList(query.getResultList());

@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Professor implements  Serializable{
+public class Professor implements Serializable {
 
 	@Id
 	@ManyToOne

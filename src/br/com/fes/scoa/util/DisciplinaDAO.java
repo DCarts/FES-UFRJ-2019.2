@@ -39,22 +39,21 @@ public class DisciplinaDAO {
 		JPAUtil.commit(em);
 	}
 
-	public static void remover(List<Disciplina> disciplinas) {
+	public static void remover(List<Disciplina> lista) {
 		EntityManager em = Main.em;
-		Session session = (Session) Main.em.getDelegate();
-		for (Disciplina d : disciplinas) {
-			em.remove(d);
-		}
+		lista.replaceAll(l -> em.find(l.getClass(),l.getId()));
+		lista.forEach(em::remove);
 		JPAUtil.commit(em);
 	}
 
 	public static ObservableList<Disciplina> buscar(String text) {
+		String busca = "%"+text.trim().toLowerCase()+"%";
 		EntityManager em = Main.em;
 		Session session = (Session) Main.em.getDelegate();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Disciplina> cr = em.getCriteriaBuilder().createQuery(Disciplina.class);
 		Root<Disciplina> root = cr.from(Disciplina.class);
-		cr.select(root).where(cb.or(cb.like(root.get("nome"), text), cb.like(root.get("descricao"), text)));
+		cr.select(root).where(cb.or(cb.like(root.get("nome"), busca), cb.like(root.get("descricao"), busca)));
 
 		Query<Disciplina> query = session.createQuery(cr);
 		return FXCollections.observableArrayList(query.getResultList());

@@ -46,7 +46,7 @@
             <TableColumn fx:id="cpfCol" text="CPF" />
             <TableColumn fx:id="emailCol" text="Email" />
             <TableColumn fx:id="data_nascimentoCol" text="Data de Nascimento" />
-            <TableColumn fx:id="enderecoCol" text="Endereço" />
+            <TableColumn fx:id="enderecoCol" text="EndereÃ§o" />
             <TableColumn fx:id="editCol" />
             <TableColumn fx:id="classesCol" />
         </columns>

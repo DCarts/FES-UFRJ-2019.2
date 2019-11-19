@@ -22,8 +22,8 @@
     <libelement value="jar://$MODULE_DIR$/lib/protobuf-java-2.6.0.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/stax-ex-1.8.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/txw2-2.3.1.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/sqlite-jdbc-3.27.2.1.jar" />
-    <libelement value="jar://$MODULE_DIR$/lib/sqlite-dialect-0.1.0.jar" />
+    <libelement value="jar://$MODULE_DIR$/lib/sqlite-jdbc-3.27.2.1.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/sqlite-dialect-0.1.0.jar!/" />
     <src_description expected_position="1">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="1" />
     </src_description>

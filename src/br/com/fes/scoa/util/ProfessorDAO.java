@@ -29,7 +29,7 @@ public class ProfessorDAO {
 		CriteriaQuery<Professor> cr = em.getCriteriaBuilder().createQuery(Professor.class);
 		Root<Professor> root = cr.from(Professor.class);
 		cr.select(root).where(cb.equal(root.get("pessoa"), pessoa));
-		
+
 		org.hibernate.query.Query<Professor> query = session.createQuery(cr);
 		return query.getSingleResult();
 	}
@@ -79,12 +79,10 @@ public static Professor cadastraProfessor(String nome, String str_data_nasciment
 	return professor;
 	}
 
-	public static void remover(List<Pessoa> pessoas) {
+	public static void remover(List<Pessoa> lista) {
 		EntityManager em = Main.em;
-		Session session = (Session) Main.em.getDelegate();
-		for (Pessoa p : pessoas) {
-			em.remove(p);
-		}
+		lista.replaceAll(l -> em.find(l.getClass(),l.getId()));
+		lista.forEach(em::remove);
 		JPAUtil.commit(em);
 	}
 
@@ -96,16 +94,19 @@ public static Professor cadastraProfessor(String nome, String str_data_nasciment
 		JPAUtil.commit(em);
 	}
 
-	public static ObservableList<Pessoa> buscar(String text) {
+	public static ObservableList<Pessoa> buscar(String str) {
+		String busca = "%"+str.trim().toLowerCase()+"%";
 		EntityManager em = Main.em;
-		Session session = (Session) Main.em.getDelegate();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Professor> cr = em.getCriteriaBuilder().createQuery(Professor.class);
-		Root<Professor> root = cr.from(Professor.class);
-		cr.select(root).where(cb.like(root.get("codLocalizacao"), text));
+		String jpql = "SELECT DISTINCT p FROM Pessoa p INNER JOIN Professor a ON a.pessoa = p WHERE LOWER(p.nome) LIKE :busca OR LOWER(p.email) LIKE :busca OR LOWER(p.cpf) LIKE :busca";
+		Query query = em.createQuery(jpql);
+		query.setParameter("busca", busca);
+		List<Pessoa> resultado = (List<Pessoa>) query.setMaxResults(10).getResultList();
+		System.out.println("Lista:");
+		resultado.forEach(System.out::println);
+		ObservableList<Pessoa> lista = FXCollections.observableArrayList(resultado);
 
-		org.hibernate.query.Query<Professor> query = session.createQuery(cr);
-		return FXCollections.observableArrayList(query.getResultList().stream().map(Professor::getPessoa).collect(Collectors.toList()));
+		JPAUtil.commit(em);
+		return lista;
 	}
 
 	public static ObservableList<Pessoa> listar() {

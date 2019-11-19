@@ -13,18 +13,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class AlunoDAO {
-	public static void remover(List<Pessoa> pessoas) {
+	public static void remover(List<Pessoa> lista) {
 		EntityManager em = Main.em;
-
-		String jpql = "DELETE FROM Pessoa p WHERE p IN (:pessoas)";
-		Query query = em.createQuery(jpql);
-		query.setParameter("pessoas", pessoas);
-		int result = query.executeUpdate();
-		if (result > 0) {
-			System.out.println("Removidos:");
-			pessoas.forEach(System.out::println);
-		}
-
+		lista.replaceAll(l -> em.find(l.getClass(),l.getId()));
+		lista.forEach(em::remove);
 		JPAUtil.commit(em);
 	}
 

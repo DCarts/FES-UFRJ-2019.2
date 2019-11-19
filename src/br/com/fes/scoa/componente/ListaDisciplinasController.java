@@ -43,10 +43,10 @@ public class ListaDisciplinasController implements Initializable {
     private TableColumn<Disciplina, String> nomeCol;
     @FXML
     private TableColumn<Disciplina, String> descricaoCol;
-    
+
     @FXML
     private TextField campoBuscar;
-    
+
     @FXML
     private Button botaoBuscar;
 
@@ -81,8 +81,10 @@ public class ListaDisciplinasController implements Initializable {
             });
         }
         else {
+            selectCol.setCellValueFactory(
+                    param -> param.getValue().getChecked());
             editCol.setCellValueFactory(
-                    new PropertyValueFactory<>("edit"));
+                    new PropertyValueFactory<>("nome"));
 
             selectCol.setCellFactory(
                     CheckBoxTableCell.forTableColumn(selectCol));
@@ -124,7 +126,7 @@ public class ListaDisciplinasController implements Initializable {
         }
         List<Disciplina> selecionados = new ArrayList();
         tabela.getItems().forEach(item -> {
-            if (selectCol.getCellData(item)) selecionados.add(item);
+            if (item.isChecked()) selecionados.add(item);
         });
         tabela.getItems().removeAll(selecionados);
         DisciplinaDAO.remover(selecionados);
@@ -149,12 +151,12 @@ public class ListaDisciplinasController implements Initializable {
                 tabela.getItems().add(novo);
             }
 
-           
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
+
     @FXML
     public void onBuscar(KeyEvent evt) {
         String busca = campoBuscar.getText();

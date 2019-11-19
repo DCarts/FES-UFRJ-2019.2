@@ -123,7 +123,7 @@ public class ListaProfessoresController implements Initializable {
             selectCol.setCellValueFactory(
                     param -> param.getValue().getChecked());
             editCol.setCellValueFactory(
-                    new PropertyValueFactory<>("edit"));
+                    new PropertyValueFactory<>("nome"));
             classesCol.setCellValueFactory(
                     new PropertyValueFactory<>("nome"));
             selectCol.setCellFactory(
@@ -220,9 +220,8 @@ public class ListaProfessoresController implements Initializable {
             stage.setTitle("Editar professor");
             stage.setScene(new Scene(root, 400, 400));
             stage.initOwner(titleLabel.getScene().getWindow());
-            stage.show();
-            Platform.runLater(stage::requestFocus);
             stage.showAndWait();
+            Platform.runLater(stage::requestFocus);
             CadastroProfessorController controller = loader.getController();
             Pessoa novo = controller.getNovo();
             if (novo != null) {

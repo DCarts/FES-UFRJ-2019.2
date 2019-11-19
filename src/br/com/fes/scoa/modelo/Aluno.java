@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Aluno implements Serializable{
-	
+public class Aluno implements Serializable {
+
 	@Id
 	@ManyToOne
 	private Pessoa pessoa;
