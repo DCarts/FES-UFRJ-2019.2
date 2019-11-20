@@ -108,7 +108,7 @@ public class CadastroTurmaController implements Initializable {
     public void selecionaDisciplina(ActionEvent evt) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_disciplinas.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_disciplinas.fxml")));
             loader.setControllerFactory((t) -> new ListaDisciplinasController(true));
             Parent root = loader.load();
             Stage stage = new Stage();
@@ -143,7 +143,7 @@ public class CadastroTurmaController implements Initializable {
     public void selecionaProfessor(ActionEvent evt) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_professores.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_professores.fxml")));
             loader.setControllerFactory((t) -> new ListaProfessoresController(true));
             Parent root = loader.load();
             Stage stage = new Stage();
@@ -178,7 +178,7 @@ public class CadastroTurmaController implements Initializable {
     public void selecionaSala(ActionEvent evt) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/lista_salas.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_salas.fxml")));
             loader.setControllerFactory((t) -> new ListaSalasController(true));
             Parent root = loader.load();
             Stage stage = new Stage();
@@ -213,7 +213,7 @@ public class CadastroTurmaController implements Initializable {
     public void adicionaHorario(ActionEvent evt) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_horario.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_horario.fxml")));
             loader.setControllerFactory((t) -> new CadastroHorarioController(null));
             Parent root = loader.load();
             Stage stage = new Stage();

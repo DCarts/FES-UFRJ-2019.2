@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.lang.Thread;
 
 import javax.persistence.EntityManager;
 
@@ -33,7 +32,7 @@ public class Main extends Application {
         TesteConta.main(null);
   		
     	
-        Parent root = FXMLLoader.load(getClass().getResource("./componente/home_secretario.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("componente/fxml/home_secretario.fxml"));
         primaryStage.setTitle("SCOA");
         primaryStage.setScene(new Scene(root));
         primaryStage.onCloseRequestProperty().setValue(evt -> {

@@ -1,8 +1,6 @@
 package br.com.fes.scoa.componente;
 
 import br.com.fes.scoa.modelo.Disciplina;
-import br.com.fes.scoa.modelo.Pessoa;
-import br.com.fes.scoa.util.AlunoDAO;
 import br.com.fes.scoa.util.DisciplinaDAO;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -136,7 +134,7 @@ public class ListaDisciplinasController implements Initializable {
     public void onCriar(ActionEvent actionEvent) {
         try {
         	FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_disciplina.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_disciplina.fxml")));
         	loader.setControllerFactory((t) -> new CadastroDisciplinaController(null));
         	Parent root = loader.load();
             Stage stage = new Stage();
@@ -174,7 +172,7 @@ public class ListaDisciplinasController implements Initializable {
     public void onEditar(Disciplina disciplina) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_disciplina.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_disciplina.fxml")));
             loader.setControllerFactory((t) -> new CadastroDisciplinaController(disciplina));
             Parent root = loader.load();
             Stage stage = new Stage();

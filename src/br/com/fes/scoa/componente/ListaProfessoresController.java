@@ -1,8 +1,6 @@
 package br.com.fes.scoa.componente;
 
 import br.com.fes.scoa.modelo.Pessoa;
-import br.com.fes.scoa.modelo.Professor;
-import br.com.fes.scoa.util.AlunoDAO;
 import br.com.fes.scoa.util.ProfessorDAO;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -176,7 +174,7 @@ public class ListaProfessoresController implements Initializable {
     public void onCriar(ActionEvent actionEvent) {
         try {
         	FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_professor.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_professor.fxml")));
         	loader.setControllerFactory((t) -> new CadastroProfessorController(null));
         	Parent root = loader.load();
             Stage stage = new Stage();
@@ -213,7 +211,7 @@ public class ListaProfessoresController implements Initializable {
     public void onEditar(Pessoa pessoa) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_professor.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_professor.fxml")));
             loader.setControllerFactory((t) -> new CadastroProfessorController(pessoa));
             Parent root = loader.load();
             Stage stage = new Stage();
@@ -237,7 +235,7 @@ public class ListaProfessoresController implements Initializable {
     public void onClasses(Pessoa pessoa) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/turmas_professor.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/turmas_professor.fxml")));
             loader.setControllerFactory((t) -> new TurmasProfessorController(pessoa));
             Parent root = loader.load();
             Stage stage = new Stage();

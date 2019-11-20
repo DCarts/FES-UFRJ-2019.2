@@ -1,8 +1,6 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.modelo.Pessoa;
 import br.com.fes.scoa.modelo.Sala;
-import br.com.fes.scoa.util.AlunoDAO;
 import br.com.fes.scoa.util.SalaDAO;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -137,7 +135,7 @@ public class ListaSalasController implements Initializable {
     public void onCriar(ActionEvent actionEvent) {
         try {
         	FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_sala.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_sala.fxml")));
         	loader.setControllerFactory((t) -> new CadastroSalaController(null));
         	Parent root = loader.load();
             Stage stage = new Stage();
@@ -175,7 +173,7 @@ public class ListaSalasController implements Initializable {
     public void onEditar(Sala sala) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_sala.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_sala.fxml")));
             loader.setControllerFactory((t) -> new CadastroSalaController(sala));
             Parent root = loader.load();
             Stage stage = new Stage();

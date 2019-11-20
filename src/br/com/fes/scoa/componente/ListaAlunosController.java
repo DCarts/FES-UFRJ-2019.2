@@ -145,7 +145,7 @@ public class ListaAlunosController implements Initializable {
     public void onCriar(ActionEvent actionEvent) {
         try {
         	FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_aluno.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_aluno.fxml")));
         	loader.setControllerFactory((t) -> new CadastroAlunoController(tabela.getItems(),null));
         	Parent root = loader.load();
             Stage stage = new Stage();
@@ -177,7 +177,7 @@ public class ListaAlunosController implements Initializable {
     public void onEditar(Pessoa pessoa) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_aluno.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_aluno.fxml")));
             loader.setControllerFactory((t) -> new CadastroAlunoController(tabela.getItems(), pessoa));
             Parent root = loader.load();
             Stage stage = new Stage();
