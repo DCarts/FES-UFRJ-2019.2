@@ -174,7 +174,7 @@ public class ListaDisciplinasController implements Initializable {
     public void onEditar(Disciplina disciplina) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_aluno.fxml")));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/cadastro_disciplina.fxml")));
             loader.setControllerFactory((t) -> new CadastroDisciplinaController(disciplina));
             Parent root = loader.load();
             Stage stage = new Stage();
