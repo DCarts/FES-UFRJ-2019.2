@@ -1,6 +1,6 @@
 package br.com.fes.scoa.util;
 
-import br.com.fes.scoa.componente.CadastroHorarioController.Dia;
+import br.com.fes.scoa.componente.CadastroSalaHorarioController.Dia;
 import br.com.fes.scoa.model.Horariodeaula;
 import br.com.fes.scoa.model.HorariodeaulaCriteria;
 import br.com.fes.scoa.model.HorariodeaulaDAO;

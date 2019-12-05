@@ -31,7 +31,7 @@ public class SCOAPersistentManager extends PersistentManager {
 	
 	private SCOAPersistentManager() throws PersistentException {
 		super(_connectionSetting, _sessionType, _timeToAlive, new String[] {}, _extraProperties, _configurationFile);
-		setFlushMode(FlushMode.AUTO);
+		setFlushMode(FlushMode.COMMIT);
 	}
 	
 	public String getProjectName() {

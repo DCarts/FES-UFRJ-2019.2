@@ -39,6 +39,8 @@ public class ListaAlunosController implements Initializable {
     @FXML
     private TableColumn<Aluno, String> editCol;
     @FXML
+    private TableColumn<Aluno, String> cursoNomeCol;
+    @FXML
     private TableColumn<Aluno, String> nomeCol;
     @FXML
     private TableColumn<Aluno, String> cpfCol;
@@ -68,6 +70,7 @@ public class ListaAlunosController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        cursoNomeCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getCurso().getNome());});
         nomeCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getNome());});
         cpfCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getCpf());});
         emailCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getEmail());});

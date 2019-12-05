@@ -14,7 +14,7 @@ License Type: Evaluation
 		</many-to-one>
 		<many-to-one name="curso" cascade="lock" column="curso_id" class="br.com.fes.scoa.model.Curso" not-null="true" lazy="proxy" access="field">
 		</many-to-one>
-		<property name="codigo" column="codigo" unique="true" type="string" length="8" not-null="true" lazy="false"/>
+		<property name="codigo" column="codigo" unique="true" type="string" length="16" not-null="true" lazy="false"/>
 		<property name="nome" column="nome" type="string" length="255" not-null="true" lazy="false"/>
 		<property name="descricao" column="descricao" type="string" length="255" not-null="true" lazy="false"/>
 		<set name="ORM_Disciplina1" table="equivalencias" lazy="true" cascade="save-update,lock" inverse="true">

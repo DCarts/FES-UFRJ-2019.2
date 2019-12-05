@@ -174,46 +174,11 @@ public class CadastroTurmaController implements Initializable {
     }
 
     @FXML
-    public void selecionaSala(ActionEvent evt) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_salas.fxml")));
-            loader.setControllerFactory((t) -> new ListaSalasController(true));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Adicionar horário");
-            stage.setScene(new Scene(root));
-            stage.initOwner(botaoEnviar.getScene().getWindow());
-            Platform.runLater(stage::requestFocus);
-            stage.showAndWait();
-            ListaSalasController controller = loader.getController();
-            Sala selected = controller.getSelectedItem();
-            salaSelecionado = selected;
-            if (selected != null) {
-                // @TODO fazer selecao
-                labelSalaSelecionada.setText(selected.getCodLocalizacao().split("::")[2]);
-            }
-            else {
-                labelSalaSelecionada.setText(labelSalaEmptyText);
-            }
-
-        } catch (IOException err) {
-            Alert errAlert = new Alert(Alert.AlertType.ERROR);
-            errAlert.setTitle(errorDialogTitle);
-            errAlert.setHeaderText(err.toString());
-            errAlert.setContentText(errorDialogContent);
-            err.printStackTrace();
-            errAlert.show();
-        }
-
-    }
-
-    @FXML
     public void adicionaHorario(ActionEvent evt) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_horario.fxml")));
-            loader.setControllerFactory((t) -> new CadastroHorarioController(null));
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_salahorario.fxml")));
+            loader.setControllerFactory((t) -> new CadastroSalaHorarioController(null));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Adicionar horário");
@@ -221,7 +186,7 @@ public class CadastroTurmaController implements Initializable {
             stage.initOwner(botaoEnviar.getScene().getWindow());
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
-            CadastroHorarioController controller = loader.getController();
+            CadastroSalaHorarioController controller = loader.getController();
             Horariodeaula novo = controller.getNovo();
             if (novo != null) {
                 if (horariosSelecionados.contains(novo)) {
@@ -243,6 +208,30 @@ public class CadastroTurmaController implements Initializable {
 
     @FXML
     public void onEnviar(ActionEvent event) {
+        if (professorSelecionado == null) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Professor não selecionado");
+            errAlert.setContentText("Você precisa selecionar um professor!");
+            errAlert.show();
+            return;
+        }
+        if (disciplinaSelecionada == null) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Disciplina não selecionada");
+            errAlert.setContentText("Você precisa selecionar uma disciplina!");
+            errAlert.show();
+            return;
+        }
+        if (horariosSelecionados.isEmpty()) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Horários não selecionados");
+            errAlert.setContentText("Você precisa selecionar pelo menos um horário!");
+            errAlert.show();
+            return;
+        }
         // @TODO testar selecao
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(confirmDialogTitle);

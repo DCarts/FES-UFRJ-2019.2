@@ -1,32 +1,46 @@
 package br.com.fes.scoa.componente;
 
 import br.com.fes.scoa.model.Horariodeaula;
+import br.com.fes.scoa.model.Sala;
 import br.com.fes.scoa.util.HorariodeaulaDAOHandler;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 import utils.TimeSpinner;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class CadastroHorarioController implements Initializable {
+public class CadastroSalaHorarioController implements Initializable {
     @FXML
     public ComboBox<Dia> campoDia;
     @FXML
     public TimeSpinner campoInicio;
     @FXML
     public TimeSpinner campoFim;
+
+    @FXML
+    public Button botaoSelecionarSala;
+
+    @FXML
+    public Label labelSalaSelecionada;
+    private Sala salaSelecionada = null;
+    private final String labelSalaEmptyText = "Nenhuma sala selecionada";
+
     @FXML
     public Button botaoEnviar;
     private final Horariodeaula original;
@@ -81,7 +95,7 @@ public class CadastroHorarioController implements Initializable {
 
     private final DiaConverter dc = new DiaConverter();
 
-    public CadastroHorarioController(Horariodeaula original) {
+    public CadastroSalaHorarioController(Horariodeaula original) {
         this.original = original;
     }
 
@@ -111,8 +125,28 @@ public class CadastroHorarioController implements Initializable {
         return novo;
     }
 
+    public Sala getSala() {
+        return salaSelecionada;
+    }
+
     @FXML
     public void onEnviar(ActionEvent event) {
+        if (campoDia.getSelectionModel().getSelectedItem() == null) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Dia vazio");
+            errAlert.setContentText("Você precisa selecionar um dia!");
+            errAlert.show();
+            return;
+        }
+        if (salaSelecionada == null) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Sala não selecionada");
+            errAlert.setContentText("Você precisa selecionar uma sala!");
+            errAlert.show();
+            return;
+        }
         System.out.println(campoDia.getValue());
         System.out.println(campoInicio.getValue().truncatedTo(ChronoUnit.MINUTES));
         System.out.println(campoFim.getValue().truncatedTo(ChronoUnit.MINUTES));
@@ -131,6 +165,8 @@ public class CadastroHorarioController implements Initializable {
                         campoInicio.getValue().truncatedTo(ChronoUnit.MINUTES),
                         campoFim.getValue().truncatedTo(ChronoUnit.MINUTES)
                 );
+
+
 
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle(successDialogTitle);
@@ -153,6 +189,41 @@ public class CadastroHorarioController implements Initializable {
         else {
             setEditable(true);
         }
+    }
+
+    @FXML
+    public void selecionaSala(ActionEvent evt) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_salas.fxml")));
+            loader.setControllerFactory((t) -> new ListaSalasController(true));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Adicionar horário");
+            stage.setScene(new Scene(root));
+            stage.initOwner(botaoEnviar.getScene().getWindow());
+            Platform.runLater(stage::requestFocus);
+            stage.showAndWait();
+            ListaSalasController controller = loader.getController();
+            Sala selected = controller.getSelectedItem();
+            salaSelecionada = selected;
+            if (selected != null) {
+                // @TODO fazer selecao
+                labelSalaSelecionada.setText(selected.getCodLocalizacao().split("::")[2]);
+            }
+            else {
+                labelSalaSelecionada.setText(labelSalaEmptyText);
+            }
+
+        } catch (IOException err) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText(err.toString());
+            errAlert.setContentText(errorDialogContent);
+            err.printStackTrace();
+            errAlert.show();
+        }
+
     }
 
     private void setEditable(boolean edit) {

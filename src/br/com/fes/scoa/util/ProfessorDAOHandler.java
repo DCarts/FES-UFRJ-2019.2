@@ -47,7 +47,7 @@ public static Professor cadastraProfessor(String nome, String str_data_nasciment
 		throw new PersistentException(e);
 	}
 
-	br.com.fes.scoa.model.Pessoa pessoa = PessoaDAO.createPessoa();
+	Pessoa pessoa = PessoaDAO.createPessoa();
 	pessoa.setNome(nome);
 	pessoa.setData_nascimento(data_nascimento);
 	pessoa.setCpf(cpf);
@@ -59,7 +59,7 @@ public static Professor cadastraProfessor(String nome, String str_data_nasciment
 	professor.setPessoa(pessoa);
 	professor.setArea_disciplina(area);
 
-	List<br.com.fes.scoa.model.Pessoa> pessoas_existentes_com_cpf = PessoaDAO.queryPessoa("cpf="+cpf, null);
+	List<Pessoa> pessoas_existentes_com_cpf = PessoaDAO.queryPessoa("cpf='"+cpf+"'", null);
 
 	if (pessoas_existentes_com_cpf.isEmpty()) {
 
@@ -67,17 +67,16 @@ public static Professor cadastraProfessor(String nome, String str_data_nasciment
 		ProfessorDAO.save(professor);
 	} else {
 
-		List<Aluno> resultado2 = AlunoDAO.queryAluno("pessoa_id="+pessoas_existentes_com_cpf.get(0).getId(), null);
+		List<Professor> resultado2 = ProfessorDAO.queryProfessor("pessoa_id="+pessoas_existentes_com_cpf.get(0).getId(), null);
 
 		if (resultado2.isEmpty()) {
 			professor.setPessoa(pessoas_existentes_com_cpf.get(0));
 			ProfessorDAO.save(professor);
 		} else {
 			// @TODO reportar isso ao usuário de alguma forma quando ele tenta cadastrar um
-			// aluno que ja esta cadastrado
+			// professor que ja esta cadastrado
 
-			System.out.println(resultado2.get(0).getPessoa().getNome()
-					+ " ja esta cadastrado(a) como aluno(a)\n CPF: " + resultado2.get(0).getPessoa().getCpf());
+			throw new PersistentException("Já há um professor cadastrado com esse CPF:" + resultado2.get(0).getPessoa().getCpf());
 		}
 
 	}

@@ -50,7 +50,7 @@ public class AlunoDAOHandler {
 		aluno.setPessoa(pessoa);
 		aluno.setCurso(curso);
 
-		List<Pessoa> pessoas_existentes_com_cpf = PessoaDAO.queryPessoa("cpf="+cpf, null);
+		List<Pessoa> pessoas_existentes_com_cpf = PessoaDAO.queryPessoa("cpf='"+cpf+"'", null);
 
 		if (pessoas_existentes_com_cpf.isEmpty()) {
 
@@ -67,8 +67,7 @@ public class AlunoDAOHandler {
 				// @TODO reportar isso ao usuário de alguma forma quando ele tenta cadastrar um
 				// aluno que ja esta cadastrado
 
-				System.out.println(resultado2.get(0).getPessoa().getNome()
-						+ " ja esta cadastrado(a) como aluno(a)\n CPF: " + resultado2.get(0).getPessoa().getCpf());
+				throw new PersistentException("Já há um aluno cadastrado com esse CPF:" + resultado2.get(0).getPessoa().getCpf());
 			}
 
 		}

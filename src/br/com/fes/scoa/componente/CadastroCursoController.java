@@ -74,6 +74,22 @@ public class CadastroCursoController implements Initializable {
 
     @FXML
     public void onEnviar(ActionEvent event) {
+        if (campoNome.getCharacters().toString().trim().isEmpty()) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Nome vazio");
+            errAlert.setContentText("Você precisa digitar um nome!");
+            errAlert.show();
+            return;
+        }
+        if (campoDescricao.getText().trim().isEmpty()) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Descrição vazia");
+            errAlert.setContentText("Você precisa digitar uma descrição!");
+            errAlert.show();
+            return;
+        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(confirmDialogTitle);
         alert.setHeaderText(confirmDialogHeader);

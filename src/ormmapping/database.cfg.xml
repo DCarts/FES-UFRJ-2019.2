@@ -31,21 +31,6 @@
     <ServerName></ServerName>
     <SelectedForm>true</SelectedForm>
   </Setting>
-  <Setting type="1024">
-    <Driver></Driver>
-    <DriverFiles></DriverFiles>
-    <Dialect></Dialect>
-    <DriverClass></DriverClass>
-    <URL></URL>
-    <UserName></UserName>
-    <EncryptedPassword>32F3ACE632ECEBAFB24DCAF99A8C6CDC</EncryptedPassword>
-    <HostName></HostName>
-    <PortNO></PortNO>
-    <DBName></DBName>
-    <ServiceName></ServiceName>
-    <ServerName></ServerName>
-    <SelectedForm>true</SelectedForm>
-  </Setting>
   <Setting type="1048576">
     <Driver>MySQL5 (Connector/J Driver)</Driver>
     <DriverFiles>&lt;&lt;MySQL Connector/J 8.0.18&gt;&gt;</DriverFiles>
@@ -57,6 +42,21 @@
     <HostName>localhost</HostName>
     <PortNO>3306</PortNO>
     <DBName>scoadb</DBName>
+    <ServiceName></ServiceName>
+    <ServerName></ServerName>
+    <SelectedForm>true</SelectedForm>
+  </Setting>
+  <Setting type="1024">
+    <Driver></Driver>
+    <DriverFiles></DriverFiles>
+    <Dialect></Dialect>
+    <DriverClass></DriverClass>
+    <URL></URL>
+    <UserName></UserName>
+    <EncryptedPassword>32F3ACE632ECEBAFB24DCAF99A8C6CDC</EncryptedPassword>
+    <HostName></HostName>
+    <PortNO></PortNO>
+    <DBName></DBName>
     <ServiceName></ServiceName>
     <ServerName></ServerName>
     <SelectedForm>true</SelectedForm>

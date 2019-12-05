@@ -102,6 +102,38 @@ public class CadastroDisciplinaController implements Initializable {
 
     @FXML
     public void onEnviar(ActionEvent event) {
+        if (campoNome.getCharacters().toString().trim().isEmpty()) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Nome vazio");
+            errAlert.setContentText("Você precisa digitar um nome!");
+            errAlert.show();
+            return;
+        }
+        if (campoDescricao.getText().trim().isEmpty()) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Descrição vazia");
+            errAlert.setContentText("Você precisa digitar uma descrição!");
+            errAlert.show();
+            return;
+        }
+        if (cursoSelecionado == null) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Curso não selecionado");
+            errAlert.setContentText("Você precisa selecionar um curso!");
+            errAlert.show();
+            return;
+        }
+        if (areaSelecionada == null) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Área não selecionada");
+            errAlert.setContentText("Você precisa selecionar uma área!");
+            errAlert.show();
+            return;
+        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(confirmDialogTitle);
         alert.setHeaderText(confirmDialogHeader);

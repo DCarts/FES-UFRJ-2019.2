@@ -80,6 +80,30 @@ public class CadastroSalaController implements Initializable {
 
     @FXML
     public void onEnviar(ActionEvent event) {
+        if (campoNome.getCharacters().toString().trim().isEmpty()) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Nome vazio");
+            errAlert.setContentText("Você precisa digitar um nome!");
+            errAlert.show();
+            return;
+        }
+        if (campoAndar.getCharacters().toString().trim().isEmpty()) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Andar vazio");
+            errAlert.setContentText("Você precisa digitar um andar!");
+            errAlert.show();
+            return;
+        }
+        if (campoPredio.getCharacters().toString().trim().isEmpty()) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Prédio vazio");
+            errAlert.setContentText("Você precisa digitar um prédio!");
+            errAlert.show();
+            return;
+        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(confirmDialogTitle);
         alert.setHeaderText(confirmDialogHeader);

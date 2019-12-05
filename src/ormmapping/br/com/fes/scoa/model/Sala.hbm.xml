@@ -10,7 +10,7 @@ License Type: Evaluation
 			<generator class="native">
 			</generator>
 		</id>
-		<property name="codLocalizacao" column="codLocalizacao" unique="true" type="string" length="9" not-null="true" lazy="false"/>
+		<property name="codLocalizacao" column="codLocalizacao" unique="true" type="string" length="255" not-null="true" lazy="false"/>
 		<set name="ORM_Alocacao_sala_turma" lazy="true" cascade="save-update,lock" inverse="true">
 			<key column="sala_id" not-null="true"/>
 			<one-to-many class="br.com.fes.scoa.model.Alocacao_sala_turma"/>
