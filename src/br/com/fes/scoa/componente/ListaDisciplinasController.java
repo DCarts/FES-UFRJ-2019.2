@@ -1,7 +1,7 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.modelo.Disciplina;
-import br.com.fes.scoa.util.DisciplinaDAO;
+import br.com.fes.scoa.model.Disciplina;
+import br.com.fes.scoa.util.DisciplinaDAOHandler;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,10 +17,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.orm.PersistentException;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -122,12 +122,14 @@ public class ListaDisciplinasController implements Initializable {
             botaoRemover.getScene().getWindow().hide();
             return;
         }
-        List<Disciplina> selecionados = new ArrayList();
-        tabela.getItems().forEach(item -> {
-            if (item.isChecked()) selecionados.add(item);
-        });
-        tabela.getItems().removeAll(selecionados);
-        DisciplinaDAO.remover(selecionados);
+
+        try {
+            List<Disciplina> toremove = tabela.getItems().filtered(selectCol::getCellData);
+            DisciplinaDAOHandler.remover(toremove);
+            tabela.getItems().removeAll(toremove);
+        } catch (PersistentException e) {
+            e.printStackTrace(); //@TODO mostrar erro
+        }
     }
 
     @FXML
@@ -196,11 +198,15 @@ public class ListaDisciplinasController implements Initializable {
     public void atualizarLista() {
         String text = campoBuscar.getText();
         ObservableList<Disciplina> lista;
-        if (text.length() > 0) {
-            lista = DisciplinaDAO.buscar(text);
-        } else {
-            lista = DisciplinaDAO.listar();
+        try {
+            if (text.length() > 0) {
+                lista = DisciplinaDAOHandler.buscar(text);
+            } else {
+                lista = DisciplinaDAOHandler.listar();
+            }
+            tabela.setItems(lista);
+        } catch (PersistentException e) {
+            e.printStackTrace();
         }
-        tabela.setItems(lista);
     }
 }

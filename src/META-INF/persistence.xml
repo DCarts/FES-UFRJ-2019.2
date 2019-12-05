@@ -10,30 +10,20 @@
         <!-- Implementação do JPA, no nosso caso Hibernate -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <!-- Aqui são listadas todas as entidades -->
-        <class>br.com.fes.scoa.modelo.Pessoa</class>
-        <class>br.com.fes.scoa.modelo.Aluno</class>
-        <class>br.com.fes.scoa.modelo.Professor</class>
-        <class>br.com.fes.scoa.modelo.Disciplina</class>
-        <class>br.com.fes.scoa.modelo.Turma</class>
-        <class>br.com.fes.scoa.modelo.Sala</class>
-        <class>br.com.fes.scoa.modelo.SalasTurmas</class>
-        <class>br.com.fes.scoa.modelo.HorarioDeAula</class>
-
         <properties>
             <!-- Propriedades JDBC -->
             <property name="javax.persistence.jdbc.driver"
-                value="org.sqlite.JDBC" />
+                value="com.mysql.jdbc.Driver" />
 
             <property name="javax.persistence.jdbc.url"
-                value="jdbc:sqlite:SCOA.db" />
+                value="jdbc:mysql://localhost/scoadb" />
 
             <property name="javax.persistence.jdbc.user" value="fes20192" />
             <property name="javax.persistence.jdbc.password" value="fes20192" />
 
             <!-- Configurações específicas do Hibernate -->
             <property name="hibernate.dialect"
-                value="org.hibernate.dialect.SQLiteDialect" />
+                value="org.hibernate.dialect.MySQL8Dialect" />
 
 
             <property name="hibernate.show_sql" value="true" />

@@ -1,13 +1,10 @@
 package br.com.fes.scoa.modelo;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.io.Serializable;
 
-@Entity
+
 public class Aluno implements Serializable {
 
 	@Id

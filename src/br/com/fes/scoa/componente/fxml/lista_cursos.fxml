@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox minHeight="180.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.fes.scoa.componente.ListaDisciplinasController">
+    <BorderPane>
+        <left>
+            <Label fx:id="titleLabel" text="Cursos">
+            <font>
+               <Font name="Arial" size="24.0" />
+            </font></Label>
+        </left>
+        <right>
+            <Button fx:id="botaoCriar" mnemonicParsing="false" onAction="#onCriar" text="Cadastrar Curso" />
+        </right>
+        <padding>
+            <Insets bottom="10.0" />
+        </padding>
+    </BorderPane>
+    <HBox spacing="20.0">
+        <children>
+            <TextField fx:id="campoBuscar" onKeyReleased="#onBuscar" promptText="Busca..." HBox.hgrow="ALWAYS" />
+            <Button fx:id="botaoBuscar" disable="true" mnemonicParsing="false" onAction="#atualizarLista" text="Buscar" />
+        </children>
+        <padding>
+            <Insets bottom="10.0" top="10.0" />
+        </padding>
+    </HBox>
+
+    <TableView fx:id="tabela" editable="true">
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+        <columns>
+            <TableColumn fx:id="selectCol" maxWidth="40" minWidth="40" />
+            <TableColumn fx:id="nomeCol" prefWidth="130.629638671875" text="Nome" />
+            <TableColumn fx:id="descricaoCol" prefWidth="369.0" text="Descrição" />
+            <TableColumn fx:id="editCol" maxWidth="60" minWidth="60" />
+        </columns>
+      <VBox.margin>
+         <Insets top="10.0" />
+      </VBox.margin>
+    </TableView>
+
+    <BorderPane>
+        <right>
+            <Button fx:id="botaoRemover" mnemonicParsing="false" onAction="#onRemoverSelecionados" text="Remover Selecionados" />
+        </right>
+        <padding>
+            <Insets bottom="0" left="0" right="0" top="20" />
+        </padding>
+    </BorderPane>
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+</VBox>

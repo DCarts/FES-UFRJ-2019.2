@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fes.scoa.model.Horariodeaula" table="horariodeaula" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="dia" column="dia" type="string" length="255" not-null="true" lazy="false"/>
+		<property name="horarioFim" column="horarioFim" type="time" length="6" not-null="true" lazy="false"/>
+		<property name="horarioInicio" column="horarioInicio" type="time" length="6" not-null="true" lazy="false"/>
+		<set name="ORM_Alocacao_sala_turma" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="hora_id" not-null="true"/>
+			<one-to-many class="br.com.fes.scoa.model.Alocacao_sala_turma"/>
+		</set>
+	</class>
+</hibernate-mapping>

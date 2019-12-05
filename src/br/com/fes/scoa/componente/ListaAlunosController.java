@@ -1,21 +1,14 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.modelo.Pessoa;
+import br.com.fes.scoa.model.Aluno;
+import br.com.fes.scoa.util.AlunoDAOHandler;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
-
-import br.com.fes.scoa.util.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -25,6 +18,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.orm.PersistentException;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 
 public class ListaAlunosController implements Initializable {
@@ -33,21 +33,21 @@ public class ListaAlunosController implements Initializable {
     @FXML
     private Button botaoRemover;
     @FXML
-    private TableView<Pessoa> tabela;
+    private TableView<Aluno> tabela;
     @FXML
-    private TableColumn<Pessoa, Boolean> selectCol;
+    private TableColumn<Aluno, Boolean> selectCol;
     @FXML
-    private TableColumn<Pessoa, String> editCol;
+    private TableColumn<Aluno, String> editCol;
     @FXML
-    private TableColumn<Pessoa, String> nomeCol;
+    private TableColumn<Aluno, String> nomeCol;
     @FXML
-    private TableColumn<Pessoa, String> cpfCol;
+    private TableColumn<Aluno, String> cpfCol;
     @FXML
-    private TableColumn<Pessoa, String> emailCol;
+    private TableColumn<Aluno, String> emailCol;
     @FXML
-    private TableColumn<Pessoa, String> enderecoCol;
+    private TableColumn<Aluno, String> enderecoCol;
     @FXML
-    private TableColumn<Pessoa, String> data_nascimentoCol;
+    private TableColumn<Aluno, String> data_nascimentoCol;
     
     @FXML
     private TextField campoBuscar;
@@ -56,9 +56,9 @@ public class ListaAlunosController implements Initializable {
     private Button botaoBuscar;
 
     private final boolean doSelect;
-    private Pessoa selectedItem = null;
+    private Aluno selectedItem = null;
 
-    public Pessoa getSelectedItem() {
+    public Aluno getSelectedItem() {
         return selectedItem;
     }
 
@@ -68,16 +68,11 @@ public class ListaAlunosController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        nomeCol.setCellValueFactory(
-                new PropertyValueFactory<>("nome"));
-        cpfCol.setCellValueFactory(
-                new PropertyValueFactory<>("cpf"));
-        emailCol.setCellValueFactory(
-                new PropertyValueFactory<>("email"));
-        enderecoCol.setCellValueFactory(
-                new PropertyValueFactory<>("endereco"));
-        data_nascimentoCol.setCellValueFactory(
-                new PropertyValueFactory<>("data_nascimento"));
+        nomeCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getNome());});
+        cpfCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getCpf());});
+        emailCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getEmail());});
+        enderecoCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getEndereco());});
+        data_nascimentoCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getData_nascimento().toString());});
         if (doSelect) {
             botaoRemover.setDisable(true);
             botaoRemover.setText("Selecionar");
@@ -99,10 +94,10 @@ public class ListaAlunosController implements Initializable {
             selectCol.setCellFactory(
                     CheckBoxTableCell.forTableColumn(selectCol));
             editCol.setCellFactory(
-                    new Callback<TableColumn<Pessoa, String>, TableCell<Pessoa, String>>() {
+                    new Callback<TableColumn<Aluno, String>, TableCell<Aluno, String>>() {
                         @Override
-                        public TableCell call(final TableColumn<Pessoa, String> param) {
-                            final TableCell<Pessoa, String> cell = new TableCell<Pessoa, String>() {
+                        public TableCell call(final TableColumn<Aluno, String> param) {
+                            final TableCell<Aluno, String> cell = new TableCell<Aluno, String>() {
                                 final Button btn = new Button("Editar");
                                 @Override
                                 public void updateItem(String item, boolean empty) {
@@ -112,8 +107,8 @@ public class ListaAlunosController implements Initializable {
                                         setText(null);
                                     } else {
                                         btn.setOnAction(event -> {
-                                            Pessoa pessoa = getTableView().getItems().get(getIndex());
-                                            onEditar(pessoa);
+                                            Aluno aluno = getTableView().getItems().get(getIndex());
+                                            onEditar(aluno);
                                         });
                                         setGraphic(btn);
                                         setText(null);
@@ -133,12 +128,14 @@ public class ListaAlunosController implements Initializable {
             botaoRemover.getScene().getWindow().hide();
             return;
         }
-        List<Pessoa> selecionados = new ArrayList();
-        tabela.getItems().forEach(item -> {
-            if (item.isChecked()) selecionados.add(item);
-        });
-        tabela.getItems().removeAll(selecionados);
-        AlunoDAO.remover(selecionados);
+
+        try {
+            List<Aluno> toremove = tabela.getItems().filtered(selectCol::getCellData);
+            AlunoDAOHandler.remover(toremove);
+            tabela.getItems().removeAll(toremove);
+        } catch (PersistentException e) {
+            e.printStackTrace(); //@TODO mostrar erro
+        }
     }
 
     @FXML
@@ -174,11 +171,11 @@ public class ListaAlunosController implements Initializable {
     }
 
     @FXML
-    public void onEditar(Pessoa pessoa) {
+    public void onEditar(Aluno aluno) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_aluno.fxml")));
-            loader.setControllerFactory((t) -> new CadastroAlunoController(tabela.getItems(), pessoa));
+            loader.setControllerFactory((t) -> new CadastroAlunoController(tabela.getItems(), aluno));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Editar aluno");
@@ -194,12 +191,16 @@ public class ListaAlunosController implements Initializable {
     @FXML
     public void atualizarLista() {
         String text = campoBuscar.getText();
-        ObservableList<Pessoa> lista;
-        if (text.length() > 0) {
-            lista = AlunoDAO.buscar(text);
-        } else {
-            lista = AlunoDAO.listar();
-        }
-        tabela.setItems(lista);
+        ObservableList<Aluno> lista;
+            try {
+                if (text.length() > 0) {
+                    lista = AlunoDAOHandler.buscar(text);
+                } else {
+                    lista = AlunoDAOHandler.listar();
+                }
+                tabela.setItems(lista);
+            } catch (PersistentException e) {
+                e.printStackTrace(); //@TODO mostrar erro
+            }
     }
 }

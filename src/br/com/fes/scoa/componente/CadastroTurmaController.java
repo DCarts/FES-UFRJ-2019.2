@@ -1,8 +1,7 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.modelo.*;
-import br.com.fes.scoa.util.ProfessorDAO;
-import br.com.fes.scoa.util.TurmaDAO;
+import br.com.fes.scoa.model.*;
+import br.com.fes.scoa.util.TurmaDAOHandler;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,7 +36,7 @@ public class CadastroTurmaController implements Initializable {
 
     @FXML
     public Label labelProfessorSelecionado;
-    private Pessoa professorSelecionado = null;
+    private Professor professorSelecionado = null;
     private final String labelProfessorEmptyText = "Nenhum professor selecionado";
 
     @FXML
@@ -52,8 +51,8 @@ public class CadastroTurmaController implements Initializable {
     public Button botaoAdicionarHorario;
 
     @FXML
-    public ListView<HorarioDeAula> horariosSelecionadosView;
-    private final ObservableList<HorarioDeAula> horariosSelecionados = FXCollections.observableArrayList();
+    public ListView<Horariodeaula> horariosSelecionadosView;
+    private final ObservableList<Horariodeaula> horariosSelecionados = FXCollections.observableArrayList();
 
     @FXML
     public Button botaoEnviar;
@@ -153,11 +152,11 @@ public class CadastroTurmaController implements Initializable {
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
             ListaProfessoresController controller = loader.getController();
-            Pessoa selected = controller.getSelectedItem();
+            Professor selected = controller.getSelectedItem();
             professorSelecionado = selected;
             if (selected != null) {
                 // @TODO fazer selecao
-                labelProfessorSelecionado.setText(selected.getNome());
+                labelProfessorSelecionado.setText(selected.getPessoa().getNome());
             }
             else {
                 labelProfessorSelecionado.setText(labelProfessorEmptyText);
@@ -223,7 +222,7 @@ public class CadastroTurmaController implements Initializable {
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
             CadastroHorarioController controller = loader.getController();
-            HorarioDeAula novo = controller.getNovo();
+            Horariodeaula novo = controller.getNovo();
             if (novo != null) {
                 if (horariosSelecionados.contains(novo)) {
                     // @TODO este horario ja esta selecionado
@@ -256,17 +255,15 @@ public class CadastroTurmaController implements Initializable {
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             try {
                 if (original != null) {
-                    original.setProfessor(ProfessorDAO.fromPessoa(professorSelecionado));
+                    original.setProfessor(professorSelecionado);
                     original.setDisciplina(disciplinaSelecionada);
-                    original.setSala(salaSelecionado);
-                    original.setHorario(horariosSelecionados);
-                    TurmaDAO.atualiza(original);
+                    //@todo original.setSala(salaSelecionado);
+                    //@todo original.setHorario(horariosSelecionados);
+                    TurmaDAO.save(original);
                 } else {
-                    TurmaDAO.cadastraTurma(
+                    TurmaDAOHandler.cadastraTurma(
                             disciplinaSelecionada,
-                            ProfessorDAO.fromPessoa(professorSelecionado),
-                            salaSelecionado,
-                            horariosSelecionados
+                            professorSelecionado
                     );
                 }
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);

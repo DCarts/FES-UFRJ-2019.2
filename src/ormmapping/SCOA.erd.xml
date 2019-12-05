@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Model quotesql="1" tablecharset="UTF8" mysql_version="505" mssql_version="2005" derby_version="106" ingres_version="9">
+  <Entity name="aluno" Unlogged="false" PKClustered="0">
+    <Column name="pessoa_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>pessoa.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="curso_id">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>curso.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="disciplina" Unlogged="false" PKClustered="0">
+    <Column name="id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>true</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="area_disciplina_id">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>area_disciplina.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="curso_id">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>curso.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="codigo">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>8</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>true</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="nome">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="descricao">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="equivalencias" Unlogged="false" PKClustered="0">
+    <Column name="disciplina1_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>disciplina.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="disciplina2_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>disciplina.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="horariodeaula" Unlogged="false" PKClustered="0">
+    <Column name="id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>true</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="dia">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="horarioFim">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>19</Type>
+      <Length>6</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="horarioInicio">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>19</Type>
+      <Length>6</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="pessoa" Unlogged="false" PKClustered="0">
+    <Column name="id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>true</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="cpf">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>12</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>true</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="data_nascimento">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>17</Type>
+      <Length>0</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="email">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="endereco">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="nome">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="senha">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="professor" Unlogged="false" PKClustered="0">
+    <Column name="pessoa_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>pessoa.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="area_disciplina_id">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>area_disciplina.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="sala" Unlogged="false" PKClustered="0">
+    <Column name="id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>true</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="codLocalizacao">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>9</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>true</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="alocacao_sala_turma" Unlogged="false" PKClustered="0">
+    <Column name="turma_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>turma.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="sala_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>sala.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="hora_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>horariodeaula.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="turma" Unlogged="false" PKClustered="0">
+    <Column name="id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>true</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="disciplina_id">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>disciplina.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="professor_id">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>professor.pessoa_id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="periodo">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>6</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="inscricao_aluno" Unlogged="false" PKClustered="0">
+    <Column name="turma_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>turma.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="aluno_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>aluno.pessoa_id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="nota">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>11</Type>
+      <Length>4</Length>
+      <Scale>2</Scale>
+      <Nullable>true</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <DefaultValue>NULL</DefaultValue>
+      <UserTypes/>
+    </Column>
+    <Column name="situacao_id">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>situacao.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>10</Length>
+      <Nullable>true</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="prerequisitos" Unlogged="false" PKClustered="0">
+    <Column name="disciplina_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>disciplina.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="prerequisito_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>disciplina.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="area_disciplina" Unlogged="false" PKClustered="0">
+    <Column name="id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>true</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="nome">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="descricao">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="situacao" Unlogged="false" PKClustered="0">
+    <Column name="id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>10</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>true</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="nome">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="curso" Unlogged="false" PKClustered="0">
+    <Column name="id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>true</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="nome">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="descricao">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="secretario" Unlogged="false" PKClustered="0">
+    <Column name="pessoa_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>pessoa.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="curso_id">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>curso.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <Entity name="sysadmins" Unlogged="false" PKClustered="0">
+    <Column name="pessoa_id">
+      <PrimaryKey>true</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>pessoa.id</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>assigned</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+  </Entity>
+  <ForeignKey name="fk_pessoa1">
+    <ReferenceTable>aluno</ReferenceTable>
+    <ReferencedTable>pessoa</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>pessoa_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_disciplina1">
+    <ReferenceTable>equivalencias</ReferenceTable>
+    <ReferencedTable>disciplina</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>disciplina1_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_disciplina2">
+    <ReferenceTable>equivalencias</ReferenceTable>
+    <ReferencedTable>disciplina</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>disciplina2_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_pessoa2">
+    <ReferenceTable>professor</ReferenceTable>
+    <ReferencedTable>pessoa</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>pessoa_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_turma3">
+    <ReferenceTable>alocacao_sala_turma</ReferenceTable>
+    <ReferencedTable>turma</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>turma_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_sala">
+    <ReferenceTable>alocacao_sala_turma</ReferenceTable>
+    <ReferencedTable>sala</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>sala_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_hora">
+    <ReferenceTable>alocacao_sala_turma</ReferenceTable>
+    <ReferencedTable>horariodeaula</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>hora_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_turma2">
+    <ReferenceTable>turma</ReferenceTable>
+    <ReferencedTable>disciplina</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>disciplina_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_professor">
+    <ReferenceTable>turma</ReferenceTable>
+    <ReferencedTable>professor</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>professor_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>pessoa_id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_turma1">
+    <ReferenceTable>inscricao_aluno</ReferenceTable>
+    <ReferencedTable>turma</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>turma_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_aluno">
+    <ReferenceTable>inscricao_aluno</ReferenceTable>
+    <ReferencedTable>aluno</ReferencedTable>
+    <OnUpdate>Restrict</OnUpdate>
+    <OnDelete>Restrict</OnDelete>
+    <Columns>
+      <Column>aluno_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>pessoa_id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_disciplina3">
+    <ReferenceTable>prerequisitos</ReferenceTable>
+    <ReferencedTable>disciplina</ReferencedTable>
+    <Columns>
+      <Column>disciplina_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_prerequisito">
+    <ReferenceTable>prerequisitos</ReferenceTable>
+    <ReferencedTable>disciplina</ReferencedTable>
+    <Columns>
+      <Column>prerequisito_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_area1">
+    <ReferenceTable>professor</ReferenceTable>
+    <ReferencedTable>area_disciplina</ReferencedTable>
+    <Columns>
+      <Column>area_disciplina_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_area2">
+    <ReferenceTable>disciplina</ReferenceTable>
+    <ReferencedTable>area_disciplina</ReferencedTable>
+    <Columns>
+      <Column>area_disciplina_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_situacao">
+    <ReferenceTable>inscricao_aluno</ReferenceTable>
+    <ReferencedTable>situacao</ReferencedTable>
+    <Columns>
+      <Column>situacao_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_curso2">
+    <ReferenceTable>disciplina</ReferenceTable>
+    <ReferencedTable>curso</ReferencedTable>
+    <Columns>
+      <Column>curso_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_curso">
+    <ReferenceTable>aluno</ReferenceTable>
+    <ReferencedTable>curso</ReferencedTable>
+    <Columns>
+      <Column>curso_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="FKsecretario460290">
+    <ReferenceTable>secretario</ReferenceTable>
+    <ReferencedTable>pessoa</ReferencedTable>
+    <Columns>
+      <Column>pessoa_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_pessoa3">
+    <ReferenceTable>secretario</ReferenceTable>
+    <ReferencedTable>curso</ReferencedTable>
+    <Columns>
+      <Column>curso_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="fk_pessoa4">
+    <ReferenceTable>sysadmins</ReferenceTable>
+    <ReferencedTable>pessoa</ReferencedTable>
+    <Columns>
+      <Column>pessoa_id</Column>
+    </Columns>
+    <RefColumns>
+      <Column>id</Column>
+    </RefColumns>
+  </ForeignKey>
+  <Trigger name="aloca_turma_pra_sala_test">
+    <CreateStmt>CREATE TRIGGER aloca_turma_pra_sala_test BEFORE INSERT ON alocacao_sala_turma FOR EACH ROW BEGIN DECLARE temp_turmas_count_1 INT; DECLARE temp_turmas_count_2 INT; DECLARE new_periodo VARCHAR(6); DECLARE new_professor_id VARCHAR(6); CREATE TEMPORARY TABLE temp_turmas_1 (id int); CREATE TEMPORARY TABLE temp_turmas_2 (id int); SELECT periodo INTO new_periodo FROM turma WHERE id=new.turma_id; SELECT professor_id INTO new_professor_id FROM turma WHERE id=new.turma_id; INSERT INTO temp_turmas_1 SELECT turma_id FROM alocacao_sala_turma JOIN turma ON id=turma_id WHERE sala_id = new.sala_id AND hora_id = new.hora_id AND periodo = new_periodo; SELECT count(*) INTO temp_turmas_count_1 FROM temp_turmas_1; INSERT INTO temp_turmas_2 SELECT turma_id FROM alocacao_sala_turma JOIN turma ON id=turma_id WHERE professor_id = new_professor_id AND hora_id = new.hora_id AND periodo = new_periodo; SELECT count(*) INTO temp_turmas_count_2 FROM temp_turmas_2; DROP TEMPORARY TABLE temp_turmas_1; DROP TEMPORARY TABLE temp_turmas_2; IF temp_turmas_count_1 &gt; 0 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Esta sala já esta ocupada no horario desejado.'; END IF; IF temp_turmas_count_2 &gt; 0 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O professor da disciplina já esta ocupado no horario desejado.'; END IF; END</CreateStmt>
+  </Trigger>
+</Model>

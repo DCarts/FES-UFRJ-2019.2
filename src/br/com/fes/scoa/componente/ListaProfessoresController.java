@@ -1,8 +1,9 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.modelo.Pessoa;
-import br.com.fes.scoa.util.ProfessorDAO;
+import br.com.fes.scoa.model.Professor;
+import br.com.fes.scoa.util.ProfessorDAOHandler;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,10 +18,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.orm.PersistentException;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -32,23 +33,23 @@ public class ListaProfessoresController implements Initializable {
     @FXML
     private Button botaoRemover;
     @FXML
-    private TableView<Pessoa> tabela;
+    private TableView<Professor> tabela;
     @FXML
-    private TableColumn<Pessoa, Boolean> selectCol;
+    private TableColumn<Professor, Boolean> selectCol;
     @FXML
-    private TableColumn<Pessoa, String> editCol;
+    private TableColumn<Professor, String> editCol;
     @FXML
-    private TableColumn<Pessoa, String> classesCol;
+    private TableColumn<Professor, String> classesCol;
     @FXML
-    private TableColumn<Pessoa, String> nomeCol;
+    private TableColumn<Professor, String> nomeCol;
     @FXML
-    private TableColumn<Pessoa, String> cpfCol;
+    private TableColumn<Professor, String> cpfCol;
     @FXML
-    private TableColumn<Pessoa, String> emailCol;
+    private TableColumn<Professor, String> emailCol;
     @FXML
-    private TableColumn<Pessoa, String> enderecoCol;
+    private TableColumn<Professor, String> enderecoCol;
     @FXML
-    private TableColumn<Pessoa, String> data_nascimentoCol;
+    private TableColumn<Professor, String> data_nascimentoCol;
     
     @FXML
     private TextField campoBuscar;
@@ -57,9 +58,9 @@ public class ListaProfessoresController implements Initializable {
     private Button botaoBuscar;
 
     private final boolean doSelect;
-    private Pessoa selectedItem = null;
+    private Professor selectedItem = null;
 
-    public Pessoa getSelectedItem() {
+    public Professor getSelectedItem() {
         return selectedItem;
     }
 
@@ -69,21 +70,16 @@ public class ListaProfessoresController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        nomeCol.setCellValueFactory(
-                new PropertyValueFactory<>("nome"));
-        cpfCol.setCellValueFactory(
-                new PropertyValueFactory<>("cpf"));
-        emailCol.setCellValueFactory(
-                new PropertyValueFactory<>("email"));
-        enderecoCol.setCellValueFactory(
-                new PropertyValueFactory<>("endereco"));
-        data_nascimentoCol.setCellValueFactory(
-                new PropertyValueFactory<>("data_nascimento"));
+        nomeCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getNome());});
+        cpfCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getCpf());});
+        emailCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getEmail());});
+        enderecoCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getEndereco());});
+        data_nascimentoCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getData_nascimento().toString());});
         classesCol.setCellFactory(
-                new Callback<TableColumn<Pessoa, String>, TableCell<Pessoa, String>>() {
+                new Callback<TableColumn<Professor, String>, TableCell<Professor, String>>() {
                     @Override
-                    public TableCell call(final TableColumn<Pessoa, String> param) {
-                        final TableCell<Pessoa, String> cell = new TableCell<Pessoa, String>() {
+                    public TableCell call(final TableColumn<Professor, String> param) {
+                        final TableCell<Professor, String> cell = new TableCell<Professor, String>() {
                             final Button btn = new Button("Turmas");
                             @Override
                             public void updateItem(String item, boolean empty) {
@@ -93,8 +89,8 @@ public class ListaProfessoresController implements Initializable {
                                     setText(null);
                                 } else {
                                     btn.setOnAction(event -> {
-                                        Pessoa pessoa = getTableView().getItems().get(getIndex());
-                                        onClasses(pessoa);
+                                        Professor professor = getTableView().getItems().get(getIndex());
+                                        onClasses(professor);
                                     });
                                     setGraphic(btn);
                                     setText(null);
@@ -127,10 +123,10 @@ public class ListaProfessoresController implements Initializable {
             selectCol.setCellFactory(
                     CheckBoxTableCell.forTableColumn(selectCol));
             editCol.setCellFactory(
-                    new Callback<TableColumn<Pessoa, String>, TableCell<Pessoa, String>>() {
+                    new Callback<TableColumn<Professor, String>, TableCell<Professor, String>>() {
                         @Override
-                        public TableCell call(final TableColumn<Pessoa, String> param) {
-                            final TableCell<Pessoa, String> cell = new TableCell<Pessoa, String>() {
+                        public TableCell call(final TableColumn<Professor, String> param) {
+                            final TableCell<Professor, String> cell = new TableCell<Professor, String>() {
                                 final Button btn = new Button("Editar");
                                 @Override
                                 public void updateItem(String item, boolean empty) {
@@ -140,8 +136,8 @@ public class ListaProfessoresController implements Initializable {
                                         setText(null);
                                     } else {
                                         btn.setOnAction(event -> {
-                                            Pessoa pessoa = getTableView().getItems().get(getIndex());
-                                            onEditar(pessoa);
+                                            Professor professor = getTableView().getItems().get(getIndex());
+                                            onEditar(professor);
                                         });
                                         setGraphic(btn);
                                         setText(null);
@@ -162,12 +158,14 @@ public class ListaProfessoresController implements Initializable {
             botaoRemover.getScene().getWindow().hide();
             return;
         }
-        List<Pessoa> selecionados = new ArrayList();
-        tabela.getItems().forEach(item -> {
-            if (item.isChecked()) selecionados.add(item);
-        });
-        tabela.getItems().removeAll(selecionados);
-        ProfessorDAO.remover(selecionados);
+
+        try {
+            List<Professor> toremove = tabela.getItems().filtered(selectCol::getCellData);
+            ProfessorDAOHandler.remover(toremove);
+            tabela.getItems().removeAll(toremove);
+        } catch (PersistentException e) {
+            e.printStackTrace(); //@TODO mostrar erro
+        }
     }
 
     @FXML
@@ -184,7 +182,7 @@ public class ListaProfessoresController implements Initializable {
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
             CadastroProfessorController controller = loader.getController();
-            Pessoa novo = controller.getNovo();
+            Professor novo = controller.getNovo();
             if (novo != null) {
                 tabela.getItems().add(novo);
             }
@@ -208,11 +206,11 @@ public class ListaProfessoresController implements Initializable {
     }
 
     @FXML
-    public void onEditar(Pessoa pessoa) {
+    public void onEditar(Professor professor) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_professor.fxml")));
-            loader.setControllerFactory((t) -> new CadastroProfessorController(pessoa));
+            loader.setControllerFactory((t) -> new CadastroProfessorController(professor));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Editar professor");
@@ -221,9 +219,9 @@ public class ListaProfessoresController implements Initializable {
             stage.showAndWait();
             Platform.runLater(stage::requestFocus);
             CadastroProfessorController controller = loader.getController();
-            Pessoa novo = controller.getNovo();
+            Professor novo = controller.getNovo();
             if (novo != null) {
-                tabela.getItems().remove(pessoa);
+                tabela.getItems().remove(professor);
                 tabela.getItems().add(novo);
             }
         } catch (IOException e) {
@@ -232,14 +230,14 @@ public class ListaProfessoresController implements Initializable {
     }
     
     @FXML
-    public void onClasses(Pessoa pessoa) {
+    public void onClasses(Professor professor) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/turmas_professor.fxml")));
-            loader.setControllerFactory((t) -> new TurmasProfessorController(pessoa));
+            loader.setControllerFactory((t) -> new TurmasProfessorController(professor));
             Parent root = loader.load();
             Stage stage = new Stage();
-            stage.setTitle("Turmas do " + pessoa.getNome());
+            stage.setTitle("Turmas do " + professor.getPessoa().getNome());
             stage.setScene(new Scene(root));
             stage.initOwner(titleLabel.getScene().getWindow());
             stage.show();
@@ -252,12 +250,16 @@ public class ListaProfessoresController implements Initializable {
     @FXML
     public void atualizarLista() {
         String text = campoBuscar.getText();
-        ObservableList<Pessoa> lista;
-        if (text.length() > 0) {
-            lista = ProfessorDAO.buscar(text);
-        } else {
-            lista = ProfessorDAO.listar();
+        ObservableList<Professor> lista;
+        try {
+            if (text.length() > 0) {
+                lista = ProfessorDAOHandler.buscar(text);
+            } else {
+                lista = ProfessorDAOHandler.listar();
+            }
+            tabela.setItems(lista);
+        } catch (PersistentException e) {
+            e.printStackTrace();
         }
-        tabela.setItems(lista);
     }
 }

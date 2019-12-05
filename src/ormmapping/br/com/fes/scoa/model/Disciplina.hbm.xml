@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fes.scoa.model.Disciplina" table="disciplina" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="area_disciplina" cascade="lock" column="area_disciplina_id" class="br.com.fes.scoa.model.Area_disciplina" not-null="true" lazy="proxy" access="field">
+		</many-to-one>
+		<many-to-one name="curso" cascade="lock" column="curso_id" class="br.com.fes.scoa.model.Curso" not-null="true" lazy="proxy" access="field">
+		</many-to-one>
+		<property name="codigo" column="codigo" unique="true" type="string" length="8" not-null="true" lazy="false"/>
+		<property name="nome" column="nome" type="string" length="255" not-null="true" lazy="false"/>
+		<property name="descricao" column="descricao" type="string" length="255" not-null="true" lazy="false"/>
+		<set name="ORM_Disciplina1" table="equivalencias" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="disciplina2_id" not-null="true"/>
+			<many-to-many column="disciplina1_id" class="br.com.fes.scoa.model.Disciplina">
+			</many-to-many>
+		</set>
+		<set name="ORM_Disciplina" table="prerequisitos" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="prerequisito_id" not-null="true"/>
+			<many-to-many column="disciplina_id" class="br.com.fes.scoa.model.Disciplina">
+			</many-to-many>
+		</set>
+		<set name="ORM_Disciplina2" table="equivalencias" lazy="true" cascade="save-update,lock">
+			<key column="disciplina1_id" not-null="true"/>
+			<many-to-many column="disciplina2_id" class="br.com.fes.scoa.model.Disciplina">
+			</many-to-many>
+		</set>
+		<set name="ORM_Prerequisito" table="prerequisitos" lazy="true" cascade="save-update,lock">
+			<key column="disciplina_id" not-null="true"/>
+			<many-to-many column="prerequisito_id" class="br.com.fes.scoa.model.Disciplina">
+			</many-to-many>
+		</set>
+		<set name="ORM_Turma" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="disciplina_id" not-null="true"/>
+			<one-to-many class="br.com.fes.scoa.model.Turma"/>
+		</set>
+	</class>
+</hibernate-mapping>

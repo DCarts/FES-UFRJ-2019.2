@@ -6,7 +6,7 @@ import javafx.beans.value.ObservableStringValue;
 
 import javax.persistence.*;
 
-@Entity
+
 public class Sala {
 
     @Id

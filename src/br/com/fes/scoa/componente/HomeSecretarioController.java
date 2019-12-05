@@ -27,6 +27,15 @@ public class HomeSecretarioController implements Initializable {
     public Button botaoListaDisciplinas;
 
     @FXML
+    public Button botaoListaCursos;
+
+    @FXML
+    public Button botaoListaAreas;
+
+    @FXML
+    public Button botaoListaSecretarios;
+
+    @FXML
     public Button botaoListaSalas;
 
     @FXML
@@ -68,6 +77,57 @@ public class HomeSecretarioController implements Initializable {
 
     @FXML
     public void onListaDisciplinas(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_disciplinas.fxml")));
+            loader.setControllerFactory((t) -> new ListaDisciplinasController(false));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Disciplinas");
+            stage.setScene(new Scene(root, 400, 400));
+            stage.show();
+            Platform.runLater(stage::requestFocus);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onListaCursos(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_cursos.fxml")));
+            loader.setControllerFactory((t) -> new ListaCursosController(false));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Cursos");
+            stage.setScene(new Scene(root, 400, 400));
+            stage.show();
+            Platform.runLater(stage::requestFocus);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onListaAreas(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_areas.fxml")));
+            loader.setControllerFactory((t) -> new ListaAreasController(false));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Áreas");
+            stage.setScene(new Scene(root, 400, 400));
+            stage.show();
+            Platform.runLater(stage::requestFocus);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onListaSecretarios(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_disciplinas.fxml")));

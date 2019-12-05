@@ -1,16 +1,16 @@
 package br.com.fes.scoa.modelo;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableStringValue;
 
-@Entity
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Disciplina {
 
 	@Id

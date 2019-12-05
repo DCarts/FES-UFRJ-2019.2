@@ -243,5 +243,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="hibernate libs" level="project" />
   </component>
 </module>

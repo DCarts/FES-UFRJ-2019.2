@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.Objects;
 
-@Entity
+
 public class HorarioDeAula {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

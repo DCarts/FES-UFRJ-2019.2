@@ -4,10 +4,13 @@ package br.com.fes.scoa.modelo;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableStringValue;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
-@Entity
+
 public class SalasTurmas implements Serializable {
 
     @Id

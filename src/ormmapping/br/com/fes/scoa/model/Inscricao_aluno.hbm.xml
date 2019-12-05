@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fes.scoa.model.Inscricao_aluno" table="inscricao_aluno" lazy="false">
+		<composite-id>
+			<key-many-to-one name="ORM_Turma" column="turma_id" class="br.com.fes.scoa.model.Turma">
+			</key-many-to-one>
+			<key-many-to-one name="ORM_Aluno" column="aluno_id" class="br.com.fes.scoa.model.Aluno">
+			</key-many-to-one>
+		</composite-id>
+		<property name="nota" type="big_decimal" precision="4" scale="2" not-null="false" lazy="false">
+			<column name="nota" default="NULL"/>
+		</property>
+		<many-to-one name="situacao" cascade="lock" column="situacao_id" class="br.com.fes.scoa.model.Situacao" not-null="false" lazy="proxy" access="field">
+		</many-to-one>
+	</class>
+</hibernate-mapping>

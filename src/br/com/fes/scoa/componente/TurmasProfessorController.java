@@ -1,22 +1,24 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.modelo.*;
-import javafx.beans.property.SimpleStringProperty;
+import br.com.fes.scoa.model.Horariodeaula;
+import br.com.fes.scoa.model.Professor;
+import br.com.fes.scoa.model.Turma;
+import br.com.fes.scoa.util.ProfessorDAOHandler;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
+import org.orm.PersistentException;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import br.com.fes.scoa.util.*;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
-import javafx.util.Callback;
 
 
 public class TurmasProfessorController implements Initializable {
@@ -46,50 +48,55 @@ public class TurmasProfessorController implements Initializable {
     private Button botaoBuscar;
 
     private final ObservableList<Turma> lista;
-    private Pessoa pessoa = null;
+    private Professor professor = null;
 
-    public TurmasProfessorController(Pessoa pessoa) {
-        lista = ProfessorDAO.turmas(pessoa);
-        this.pessoa = pessoa;
+    public TurmasProfessorController(Professor professor) {
+        lista = FXCollections.observableArrayList();
+        try {
+            lista.addAll(ProfessorDAOHandler.turmas(professor));
+        } catch (PersistentException e) {
+            e.printStackTrace(); // @TODO passar erro
+        }
+        this.professor = professor;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         disciplinaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return r.getValue().getDisciplina().getNomeProperty();
+                return new ReadOnlyStringWrapper(r.getValue().getDisciplina().getNome());
             }
         });
         salaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return r.getValue().getSala().getCodLocalizacaoProperty();
+                return new ReadOnlyStringWrapper("derp");
             }
         });
         predioCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return r.getValue().getSala().getSalaPredioProperty();
+                return new ReadOnlyStringWrapper("derp");
             }
         });
         andarCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return r.getValue().getSala().getSalaAndarProperty();
+                return new ReadOnlyStringWrapper("derp");
             }
         });
         salaNomeCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return r.getValue().getSala().getSalaNomeProperty();
+                return new ReadOnlyStringWrapper("derp");
             }
         });
         horaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return new SimpleStringProperty(horaAsString(r.getValue().getHorario()));
+                return new ReadOnlyStringWrapper("derp");
             }
         });
 
         atualizarLista();
     }
     
-    private String horaAsString(List<HorarioDeAula> horarios) {
+    private String horaAsString(List<Horariodeaula> horarios) {
     	StringBuilder sb = new StringBuilder();
     	
     	int i = 0;
@@ -114,15 +121,19 @@ public class TurmasProfessorController implements Initializable {
 
     @FXML
     public void atualizarLista() {
-        if (pessoa == null) return;
+        if (professor == null) return;
         String text = "";
         if (campoBuscar != null) text = campoBuscar.getText();
         ObservableList<Turma> lista;
-        if (text.length() > 0) {
-            lista = ProfessorDAO.buscarTurmas(text);
-        } else {
-            lista = ProfessorDAO.turmas(pessoa);
+        try {
+            if (text.length() > 0) {
+                lista = ProfessorDAOHandler.buscarTurmas(text);
+            } else {
+                lista = ProfessorDAOHandler.turmas(professor);
+            }
+            tabela.setItems(lista);
+        } catch (PersistentException e) {
+            e.printStackTrace(); // @TODO passar erro
         }
-        tabela.setItems(lista);
     }
 }

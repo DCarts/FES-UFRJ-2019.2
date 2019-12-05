@@ -1,7 +1,7 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.modelo.HorarioDeAula;
-import br.com.fes.scoa.util.TipoHoraDoDiaDAO;
+import br.com.fes.scoa.model.Horariodeaula;
+import br.com.fes.scoa.util.HorariodeaulaDAOHandler;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +17,6 @@ import utils.TimeSpinner;
 import java.io.Serializable;
 import java.net.URL;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -30,8 +29,8 @@ public class CadastroHorarioController implements Initializable {
     public TimeSpinner campoFim;
     @FXML
     public Button botaoEnviar;
-    private final HorarioDeAula original;
-    private HorarioDeAula novo = null;
+    private final Horariodeaula original;
+    private Horariodeaula novo = null;
 
     public static enum Dia implements Serializable {
         DOMINGO("Domingo"),
@@ -80,7 +79,9 @@ public class CadastroHorarioController implements Initializable {
     private String errorDialogTitle = "Erro no cadastro";
     private String errorDialogContent = "Cheque o console para mais informações.";
 
-    public CadastroHorarioController(HorarioDeAula original) {
+    private final DiaConverter dc = new DiaConverter();
+
+    public CadastroHorarioController(Horariodeaula original) {
         this.original = original;
     }
 
@@ -90,9 +91,9 @@ public class CadastroHorarioController implements Initializable {
         campoDia.setConverter(new DiaConverter());
         campoDia.getSelectionModel().selectFirst();
         if (original != null) {
-            campoDia.getSelectionModel().select(original.getDia());
-            campoInicio.getValueFactory().setValue(original.getHorarioInicio().truncatedTo(ChronoUnit.MINUTES));
-            campoFim.getValueFactory().setValue(original.getHorarioFim().truncatedTo(ChronoUnit.MINUTES));
+            campoDia.getSelectionModel().select(dc.fromString(original.getDia()));
+            campoInicio.getValueFactory().setValue(original.getHorarioInicio().toLocalTime().truncatedTo(ChronoUnit.MINUTES));
+            campoFim.getValueFactory().setValue(original.getHorarioFim().toLocalTime().truncatedTo(ChronoUnit.MINUTES));
 
             confirmDialogTitle = "Editar sala";
             confirmDialogHeader = "Confirmar atualização do horário";
@@ -106,7 +107,7 @@ public class CadastroHorarioController implements Initializable {
         }
     }
 
-    public HorarioDeAula getNovo() {
+    public Horariodeaula getNovo() {
         return novo;
     }
 
@@ -125,7 +126,7 @@ public class CadastroHorarioController implements Initializable {
         setEditable(false);
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             try {
-                novo = TipoHoraDoDiaDAO.cadastraHorario(
+                novo = HorariodeaulaDAOHandler.cadastraHorario(
                         campoDia.getSelectionModel().getSelectedItem(),
                         campoInicio.getValue().truncatedTo(ChronoUnit.MINUTES),
                         campoFim.getValue().truncatedTo(ChronoUnit.MINUTES)

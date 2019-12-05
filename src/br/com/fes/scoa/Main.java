@@ -1,5 +1,6 @@
 package br.com.fes.scoa;
 
+import br.com.fes.scoa.model.SCOAPersistentManager;
 import br.com.fes.scoa.teste.TesteConta;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -9,8 +10,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import javax.persistence.EntityManager;
-
-import br.com.fes.scoa.util.JPAUtil;
 
 public class Main extends Application {
 	
@@ -26,8 +25,8 @@ public class Main extends Application {
     	    	em = JPAUtil.abreConexao();
     	    }
     	});  
-    	t1.start();*/
-        em = JPAUtil.abreConexao();
+    	t1.start();
+        em = JPAUtil.abreConexao();*/
 
         TesteConta.main(null);
   		
@@ -37,7 +36,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.onCloseRequestProperty().setValue(evt -> {
             try {
-                em.close();
+                SCOAPersistentManager.instance().disposePersistentManager();
             } catch (Exception err) {}
             Platform.exit();
         });

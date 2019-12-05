@@ -1,18 +1,18 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.modelo.Aluno;
-import br.com.fes.scoa.modelo.Pessoa;
-import br.com.fes.scoa.modelo.Sala;
-import br.com.fes.scoa.util.AlunoDAO;
-import br.com.fes.scoa.util.DisciplinaDAO;
-import br.com.fes.scoa.util.SalaDAO;
-import javafx.collections.ObservableList;
+import br.com.fes.scoa.model.SCOAPersistentManager;
+import br.com.fes.scoa.model.Sala;
+import br.com.fes.scoa.model.SalaDAO;
+import br.com.fes.scoa.util.SalaDAOHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.stage.StageStyle;
-import utils.MaskedTextField;
+import org.orm.PersistentException;
 
 import java.net.URL;
 import java.util.Optional;
@@ -94,10 +94,10 @@ public class CadastroSalaController implements Initializable {
                     original.setCodLocalizacao(campoPredio.getCharacters().toString() + "::" +
                             campoAndar.getCharacters().toString() + "::" +
                             campoNome.getCharacters().toString());
-                    SalaDAO.atualiza(original);
+                    SalaDAO.save(original);
                     novo = original;
                 } else {
-                    novo = SalaDAO.cadastraSala(
+                    novo = SalaDAOHandler.cadastraSala(
                             campoPredio.getCharacters().toString() + "::" +
                                     campoAndar.getCharacters().toString() + "::" +
                                     campoNome.getCharacters().toString()
@@ -109,6 +109,11 @@ public class CadastroSalaController implements Initializable {
                 successAlert.setContentText(successDialogContent);
                 successAlert.show();
             } catch (Exception err) {
+                try {
+                    SCOAPersistentManager.instance().getSession().getTransaction().rollback();
+                } catch (PersistentException e) {
+                    e.printStackTrace(); // ai complica
+                }
                 Alert errAlert = new Alert(Alert.AlertType.ERROR);
                 errAlert.setTitle(errorDialogTitle);
                 errAlert.setHeaderText(err.toString());

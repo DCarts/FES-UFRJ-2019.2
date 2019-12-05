@@ -1,13 +1,10 @@
 package br.com.fes.scoa.modelo;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import java.io.Serializable;
 
-@Entity
+
 public class Professor implements Serializable {
 
 	@Id

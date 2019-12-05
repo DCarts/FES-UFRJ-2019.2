@@ -1,21 +1,21 @@
 package br.com.fes.scoa.componente;
 
+import br.com.fes.scoa.model.Aluno;
+import br.com.fes.scoa.model.CursoDAO;
+import br.com.fes.scoa.model.Pessoa;
+import br.com.fes.scoa.util.AlunoDAOHandler;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.StageStyle;
+import utils.DateUtil;
+import utils.MaskedTextField;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import br.com.fes.scoa.modelo.Aluno;
-import br.com.fes.scoa.modelo.Pessoa;
-import br.com.fes.scoa.util.*;
-
-import utils.MaskedTextField;
 
 public class CadastroAlunoController implements Initializable {
     @FXML
@@ -31,9 +31,9 @@ public class CadastroAlunoController implements Initializable {
     @FXML
     public Button botaoEnviar;
 
-    private final ObservableList<Pessoa> lista;
+    private final ObservableList<Aluno> lista;
     private Boolean modoEditar = false;
-    private Pessoa editarPessoa = null;
+    private Aluno editarAluno = null;
     private String confirmDialogTitle = "Confirmar cadastro";
     private String confirmDialogHeader = "Confirmar cadastro de aluno";
     private String confirmDialogContent = "Tem certeza que deseja cadastrar o aluno?";
@@ -43,20 +43,21 @@ public class CadastroAlunoController implements Initializable {
     private String errorDialogTitle = "Erro no cadastro";
     private String errorDialogContent = "Cheque o console para mais informações.";
 
-    public CadastroAlunoController(ObservableList<Pessoa> items, Pessoa pessoa) {
+    public CadastroAlunoController(ObservableList<Aluno> items, Aluno aluno) {
         lista = items;
-        editarPessoa = pessoa;
-        modoEditar = pessoa != null;
+        editarAluno= aluno;
+        modoEditar = aluno != null;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (modoEditar) {
-            campoNome.setText(editarPessoa.getNome());
-            campoDataNasc.setValue(editarPessoa.getData_nascimento());
-            campoCPF.setPlainText(editarPessoa.getCpf());
-            campoEndereco.setText(editarPessoa.getEndereco());
-            campoEmail.setText(editarPessoa.getEmail());
+            Pessoa pessoa = editarAluno.getPessoa();
+            campoNome.setText(pessoa.getNome());
+            campoDataNasc.setValue(DateUtil.toLocalDate(pessoa.getData_nascimento()));
+            campoCPF.setPlainText(pessoa.getCpf());
+            campoEndereco.setText(pessoa.getEndereco());
+            campoEmail.setText(pessoa.getEmail());
 
             confirmDialogTitle = "Editar aluno";
             confirmDialogHeader = "Confirmar atualização do aluno";
@@ -90,27 +91,31 @@ public class CadastroAlunoController implements Initializable {
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             try {
                 if (modoEditar) {
-                    Aluno aluno = AlunoDAO.editar(
-                        editarPessoa.getId(),
+                    Aluno aluno = AlunoDAOHandler.editar(
+                        editarAluno.getPessoaId(),
                         campoNome.getCharacters().toString(),
                         campoDataNasc.getValue().toString(),
                         campoCPF.getPlainText(),
                         campoEndereco.getCharacters().toString(),
-                        campoEmail.getCharacters().toString());
+                        campoEmail.getCharacters().toString(),
+                        CursoDAO.getCursoByORMID(1)
+                    );
                     for (int i = 0; i < lista.size(); i++) {
-                        if (lista.get(i).getId().equals(aluno.getPessoa().getId())) {
-                            lista.set(i,aluno.getPessoa());
+                        if (lista.get(i).getPessoaId() == aluno.getPessoa().getId()) {
+                            lista.set(i,aluno);
                             break;
                         }
                     }
                 } else {
-                    Aluno aluno = AlunoDAO.cadastrar(
+                    Aluno aluno = AlunoDAOHandler.cadastrar(
                         campoNome.getCharacters().toString(),
                         campoDataNasc.getValue().toString(),
                         campoCPF.getPlainText(),
                         campoEndereco.getCharacters().toString(),
-                        campoEmail.getCharacters().toString());
-                    lista.add(aluno.getPessoa());
+                        campoEmail.getCharacters().toString(),
+                        "wololo",
+                        CursoDAO.getCursoByORMID(1));
+                    lista.add(aluno);
                 }
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle(successDialogTitle);

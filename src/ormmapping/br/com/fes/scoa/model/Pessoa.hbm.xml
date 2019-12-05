@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fes.scoa.model.Pessoa" table="pessoa" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="cpf" column="cpf" unique="true" type="string" length="12" not-null="true" lazy="false"/>
+		<property name="data_nascimento" column="data_nascimento" type="date" not-null="true" lazy="false"/>
+		<property name="email" column="email" type="string" length="255" not-null="true" lazy="false"/>
+		<property name="endereco" column="endereco" type="string" length="255" not-null="true" lazy="false"/>
+		<property name="nome" column="nome" type="string" length="255" not-null="true" lazy="false"/>
+		<property name="senha" column="senha" type="string" length="255" not-null="true" lazy="false"/>
+		<one-to-one name="aluno" class="br.com.fes.scoa.model.Aluno" cascade="save-update,lock" lazy="proxy" access="field"/>
+		<one-to-one name="professor" class="br.com.fes.scoa.model.Professor" cascade="save-update,lock" lazy="proxy" access="field"/>
+		<one-to-one name="secretario" class="br.com.fes.scoa.model.Secretario" cascade="save-update,lock" lazy="proxy" access="field"/>
+		<one-to-one name="sysadmins" class="br.com.fes.scoa.model.Sysadmins" cascade="save-update,lock" lazy="proxy" access="field"/>
+	</class>
+</hibernate-mapping>

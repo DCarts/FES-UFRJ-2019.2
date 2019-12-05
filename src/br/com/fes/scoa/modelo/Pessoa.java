@@ -4,14 +4,12 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableBooleanValue;
 
-import java.io.Serializable;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.*;
 
-@Entity
 public class Pessoa {
 	
 	@Id

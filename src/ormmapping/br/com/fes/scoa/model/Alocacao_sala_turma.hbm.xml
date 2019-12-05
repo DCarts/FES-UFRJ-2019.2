@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="br.com.fes.scoa.model.Alocacao_sala_turma" table="alocacao_sala_turma" lazy="false">
+		<composite-id>
+			<key-many-to-one name="ORM_Turma" column="turma_id" class="br.com.fes.scoa.model.Turma">
+			</key-many-to-one>
+			<key-many-to-one name="ORM_Sala" column="sala_id" class="br.com.fes.scoa.model.Sala">
+			</key-many-to-one>
+			<key-many-to-one name="ORM_Hora" column="hora_id" class="br.com.fes.scoa.model.Horariodeaula">
+			</key-many-to-one>
+		</composite-id>
+	</class>
+</hibernate-mapping>
