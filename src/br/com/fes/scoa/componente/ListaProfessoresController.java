@@ -120,9 +120,9 @@ public class ListaProfessoresController implements Initializable {
             selectCol.setCellValueFactory(
                     param -> param.getValue().getChecked());
             editCol.setCellValueFactory(
-                    new PropertyValueFactory<>("nome"));
+                    new PropertyValueFactory<>(""));
             classesCol.setCellValueFactory(
-                    new PropertyValueFactory<>("nome"));
+                    new PropertyValueFactory<>(""));
             selectCol.setCellFactory(
                     CheckBoxTableCell.forTableColumn(selectCol));
             editCol.setCellFactory(

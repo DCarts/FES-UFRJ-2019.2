@@ -7,14 +7,11 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.orm.PersistentException;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DisciplinaDAOHandler {
 	
-	public static Disciplina cadastraDisciplina(String nome, String codigo, String creditos, String descricao, Area_disciplina area, Curso curso) throws PersistentException {
+	public static Disciplina cadastraDisciplina(String nome, String codigo, String creditos, String descricao, Area_disciplina area, Curso curso, List<Disciplina> equivalencias) throws PersistentException {
 		Disciplina disciplina = DisciplinaDAO.createDisciplina();
 
 		disciplina.setNome(nome);
@@ -23,6 +20,7 @@ public class DisciplinaDAOHandler {
 		disciplina.setDescricao(descricao);
 		disciplina.setArea_disciplina(area);
 		disciplina.setCurso(curso);
+		equivalencias.forEach(disciplina.disciplina1::add);
 
 		DisciplinaDAO.save(disciplina);
 		
@@ -37,7 +35,7 @@ public class DisciplinaDAOHandler {
 
 	public static ObservableList<Disciplina> getEquivalentes(Disciplina d) throws PersistentException {
 
-		Set<Disciplina> disciplinas = new HashSet<>();
+		List<Disciplina> disciplinas = new ArrayList<>();
 		disciplinas.addAll(Arrays.asList(d.disciplina1.toArray()));
 		disciplinas.addAll(Arrays.asList(d.disciplina2.toArray()));
 
@@ -55,8 +53,4 @@ public class DisciplinaDAOHandler {
 	public static ObservableList<Disciplina> listar() throws PersistentException {
 		return FXCollections.observableArrayList(DisciplinaDAO.listDisciplinaByQuery(null,null));
 	}
-
-    public static void equivalenciaDisciplinas(Disciplina disciplina1, Disciplina disciplina2) {
-        //@TODO implementar
-    }
 }

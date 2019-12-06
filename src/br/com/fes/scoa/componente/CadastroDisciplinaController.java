@@ -3,6 +3,8 @@ package br.com.fes.scoa.componente;
 import br.com.fes.scoa.model.*;
 import br.com.fes.scoa.util.DisciplinaDAOHandler;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,9 +18,8 @@ import org.orm.PersistentException;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CadastroDisciplinaController implements Initializable {
 
@@ -46,6 +47,11 @@ public class CadastroDisciplinaController implements Initializable {
     public Label labelCursoSelecionada;
     private Curso cursoSelecionado = null;
     private final String labelCursoEmptyText = "Nenhum curso selecionado";
+
+    @FXML
+    public Label labelEquivalenciaSelecionada;
+    private ObservableList<Disciplina> equivalenciasSelecionadas = FXCollections.observableArrayList();
+    private final String labelEquivalenciasEmptyText = "Nenhuma equivalencia selecionada";
 
     @FXML
     public Button botaoSelecionarCurso;
@@ -97,7 +103,20 @@ public class CadastroDisciplinaController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         if (original != null) {
             campoNome.setText(original.getNome());
+
             campoDescricao.setText(original.getDescricao());
+            campoCodigo.setText(original.getCodigo());
+            campoCreditos.setText(Integer.toString(original.getCreditos()));
+            areaSelecionada = original.getArea_disciplina();
+            labelAreaSelecionada.setText(areaSelecionada.getNome());
+            cursoSelecionado = original.getCurso();
+            labelCursoSelecionada.setText(cursoSelecionado.getNome());
+
+            try {
+                labelEquivalenciaSelecionada.setText(DisciplinaDAOHandler.getEquivalentes(original).stream().map(Disciplina::getNome).collect(Collectors.joining(", ")));
+            } catch (PersistentException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -172,7 +191,8 @@ public class CadastroDisciplinaController implements Initializable {
                             campoCreditos.getCharacters().toString(),
                             campoDescricao.getText(),
                             areaSelecionada,
-                            cursoSelecionado);
+                            cursoSelecionado,
+                            equivalenciasSelecionadas);
                 }
                 else {
                     original.setNome(campoNome.getCharacters().toString());
@@ -180,6 +200,11 @@ public class CadastroDisciplinaController implements Initializable {
                     original.setDescricao(campoDescricao.getText());
                     original.setArea_disciplina(areaSelecionada);
                     original.setCurso(cursoSelecionado);
+                    DisciplinaDAOHandler.getEquivalentes(original).forEach(d -> {
+                        original.disciplina1.remove(d);
+                        original.disciplina2.remove(d);
+                    });
+                    equivalenciasSelecionadas.forEach(original.disciplina1::add);
                     DisciplinaDAO.save(original);
                     novo = original;
                 }
@@ -292,5 +317,39 @@ public class CadastroDisciplinaController implements Initializable {
         campoNome.setEditable(edit);
         campoDescricao.setEditable(edit);
         botaoEnviar.setDisable(!edit);
+    }
+
+    public void selecionaEquivalencia(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_disciplinas.fxml")));
+            loader.setControllerFactory((t) -> new ListaDisciplinasController(true));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Selecionar Equivalências");
+            stage.setScene(new Scene(root));
+            stage.initOwner(botaoEnviar.getScene().getWindow());
+            Platform.runLater(stage::requestFocus);
+            stage.showAndWait();
+            ListaDisciplinasController controller = loader.getController();
+            List<Disciplina> selecteds = controller.getSelectedItems();
+            equivalenciasSelecionadas = FXCollections.observableArrayList(selecteds);
+            if (selecteds != null && selecteds.size() > 0) {
+                // @TODO fazer selecao
+                labelEquivalenciaSelecionada.setText(selecteds.stream().map(Disciplina::getNome).collect(Collectors.joining(", ")));
+            }
+            else {
+                labelEquivalenciaSelecionada.setText(labelEquivalenciasEmptyText);
+            }
+
+        } catch (IOException err) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            Throwable cause = err;
+            while (cause.getCause() != null) cause = cause.getCause();
+            errAlert.setHeaderText(errorDialogHeader);
+            errAlert.setContentText(cause.getMessage());
+            errAlert.show();
+        }
     }
 }

@@ -29,7 +29,8 @@
             </padding>
          <Button fx:id="botaoSelecionarCurso" mnemonicParsing="false" onAction="#selecionaCurso" text="Selecionar curso" />
          <Button fx:id="botaoSelecionarArea" layoutX="20.0" layoutY="30.0" mnemonicParsing="false" onAction="#selecionaArea" text="Selecionar área" />
-            <Label text="Nome" />
+         <Button fx:id="botaoSelecionarEquivalencia" layoutX="20.0" layoutY="30.0" mnemonicParsing="false" onAction="#selecionaEquivalencia" text="Selecionar equivalências" />
+         <Label text="Nome" />
          <Label text="Código" />
          <Label text="Créditos" />
             <Label text="Descrição" />
@@ -48,6 +49,11 @@
                <Insets bottom="8.0" top="8.0" />
             </padding>
          </Label>
+            <Label fx:id="labelEquivalenciaSelecionada" layoutX="20.0" layoutY="256.0" text="Nenhuma equivalência selecionada">
+                <padding>
+                    <Insets bottom="8.0" top="8.0" />
+                </padding>
+            </Label>
             <TextField fx:id="campoNome" promptText="Nome" />
          <TextField fx:id="campoCodigo" promptText="Código da disciplina" />
          <TextField fx:id="campoCreditos" promptText="Créditos" />
