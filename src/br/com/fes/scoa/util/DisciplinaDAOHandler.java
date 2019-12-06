@@ -7,7 +7,10 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.orm.PersistentException;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DisciplinaDAOHandler {
 	
@@ -30,6 +33,15 @@ public class DisciplinaDAOHandler {
 		for (Disciplina disciplina : lista) {
 			DisciplinaDAO.deleteAndDissociate(disciplina);
 		}
+	}
+
+	public static ObservableList<Disciplina> getEquivalentes(Disciplina d) throws PersistentException {
+
+		Set<Disciplina> disciplinas = new HashSet<>();
+		disciplinas.addAll(Arrays.asList(d.disciplina1.toArray()));
+		disciplinas.addAll(Arrays.asList(d.disciplina2.toArray()));
+
+		return FXCollections.observableArrayList(disciplinas);
 	}
 
 	public static ObservableList<Disciplina> buscar(String text) throws PersistentException {
