@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<VBox minHeight="180.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.fes.scoa.componente.TurmasProfessorController">
+<VBox minHeight="180.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.fes.scoa.componente.TurmasAlunoController">
     <BorderPane>
         <left>
-            <Label fx:id="titleLabel" text="Turmas do Professor">
+            <Label fx:id="titleLabel" text="Turmas do Aluno">
             <font>
                <Font name="Arial" size="24.0" />
             </font></Label>
@@ -43,6 +44,13 @@
                 </columns>
             </TableColumn>
             <TableColumn fx:id="horaCol" maxWidth="14000.0" prefWidth="160.0" text="Horário" />
+         <TableColumn fx:id="inscricaoCol" prefWidth="75.0" text="Inscrição">
+            <columns>
+               <TableColumn fx:id="notaCol" prefWidth="75.0" text="Nota" />
+               <TableColumn fx:id="frequenciaCol" prefWidth="75.0" text="Frequência" />
+               <TableColumn fx:id="situacaoCol" prefWidth="75.0" text="Situação" />
+            </columns>
+         </TableColumn>
         </columns>
       <VBox.margin>
          <Insets top="10.0" />
@@ -53,13 +61,6 @@
         <padding>
             <Insets bottom="0" left="0" right="0" top="20" />
         </padding>
-      <right>
-         <Button fx:id="botaoSelecionar" mnemonicParsing="false" onAction="#onSeleciona" text="Selecionar" BorderPane.alignment="CENTER">
-            <BorderPane.margin>
-               <Insets bottom="10.0" right="10.0" />
-            </BorderPane.margin>
-         </Button>
-      </right>
     </BorderPane>
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />

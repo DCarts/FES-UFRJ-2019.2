@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.fes.scoa.componente.TabAdminController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <Button fx:id="botaoListaAlunos" mnemonicParsing="false" onAction="#onListaAlunos" text="Alunos" />
+   <Button fx:id="botaoListaSecretarios" mnemonicParsing="false" onAction="#onListaSecretarios" text="Secretarios" />
+   <Button fx:id="botaoListaAdmins" mnemonicParsing="false" onAction="#onListaAdmins" text="Administradores" />
+   <Button fx:id="botaoListaProfessores" mnemonicParsing="false" onAction="#onListaProfessores" text="Professores" />
+   <Button fx:id="botaoListaDisciplinas" mnemonicParsing="false" onAction="#onListaDisciplinas" text="Disciplinas" />
+   <Button fx:id="botaoListaCursos" mnemonicParsing="false" onAction="#onListaCursos" text="Cursos" />
+   <Button fx:id="botaoListaAreas" layoutX="30.0" layoutY="210.0" mnemonicParsing="false" onAction="#onListaAreas" text="Areas" />
+   <Button fx:id="botaoListaSalas" mnemonicParsing="false" onAction="#onListaSalas" text="Salas" />
+   <Button fx:id="botaoListaSituacoes" mnemonicParsing="false" onAction="#onListaSituacoes" text="Situacoes" />
+   <Button fx:id="botaoAlocarTurma" mnemonicParsing="false" onAction="#onAlocaTurma" text="Alocar turma" />
+   <Button fx:id="botaoInscreverAluno" mnemonicParsing="false" onAction="#onInscrever" text="Inscrever aluno" />
+</VBox>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<SplitPane dividerPositions="0.29797979797979796" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.fes.scoa.componente.TabAlunoController">
+  <items>
+    <AnchorPane>
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Período">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="periodoListView" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+    <AnchorPane fx:id="turmasPane" />
+  </items>
+</SplitPane>

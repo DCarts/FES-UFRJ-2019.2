@@ -68,7 +68,7 @@ CREATE TABLE professor (pessoa_id int(11) NOT NULL, area_disciplina_id int(11) N
 CREATE TABLE sala (id int(11) NOT NULL AUTO_INCREMENT, codLocalizacao varchar(255) NOT NULL UNIQUE, PRIMARY KEY (id), INDEX (id)) CHARACTER SET UTF8;
 CREATE TABLE alocacao_sala_turma (turma_id int(11) NOT NULL, sala_id int(11) NOT NULL, hora_id int(11) NOT NULL, PRIMARY KEY (turma_id, sala_id, hora_id)) CHARACTER SET UTF8;
 CREATE TABLE turma (id int(11) NOT NULL AUTO_INCREMENT, disciplina_id int(11) NOT NULL, professor_id int(11) NOT NULL, periodo varchar(6) NOT NULL, PRIMARY KEY (id), INDEX (id), CONSTRAINT periodo_valido CHECK (periodo REGEXP '[0-9]{4}\.[0-9]')) CHARACTER SET UTF8;
-CREATE TABLE inscricao_aluno (turma_id int(11) NOT NULL, aluno_id int(11) NOT NULL, nota decimal(4, 2) DEFAULT NULL, situacao_id int(10), PRIMARY KEY (turma_id, aluno_id), CONSTRAINT nota_valida CHECK (nota = NULL OR (nota >= 0 AND nota <= 10))) CHARACTER SET UTF8;
+CREATE TABLE inscricao_aluno (turma_id int(11) NOT NULL, aluno_id int(11) NOT NULL, nota decimal(4, 2) DEFAULT NULL, frequencia decimal(10, 7), situacao_id int(10), PRIMARY KEY (turma_id, aluno_id), CONSTRAINT nota_valida CHECK (nota = NULL OR (nota >= 0 AND nota <= 10))) CHARACTER SET UTF8;
 CREATE TABLE prerequisitos (disciplina_id int(11) NOT NULL, prerequisito_id int(11) NOT NULL, PRIMARY KEY (disciplina_id, prerequisito_id)) CHARACTER SET UTF8;
 CREATE TABLE area_disciplina (id int(11) NOT NULL AUTO_INCREMENT, nome varchar(255) NOT NULL, descricao varchar(255) NOT NULL, PRIMARY KEY (id), INDEX (id)) CHARACTER SET UTF8;
 CREATE TABLE situacao (id int(10) NOT NULL AUTO_INCREMENT, nome varchar(255) NOT NULL, PRIMARY KEY (id), INDEX (id)) CHARACTER SET UTF8;
@@ -183,7 +183,7 @@ BEGIN
     INTO SENHA_REAL_HASHED 
     FROM pessoa WHERE cpf=pessoa_cpf;
     
-	SELECT TO_BASE64(SHA2(senha_digitada, 256)) 
+	SELECT SHA2(senha_digitada, 256)
     INTO SENHA_DIGITADA_HASHED;
 
 	-- Validando

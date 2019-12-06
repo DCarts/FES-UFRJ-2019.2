@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox alignment="TOP_CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.fes.scoa.componente.CadastroSituacaoController">
+    <padding>
+        <Insets bottom="10.0" />
+    </padding>
+    <MenuBar>
+        <Menu mnemonicParsing="false" text="File">
+            <MenuItem mnemonicParsing="false" text="Close" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+            <MenuItem mnemonicParsing="false" text="Delete" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+            <MenuItem mnemonicParsing="false" text="About" />
+        </Menu>
+    </MenuBar>
+    <HBox VBox.vgrow="ALWAYS">
+        <VBox.margin>
+            <Insets />
+        </VBox.margin>
+        <VBox alignment="TOP_RIGHT" minWidth="-Infinity" spacing="20.0">
+            <padding>
+                <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
+            </padding>
+            <Label text="Nome" />
+        </VBox>
+        <VBox spacing="12.0" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets left="10.0" right="10.0" top="16.0" />
+            </padding>
+            <TextField fx:id="campoNome" promptText="Nome" />
+        </VBox>
+    </HBox>
+    <Button fx:id="botaoEnviar" defaultButton="true" mnemonicParsing="false" onAction="#onEnviar" text="Cadastrar">
+        <padding>
+          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+        </padding>
+        <font>
+          <Font size="18.0" />
+        </font>
+    </Button>
+</VBox>

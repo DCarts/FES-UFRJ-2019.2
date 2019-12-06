@@ -1,11 +1,16 @@
 package br.com.fes.scoa.util;
 
 import br.com.fes.scoa.model.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.hibernate.criterion.Restrictions;
 import org.orm.PersistentException;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TurmaDAOHandler {
 
@@ -40,15 +45,51 @@ public class TurmaDAOHandler {
 
     }
 
-    public static void cadastraAlunoNaTurma(Turma turma, Aluno aluno){
+    public static ObservableList<String> periodosProfessor(Professor p) throws PersistentException {
 
-        /* @TODO
-        EntityManager em = Main.em;
+        TurmaCriteria tc = new TurmaCriteria();
+        ProfessorCriteria pc = tc.createProfessorCriteria();
+        pc.add(Restrictions.idEq(p.getPessoaId()));
 
-        turma.setAluno(Arrays.asList(aluno));
-        em.merge(turma);
+        return FXCollections.observableArrayList(Stream.of(TurmaDAO.listTurmaByCriteria(tc)).map(Turma::getPeriodo).distinct().collect(Collectors.toList()));
+    }
 
-        JPAUtil.commit(em);*/
+    public static ObservableList<Turma> turmasPeriodo(String periodo) throws PersistentException {
 
+        TurmaCriteria tc = new TurmaCriteria();
+        tc.add(Restrictions.eq("periodo", periodo));
+
+        return FXCollections.observableArrayList(Stream.of(TurmaDAO.listTurmaByCriteria(tc)).collect(Collectors.toList()));
+    }
+
+    public static ObservableList<Turma> turmasProfessorPeriodo(Professor p, String periodo) throws PersistentException {
+
+        TurmaCriteria tc = new TurmaCriteria();
+        tc.add(Restrictions.eq("periodo", periodo));
+        ProfessorCriteria pc = tc.createProfessorCriteria();
+        pc.add(Restrictions.idEq(p.getPessoaId()));
+
+        return FXCollections.observableArrayList(Stream.of(TurmaDAO.listTurmaByCriteria(tc)).collect(Collectors.toList()));
+    }
+
+    public static ObservableList<String> periodosAluno(Aluno a) throws PersistentException {
+
+        TurmaCriteria tc = new TurmaCriteria();
+        Inscricao_alunoCriteria iac = tc.createInscricao_alunoCriteria();
+        AlunoCriteria ac = iac.createAlunoCriteria();
+        ac.add(Restrictions.idEq(a.getPessoaId()));
+
+        return FXCollections.observableArrayList(Stream.of(TurmaDAO.listTurmaByCriteria(tc)).map(Turma::getPeriodo).distinct().collect(Collectors.toList()));
+    }
+
+    public static ObservableList<Turma> turmasAlunoPeriodo(Aluno a, String periodo) throws PersistentException {
+
+        TurmaCriteria tc = new TurmaCriteria();
+        tc.add(Restrictions.eq("periodo", periodo));
+        Inscricao_alunoCriteria iac = tc.createInscricao_alunoCriteria();
+        AlunoCriteria ac = iac.createAlunoCriteria();
+        ac.add(Restrictions.idEq(a.getPessoaId()));
+
+        return FXCollections.observableArrayList(Stream.of(TurmaDAO.listTurmaByCriteria(tc)).collect(Collectors.toList()));
     }
 }

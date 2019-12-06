@@ -28,6 +28,7 @@ public class Inscricao_alunoDetachedCriteria extends AbstractORMDetachedCriteria
 	public final IntegerExpression alunoId;
 	public final AssociationExpression aluno;
 	public final BigDecimalExpression nota;
+	public final BigDecimalExpression frequencia;
 	public final IntegerExpression situacaoId;
 	public final AssociationExpression situacao;
 	
@@ -38,6 +39,7 @@ public class Inscricao_alunoDetachedCriteria extends AbstractORMDetachedCriteria
 		alunoId = new IntegerExpression("ORM_Aluno.", this.getDetachedCriteria());
 		aluno = new AssociationExpression("ORM_Aluno", this.getDetachedCriteria());
 		nota = new BigDecimalExpression("nota", this.getDetachedCriteria());
+		frequencia = new BigDecimalExpression("frequencia", this.getDetachedCriteria());
 		situacaoId = new IntegerExpression("situacao.id", this.getDetachedCriteria());
 		situacao = new AssociationExpression("situacao", this.getDetachedCriteria());
 	}
@@ -49,6 +51,7 @@ public class Inscricao_alunoDetachedCriteria extends AbstractORMDetachedCriteria
 		alunoId = new IntegerExpression("ORM_Aluno.", this.getDetachedCriteria());
 		aluno = new AssociationExpression("ORM_Aluno", this.getDetachedCriteria());
 		nota = new BigDecimalExpression("nota", this.getDetachedCriteria());
+		frequencia = new BigDecimalExpression("frequencia", this.getDetachedCriteria());
 		situacaoId = new IntegerExpression("situacao.id", this.getDetachedCriteria());
 		situacao = new AssociationExpression("situacao", this.getDetachedCriteria());
 	}

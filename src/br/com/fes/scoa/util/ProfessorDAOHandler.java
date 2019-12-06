@@ -1,18 +1,12 @@
 package br.com.fes.scoa.util;
 
-import br.com.fes.scoa.Main;
 import br.com.fes.scoa.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.orm.PersistentException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,18 +15,6 @@ import java.util.Base64;
 import java.util.List;
 
 public class ProfessorDAOHandler {
-
-	public static Professor fromPessoa(Pessoa pessoa) {
-		EntityManager em = Main.em;
-		Session session = (Session) Main.em.getDelegate();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Professor> cr = em.getCriteriaBuilder().createQuery(Professor.class);
-		Root<Professor> root = cr.from(Professor.class);
-		cr.select(root).where(cb.equal(root.get("pessoa"), pessoa));
-
-		org.hibernate.query.Query<Professor> query = session.createQuery(cr);
-		return query.getSingleResult();
-	}
 
 public static Professor cadastraProfessor(String nome, String str_data_nascimento, String cpf, String endereco, String email, Area_disciplina area, String senha) throws PersistentException {
 

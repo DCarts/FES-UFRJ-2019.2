@@ -111,6 +111,8 @@ public class Inscricao_aluno implements Serializable {
 	
 	private java.math.BigDecimal nota;
 	
+	private java.math.BigDecimal frequencia;
+	
 	private br.com.fes.scoa.model.Situacao situacao;
 	
 	public void setNota(java.math.BigDecimal value) {
@@ -119,6 +121,14 @@ public class Inscricao_aluno implements Serializable {
 	
 	public java.math.BigDecimal getNota() {
 		return nota;
+	}
+	
+	public void setFrequencia(java.math.BigDecimal value) {
+		this.frequencia = value;
+	}
+	
+	public java.math.BigDecimal getFrequencia() {
+		return frequencia;
 	}
 	
 	public void setTurma(br.com.fes.scoa.model.Turma value) {

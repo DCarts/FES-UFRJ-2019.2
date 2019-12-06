@@ -1,7 +1,7 @@
 package br.com.fes.scoa.componente;
 
 import br.com.fes.scoa.model.*;
-import br.com.fes.scoa.util.DisciplinaDAOHandler;
+import br.com.fes.scoa.util.SecretarioDAOHandler;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,39 +13,37 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.orm.PersistentException;
+import utils.DateUtil;
+import utils.MaskedTextField;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class CadastroDisciplinaController implements Initializable {
+public class CadastroSecretarioController implements Initializable {
 
     @FXML
     public TextField campoNome;
 
     @FXML
-    public TextField campoCodigo;
+    public DatePicker campoDataNasc;
 
     @FXML
-    public TextField campoCreditos;
+    public MaskedTextField campoCPF;
 
     @FXML
-    public TextArea campoDescricao;
+    public TextField campoEndereco;
 
     @FXML
-    public Label labelAreaSelecionada;
-    private Area_disciplina areaSelecionada = null;
-    private final String labelAreaEmptyText = "Nenhuma área selecionada";
+    public TextField campoEmail;
 
     @FXML
-    public Button botaoSelecionarArea;
-
-    @FXML
-    public Label labelCursoSelecionada;
+    public Label labelCursoSelecionado;
     private Curso cursoSelecionado = null;
-    private final String labelCursoEmptyText = "Nenhum curso selecionado";
+    private final String labelCursoEmptyText = "Nenhuma curso selecionado";
 
     @FXML
     public Button botaoSelecionarCurso;
@@ -53,8 +51,8 @@ public class CadastroDisciplinaController implements Initializable {
     @FXML
     public Button botaoEnviar;
 
-    private final Disciplina original;
-    private Disciplina novo = null;
+    private final Secretario original;
+    private Secretario novo = null;
 
     private final String confirmDialogTitle;
     private final String confirmDialogHeader;
@@ -65,39 +63,45 @@ public class CadastroDisciplinaController implements Initializable {
     private final String errorDialogTitle;
     private final String errorDialogHeader;
 
-    public CadastroDisciplinaController(Disciplina original) {
+    public CadastroSecretarioController(Secretario original) {
         this.original = original;
         if (original != null) {
-            confirmDialogTitle = "Editar disciplina";
-            confirmDialogHeader = "Confirmar atualização da disciplina";
-            confirmDialogContent = "Tem certeza que deseja atualizar a disciplina?";
-            successDialogTitle = "Disciplina atualizada";
-            successDialogHeader = "Disciplina atualizada:";
-            successDialogContent = "A disciplina foi atualizada com sucesso.";
+            confirmDialogTitle = "Editar secretario";
+            confirmDialogHeader = "Confirmar atualização do secretario";
+            confirmDialogContent = "Tem certeza que deseja atualizar o secretario?";
+            successDialogTitle = "Secretario atualizado";
+            successDialogHeader = "Secretario atualizado:";
+            successDialogContent = "O secretario foi atualizada com sucesso.";
             errorDialogTitle = "Erro na atualização";
             errorDialogHeader = "Erro na atualização.";
         }
         else {
             confirmDialogTitle = "Confirmar cadastro";
-            confirmDialogHeader = "Confirmar cadastro de disciplina";
-            confirmDialogContent = "Tem certeza que deseja cadastrar a disciplina?";
-            successDialogTitle = "Disciplina cadastrada";
-            successDialogHeader = "Disciplina cadastrada:";
-            successDialogContent = "A disciplina foi cadastrada com sucesso.";
+            confirmDialogHeader = "Confirmar cadastro de secretario";
+            confirmDialogContent = "Tem certeza que deseja cadastrar o secretario?";
+            successDialogTitle = "Secretario cadastrado";
+            successDialogHeader = "Secretario cadastrado:";
+            successDialogContent = "O secretario foi cadastrado com sucesso.";
             errorDialogTitle = "Erro no cadastro";
             errorDialogHeader = "Erro no cadastro.";
         }
     }
 
-    public Disciplina getNovo() {
+    public Secretario getNovo() {
         return novo;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (original != null) {
-            campoNome.setText(original.getNome());
-            campoDescricao.setText(original.getDescricao());
+            Pessoa p = original.getPessoa();
+            campoNome.setText(p.getNome());
+            campoDataNasc.setValue(DateUtil.toLocalDate(p.getData_nascimento()));
+            campoCPF.setPlainText(p.getCpf());
+            campoEndereco.setText(p.getEndereco());
+            campoEmail.setText(p.getEmail());
+            cursoSelecionado = original.getCurso();
+            labelCursoSelecionado.setText(cursoSelecionado.getNome());
         }
     }
 
@@ -111,31 +115,27 @@ public class CadastroDisciplinaController implements Initializable {
             errAlert.show();
             return;
         }
-        if (campoDescricao.getText().trim().isEmpty()) {
+        if (campoCPF.getPlainText().trim().isEmpty()) {
             Alert errAlert = new Alert(Alert.AlertType.ERROR);
             errAlert.setTitle(errorDialogTitle);
-            errAlert.setHeaderText("Descrição vazia");
-            errAlert.setContentText("Você precisa digitar uma descrição!");
+            errAlert.setHeaderText("CPF vazio");
+            errAlert.setContentText("Você precisa digitar um CPF!");
             errAlert.show();
             return;
         }
-        try {
-            int x = Integer.parseInt(campoCreditos.getCharacters().toString());
-            if (x <= 0) throw new NumberFormatException();
-        }
-        catch (NumberFormatException ex) {
+        if (campoEndereco.getText().trim().isEmpty()) {
             Alert errAlert = new Alert(Alert.AlertType.ERROR);
             errAlert.setTitle(errorDialogTitle);
-            errAlert.setHeaderText("Créditos inválidos");
-            errAlert.setContentText("Você precisa digitar um número de créditos válido!");
+            errAlert.setHeaderText("Endereço vazio");
+            errAlert.setContentText("Você precisa digitar um endereço!");
             errAlert.show();
             return;
         }
-        if (campoCodigo.getText().trim().isEmpty()) {
+        if (campoEmail.getText().trim().isEmpty()) {
             Alert errAlert = new Alert(Alert.AlertType.ERROR);
             errAlert.setTitle(errorDialogTitle);
-            errAlert.setHeaderText("Código vazio");
-            errAlert.setContentText("Você precisa digitar um código!");
+            errAlert.setHeaderText("Email vazio");
+            errAlert.setContentText("Você precisa digitar um email!");
             errAlert.show();
             return;
         }
@@ -147,14 +147,15 @@ public class CadastroDisciplinaController implements Initializable {
             errAlert.show();
             return;
         }
-        if (areaSelecionada == null) {
+        if (campoDataNasc.getValue() == null) {
             Alert errAlert = new Alert(Alert.AlertType.ERROR);
             errAlert.setTitle(errorDialogTitle);
-            errAlert.setHeaderText("Área não selecionada");
-            errAlert.setContentText("Você precisa selecionar uma área!");
+            errAlert.setHeaderText("Data de nascimento não selecionada");
+            errAlert.setContentText("Você precisa selecionar uma data de nascimento!");
             errAlert.show();
             return;
         }
+        System.out.println(campoCPF.getPlainText());
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(confirmDialogTitle);
         alert.setHeaderText(confirmDialogHeader);
@@ -166,21 +167,24 @@ public class CadastroDisciplinaController implements Initializable {
         if (result.orElse(ButtonType.CANCEL).equals(ButtonType.OK)) {
             try {
                 if (original == null) {
-                    novo = DisciplinaDAOHandler.cadastraDisciplina(
+                    novo = SecretarioDAOHandler.cadastraSecretario(
                             campoNome.getCharacters().toString(),
-                            campoCodigo.getCharacters().toString(),
-                            campoCreditos.getCharacters().toString(),
-                            campoDescricao.getText(),
-                            areaSelecionada,
-                            cursoSelecionado);
+                            campoDataNasc.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                            campoCPF.getPlainText(),
+                            campoEndereco.getCharacters().toString(),
+                            campoEmail.getCharacters().toString(),
+                            cursoSelecionado,
+                            "wololo");
+
                 }
                 else {
-                    original.setNome(campoNome.getCharacters().toString());
-                    original.setCodigo(campoCodigo.getCharacters().toString());
-                    original.setDescricao(campoDescricao.getText());
-                    original.setArea_disciplina(areaSelecionada);
-                    original.setCurso(cursoSelecionado);
-                    DisciplinaDAO.save(original);
+                    original.getPessoa().setNome(campoNome.getCharacters().toString());
+                    original.getPessoa().setData_nascimento(DateUtil.toDate(campoDataNasc.getValue()));
+                    original.getPessoa().setCpf(campoCPF.getPlainText());
+                    original.getPessoa().setEndereco(campoEndereco.getCharacters().toString());
+                    original.getPessoa().setEmail(campoEmail.getCharacters().toString());
+                    //original.getPessoa().setSenha();@TODO
+                    SecretarioDAO.save(original);
                     novo = original;
                 }
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -205,7 +209,6 @@ public class CadastroDisciplinaController implements Initializable {
                 errAlert.setHeaderText(errorDialogHeader);
                 errAlert.setContentText(cause.getMessage());
                 errAlert.show();
-                err.printStackTrace();
             }
             finally {
                 setEditable(true);
@@ -215,43 +218,6 @@ public class CadastroDisciplinaController implements Initializable {
             setEditable(true);
         }
     }
-
-    @FXML
-    public void selecionaArea(ActionEvent evt) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_areas.fxml")));
-            loader.setControllerFactory((t) -> new ListaAreasController(true));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Selecionar área");
-            stage.setScene(new Scene(root));
-            stage.initOwner(botaoEnviar.getScene().getWindow());
-            Platform.runLater(stage::requestFocus);
-            stage.showAndWait();
-            ListaAreasController controller = loader.getController();
-            Area_disciplina selected = controller.getSelectedItem();
-            areaSelecionada = selected;
-            if (selected != null) {
-                // @TODO fazer selecao
-                labelAreaSelecionada.setText(selected.getNome());
-            }
-            else {
-                labelAreaSelecionada.setText(labelAreaEmptyText);
-            }
-
-        } catch (IOException err) {
-            Alert errAlert = new Alert(Alert.AlertType.ERROR);
-            errAlert.setTitle(errorDialogTitle);
-            Throwable cause = err;
-            while (cause.getCause() != null) cause = cause.getCause();
-            errAlert.setHeaderText(errorDialogHeader);
-            errAlert.setContentText(cause.getMessage());
-            errAlert.show();
-        }
-
-    }
-
 
     @FXML
     public void selecionaCurso(ActionEvent evt) {
@@ -271,10 +237,10 @@ public class CadastroDisciplinaController implements Initializable {
             cursoSelecionado = selected;
             if (selected != null) {
                 // @TODO fazer selecao
-                labelCursoSelecionada.setText(selected.getNome());
+                labelCursoSelecionado.setText(selected.getNome());
             }
             else {
-                labelCursoSelecionada.setText(labelCursoEmptyText);
+                labelCursoSelecionado.setText(labelCursoEmptyText);
             }
 
         } catch (IOException err) {
@@ -285,12 +251,17 @@ public class CadastroDisciplinaController implements Initializable {
             errAlert.setHeaderText(errorDialogHeader);
             errAlert.setContentText(cause.getMessage());
             errAlert.show();
+            err.printStackTrace();
         }
 
     }
     private void setEditable(boolean edit) {
         campoNome.setEditable(edit);
-        campoDescricao.setEditable(edit);
+        campoCPF.setEditable(edit);
+        campoDataNasc.setEditable(edit);
+        campoEmail.setEditable(edit);
+        campoEndereco.setEditable(edit);
         botaoEnviar.setDisable(!edit);
     }
+
 }

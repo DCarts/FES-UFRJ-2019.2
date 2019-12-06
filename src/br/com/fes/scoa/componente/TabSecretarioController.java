@@ -1,5 +1,6 @@
 package br.com.fes.scoa.componente;
 
+import br.com.fes.scoa.model.Secretario;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +16,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class HomeSecretarioController implements Initializable {
+public class TabSecretarioController implements Initializable {
 
     @FXML
     public Button botaoListaAlunos;
@@ -27,19 +28,22 @@ public class HomeSecretarioController implements Initializable {
     public Button botaoListaDisciplinas;
 
     @FXML
-    public Button botaoListaCursos;
-
-    @FXML
     public Button botaoListaAreas;
-
-    @FXML
-    public Button botaoListaSecretarios;
 
     @FXML
     public Button botaoListaSalas;
 
     @FXML
     public Button botaoAlocarTurma;
+
+    @FXML
+    public Button botaoInscreverAluno;
+
+    private Secretario secretario;
+
+    public TabSecretarioController(Secretario secretario) {
+        this.secretario = secretario;
+    }
 
     @FXML
     public void onListaAlunos(ActionEvent event) {
@@ -93,23 +97,6 @@ public class HomeSecretarioController implements Initializable {
     }
 
     @FXML
-    public void onListaCursos(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_cursos.fxml")));
-            loader.setControllerFactory((t) -> new ListaCursosController(false));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Cursos");
-            stage.setScene(new Scene(root, 400, 400));
-            stage.show();
-            Platform.runLater(stage::requestFocus);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
     public void onListaAreas(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -118,23 +105,6 @@ public class HomeSecretarioController implements Initializable {
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Áreas");
-            stage.setScene(new Scene(root, 400, 400));
-            stage.show();
-            Platform.runLater(stage::requestFocus);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void onListaSecretarios(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/lista_disciplinas.fxml")));
-            loader.setControllerFactory((t) -> new ListaDisciplinasController(false));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Disciplinas");
             stage.setScene(new Scene(root, 400, 400));
             stage.show();
             Platform.runLater(stage::requestFocus);
@@ -169,6 +139,25 @@ public class HomeSecretarioController implements Initializable {
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Alocar turma");
+            stage.setScene(new Scene(root, 400, 400));
+            stage.initOwner(botaoAlocarTurma.getScene().getWindow());
+            stage.show();
+            Platform.runLater(stage::requestFocus);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onInscrever(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResource("br/com/fes/scoa/componente/fxml/cadastro_inscricao.fxml")));
+            loader.setControllerFactory((t) -> new CadastroInscricaoController(null));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Inscrever aluno");
             stage.setScene(new Scene(root, 400, 400));
             stage.initOwner(botaoAlocarTurma.getScene().getWindow());
             stage.show();

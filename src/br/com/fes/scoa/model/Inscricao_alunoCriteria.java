@@ -27,6 +27,7 @@ public class Inscricao_alunoCriteria extends AbstractORMCriteria {
 	public final IntegerExpression alunoId;
 	public final AssociationExpression aluno;
 	public final BigDecimalExpression nota;
+	public final BigDecimalExpression frequencia;
 	public final IntegerExpression situacaoId;
 	public final AssociationExpression situacao;
 	
@@ -37,6 +38,7 @@ public class Inscricao_alunoCriteria extends AbstractORMCriteria {
 		alunoId = new IntegerExpression("ORM_Aluno.", this);
 		aluno = new AssociationExpression("ORM_Aluno", this);
 		nota = new BigDecimalExpression("nota", this);
+		frequencia = new BigDecimalExpression("frequencia", this);
 		situacaoId = new IntegerExpression("situacao.id", this);
 		situacao = new AssociationExpression("situacao", this);
 	}

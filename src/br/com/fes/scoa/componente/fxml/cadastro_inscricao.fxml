@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.fes.scoa.componente.CadastroInscricaoController">
+    <MenuBar>
+        <Menu mnemonicParsing="false" text="File">
+            <MenuItem mnemonicParsing="false" text="Close" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+            <MenuItem mnemonicParsing="false" text="Delete" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+            <MenuItem mnemonicParsing="false" text="About" />
+        </Menu>
+    </MenuBar>
+    <HBox VBox.vgrow="ALWAYS">
+        <VBox alignment="TOP_RIGHT" spacing="20.0">
+            <padding>
+                <Insets left="10.0" right="10.0" top="10.0" />
+            </padding>
+         <children>
+            <Label text="Período">
+               <VBox.margin>
+                  <Insets top="4.0" />
+               </VBox.margin></Label>
+            <Button fx:id="botaoSelecionarTurma" disable="true" mnemonicParsing="false" onAction="#selecionaTurma" text="Selecionar turma" />
+            <Button fx:id="botaoSelecionarAluno" layoutX="20.0" layoutY="61.0" mnemonicParsing="false" onAction="#selecionaAluno" text="Selecionar aluno" />
+         </children>
+        </VBox>
+        <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets left="10.0" right="10.0" top="10.0" />
+            </padding>
+         <children>
+            <TextField fx:id="campoPeriodo" promptText="Período da turma">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </TextField>
+            <Label fx:id="labelTurmaSelecionada" text="Nenhuma turma selecionada" />
+            <Label fx:id="labelAlunoSelecionado" layoutX="20.0" layoutY="62.0" text="Nenhum aluno selecionado">
+               <VBox.margin>
+                  <Insets top="8.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+        </VBox>
+    </HBox>
+    <HBox alignment="CENTER">
+        <VBox.margin>
+            <Insets bottom="20.0" />
+        </VBox.margin>
+        <Button fx:id="botaoEnviar" defaultButton="true" mnemonicParsing="false" onAction="#onEnviar" text="Cadastrar">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Button>
+      <padding>
+         <Insets top="20.0" />
+      </padding>
+    </HBox>
+</VBox>

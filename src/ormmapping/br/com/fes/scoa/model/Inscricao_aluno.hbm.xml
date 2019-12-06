@@ -15,6 +15,7 @@ License Type: Evaluation
 		<property name="nota" type="big_decimal" precision="4" scale="2" not-null="false" lazy="false">
 			<column name="nota" default="NULL"/>
 		</property>
+		<property name="frequencia" column="frequencia" type="big_decimal" precision="10" scale="7" not-null="false" lazy="false"/>
 		<many-to-one name="situacao" cascade="lock" column="situacao_id" class="br.com.fes.scoa.model.Situacao" not-null="false" lazy="proxy" access="field">
 		</many-to-one>
 	</class>
