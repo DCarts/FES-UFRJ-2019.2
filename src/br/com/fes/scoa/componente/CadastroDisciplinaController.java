@@ -1,9 +1,6 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.model.Area_disciplina;
-import br.com.fes.scoa.model.Curso;
-import br.com.fes.scoa.model.Disciplina;
-import br.com.fes.scoa.model.DisciplinaDAO;
+import br.com.fes.scoa.model.*;
 import br.com.fes.scoa.util.DisciplinaDAOHandler;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -15,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.orm.PersistentException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,6 +27,9 @@ public class CadastroDisciplinaController implements Initializable {
 
     @FXML
     public TextField campoCodigo;
+
+    @FXML
+    public TextField campoCreditos;
 
     @FXML
     public TextArea campoDescricao;
@@ -62,7 +63,7 @@ public class CadastroDisciplinaController implements Initializable {
     private final String successDialogHeader;
     private final String successDialogContent;
     private final String errorDialogTitle;
-    private final String errorDialogContent;
+    private final String errorDialogHeader;
 
     public CadastroDisciplinaController(Disciplina original) {
         this.original = original;
@@ -74,7 +75,7 @@ public class CadastroDisciplinaController implements Initializable {
             successDialogHeader = "Disciplina atualizada:";
             successDialogContent = "A disciplina foi atualizada com sucesso.";
             errorDialogTitle = "Erro na atualização";
-            errorDialogContent = "Cheque o console para mais informações.";
+            errorDialogHeader = "Erro na atualização.";
         }
         else {
             confirmDialogTitle = "Confirmar cadastro";
@@ -84,7 +85,7 @@ public class CadastroDisciplinaController implements Initializable {
             successDialogHeader = "Disciplina cadastrada:";
             successDialogContent = "A disciplina foi cadastrada com sucesso.";
             errorDialogTitle = "Erro no cadastro";
-            errorDialogContent = "Cheque o console para mais informações.";
+            errorDialogHeader = "Erro no cadastro.";
         }
     }
 
@@ -118,6 +119,26 @@ public class CadastroDisciplinaController implements Initializable {
             errAlert.show();
             return;
         }
+        try {
+            int x = Integer.parseInt(campoCreditos.getCharacters().toString());
+            if (x <= 0) throw new NumberFormatException();
+        }
+        catch (NumberFormatException ex) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Créditos inválidos");
+            errAlert.setContentText("Você precisa digitar um número de créditos válido!");
+            errAlert.show();
+            return;
+        }
+        if (campoCodigo.getText().trim().isEmpty()) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Código vazio");
+            errAlert.setContentText("Você precisa digitar um código!");
+            errAlert.show();
+            return;
+        }
         if (cursoSelecionado == null) {
             Alert errAlert = new Alert(Alert.AlertType.ERROR);
             errAlert.setTitle(errorDialogTitle);
@@ -148,6 +169,7 @@ public class CadastroDisciplinaController implements Initializable {
                     novo = DisciplinaDAOHandler.cadastraDisciplina(
                             campoNome.getCharacters().toString(),
                             campoCodigo.getCharacters().toString(),
+                            campoCreditos.getCharacters().toString(),
                             campoDescricao.getText(),
                             areaSelecionada,
                             cursoSelecionado);
@@ -166,16 +188,26 @@ public class CadastroDisciplinaController implements Initializable {
                 successAlert.setHeaderText(successDialogHeader);
                 successAlert.setContentText(successDialogContent);
                 successAlert.show();
+                botaoEnviar.getScene().getWindow().hide();
             } catch (Exception err) {
+                try {
+                    if (SCOAPersistentManager.instance().getSession().getTransaction().isActive()) {
+                        SCOAPersistentManager.instance().getSession().getTransaction().rollback();
+                    }
+                    SCOAPersistentManager.instance().getSession().close();
+                } catch (PersistentException e) {
+                    e.printStackTrace();
+                }
                 Alert errAlert = new Alert(Alert.AlertType.ERROR);
                 errAlert.setTitle(errorDialogTitle);
-                errAlert.setHeaderText(err.toString());
-                errAlert.setContentText(errorDialogContent);
-                err.printStackTrace();
+                Throwable cause = err;
+                while (cause.getCause() != null) cause = cause.getCause();
+                errAlert.setHeaderText(errorDialogHeader);
+                errAlert.setContentText(cause.getMessage());
                 errAlert.show();
             }
             finally {
-                botaoEnviar.getScene().getWindow().hide();
+                setEditable(true);
             }
         }
         else {
@@ -210,9 +242,10 @@ public class CadastroDisciplinaController implements Initializable {
         } catch (IOException err) {
             Alert errAlert = new Alert(Alert.AlertType.ERROR);
             errAlert.setTitle(errorDialogTitle);
-            errAlert.setHeaderText(err.toString());
-            errAlert.setContentText(errorDialogContent);
-            err.printStackTrace();
+            Throwable cause = err;
+            while (cause.getCause() != null) cause = cause.getCause();
+            errAlert.setHeaderText(errorDialogHeader);
+            errAlert.setContentText(cause.getMessage());
             errAlert.show();
         }
 
@@ -246,9 +279,10 @@ public class CadastroDisciplinaController implements Initializable {
         } catch (IOException err) {
             Alert errAlert = new Alert(Alert.AlertType.ERROR);
             errAlert.setTitle(errorDialogTitle);
-            errAlert.setHeaderText(err.toString());
-            errAlert.setContentText(errorDialogContent);
-            err.printStackTrace();
+            Throwable cause = err;
+            while (cause.getCause() != null) cause = cause.getCause();
+            errAlert.setHeaderText(errorDialogHeader);
+            errAlert.setContentText(cause.getMessage());
             errAlert.show();
         }
 

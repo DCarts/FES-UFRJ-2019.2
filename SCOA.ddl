@@ -14,7 +14,13 @@ DELIMITER /
 DROP FUNCTION IF EXISTS validarCPF/
 DELIMITER ;
 DELIMITER /
+DROP PROCEDURE IF EXISTS loga_usuario/
+DELIMITER ;
+DELIMITER /
 DROP FUNCTION IF EXISTS validarCPF/
+DELIMITER ;
+DELIMITER /
+DROP PROCEDURE IF EXISTS loga_usuario/
 DELIMITER ;
 ALTER TABLE aluno DROP FOREIGN KEY fk_pessoa1;
 ALTER TABLE equivalencias DROP FOREIGN KEY fk_disciplina1;
@@ -54,7 +60,7 @@ DROP TABLE IF EXISTS curso;
 DROP TABLE IF EXISTS secretario;
 DROP TABLE IF EXISTS sysadmins;
 CREATE TABLE aluno (pessoa_id int(11) NOT NULL, curso_id int(11) NOT NULL, PRIMARY KEY (pessoa_id)) CHARACTER SET UTF8;
-CREATE TABLE disciplina (id int(11) NOT NULL AUTO_INCREMENT, area_disciplina_id int(11) NOT NULL, curso_id int(11) NOT NULL, codigo varchar(16) NOT NULL UNIQUE, nome varchar(255) NOT NULL, descricao varchar(255) NOT NULL, PRIMARY KEY (id), INDEX (id)) CHARACTER SET UTF8;
+CREATE TABLE disciplina (id int(11) NOT NULL AUTO_INCREMENT, area_disciplina_id int(11) NOT NULL, curso_id int(11) NOT NULL, codigo varchar(16) NOT NULL UNIQUE, nome varchar(255) NOT NULL, descricao varchar(255) NOT NULL, creditos int(11) NOT NULL, PRIMARY KEY (id), INDEX (id)) CHARACTER SET UTF8;
 CREATE TABLE equivalencias (disciplina1_id int(11) NOT NULL, disciplina2_id int(11) NOT NULL, PRIMARY KEY (disciplina1_id, disciplina2_id)) CHARACTER SET UTF8;
 CREATE TABLE horariodeaula (id int(11) NOT NULL AUTO_INCREMENT, dia varchar(255) NOT NULL, horarioFim time(6) NOT NULL, horarioInicio time(6) NOT NULL, PRIMARY KEY (id), INDEX (id)) CHARACTER SET UTF8;
 CREATE TABLE pessoa (id int(11) NOT NULL AUTO_INCREMENT, cpf varchar(20) NOT NULL UNIQUE, data_nascimento date NOT NULL, email varchar(255) NOT NULL, endereco varchar(255) NOT NULL, nome varchar(255) NOT NULL, senha varchar(255) NOT NULL, PRIMARY KEY (id), INDEX (id)) CHARACTER SET UTF8;
@@ -165,6 +171,32 @@ BEGIN
 END/
 DELIMITER ;
 DELIMITER /
+CREATE PROCEDURE `loga_usuario`(IN pessoa_cpf VARCHAR(20), IN senha_digitada VARCHAR(255))
+BEGIN
+    DECLARE SENHA_DIGITADA_HASHED VARCHAR(255);
+    DECLARE SENHA_REAL_HASHED VARCHAR(255);
+    DECLARE login_ok CHAR(1);
+
+    SET login_ok = FALSE;
+
+	SELECT senha 
+    INTO SENHA_REAL_HASHED 
+    FROM pessoa WHERE cpf=pessoa_cpf;
+    
+	SELECT TO_BASE64(SHA2(senha_digitada, 256)) 
+    INTO SENHA_DIGITADA_HASHED;
+
+	-- Validando
+	IF (SENHA_DIGITADA_HASHED = SENHA_REAL_HASHED) THEN
+		SET login_ok = TRUE;
+	ELSE
+		SET login_ok = FALSE;
+	END IF;
+
+    SELECT login_ok;
+END/
+DELIMITER ;
+DELIMITER /
 CREATE TRIGGER aloca_turma_pra_sala_test BEFORE INSERT ON alocacao_sala_turma FOR EACH ROW
 BEGIN
     DECLARE temp_turmas_count_1 INT;
@@ -174,6 +206,9 @@ BEGIN
     DECLARE new_dia VARCHAR(255);
     DECLARE new_horastart time(6);
     DECLARE new_horaend time(6);
+    
+    DROP TEMPORARY TABLE IF EXISTS temp_turmas_1;
+    DROP TEMPORARY TABLE IF EXISTS temp_turmas_2;
     
     CREATE TEMPORARY TABLE temp_turmas_1 (id int);
     CREATE TEMPORARY TABLE temp_turmas_2 (id int);
@@ -199,8 +234,9 @@ BEGIN
     FROM turma WHERE id=new.turma_id;
     
     INSERT INTO temp_turmas_1 SELECT turma_id FROM alocacao_sala_turma JOIN turma ON turma.id=turma_id JOIN horariodeaula as hora on hora.id = hora_id WHERE 
-		sala_id = new.sala_id 
-        AND dia=new_dia 
+		periodo = new_periodo
+		AND sala_id = new.sala_id 
+        AND hora.dia=new_dia 
         AND ((new_horastart > hora.horarioInicio AND new_horastart < hora.horarioFim)
 			OR (new_horaend > hora.horarioInicio AND new_horaend < hora.horarioFim)
             OR (new_horastart < hora.horarioInicio AND new_horaend > hora.horarioFim))
@@ -210,9 +246,10 @@ BEGIN
     INTO temp_turmas_count_1
     FROM temp_turmas_1;
 
-    INSERT INTO temp_turmas_2 SELECT turma_id FROM alocacao_sala_turma JOIN turma ON id=turma_id WHERE 
-		professor_id = new_professor_id
-        AND dia=new_dia 
+    INSERT INTO temp_turmas_2 SELECT turma_id FROM alocacao_sala_turma JOIN turma ON id=turma_id JOIN horariodeaula as hora on hora.id = hora_id  WHERE 
+		periodo = new_periodo
+		AND professor_id = new_professor_id
+        AND hora.dia=new_dia 
         AND ((new_horastart > hora.horarioInicio AND new_horastart < hora.horarioFim) 
 			OR (new_horaend > hora.horarioInicio AND new_horaend < hora.horarioFim)
             OR (new_horastart < hora.horarioInicio AND new_horaend > hora.horarioFim))

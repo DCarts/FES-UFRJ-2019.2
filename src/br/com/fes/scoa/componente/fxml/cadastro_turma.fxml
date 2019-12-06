@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.fes.scoa.componente.CadastroTurmaController">
     <MenuBar>
         <Menu mnemonicParsing="false" text="File">
@@ -31,19 +24,43 @@
          <children>
             <Button fx:id="botaoSelecionarDisciplina" mnemonicParsing="false" onAction="#selecionaDisciplina" text="Selecionar disciplina" />
             <Button fx:id="botaoSelecionarProfessor" mnemonicParsing="false" onAction="#selecionaProfessor" text="Selecionar professor" />
-            <Button fx:id="botaoSelecionarSala" mnemonicParsing="false" onAction="#selecionaSala" text="Selecionar sala" />
-            <Button fx:id="botaoAdicionarHorario" mnemonicParsing="false" onAction="#adicionaHorario" text="Adicionar horário" />
+            <Label text="Período" />
+            <Button fx:id="botaoAdicionarHorario" disable="true" mnemonicParsing="false" onAction="#adicionaHorario" text="Adicionar horário">
+               <VBox.margin>
+                  <Insets top="16.0" />
+               </VBox.margin></Button>
          </children>
         </VBox>
-        <VBox spacing="18.0" HBox.hgrow="ALWAYS">
+        <VBox HBox.hgrow="ALWAYS">
             <padding>
-                <Insets left="10.0" right="10.0" top="14.0" />
+                <Insets left="10.0" right="10.0" />
             </padding>
          <children>
-            <Label fx:id="labelDisciplinaSelecionada" text="Nenhuma disciplina selecionada" />
-            <Label fx:id="labelProfessorSelecionado" text="Nenhum professor selecionado" />
-            <Label fx:id="labelSalaSelecionada" text="Nenhuma sala selecionada" />
-            <ListView fx:id="horariosSelecionadosView" prefHeight="120.0" />
+            <Label fx:id="labelDisciplinaSelecionada" text="Nenhuma disciplina selecionada">
+               <padding>
+                  <Insets bottom="9.0" top="9.0" />
+               </padding></Label>
+            <Label fx:id="labelProfessorSelecionado" text="Nenhum professor selecionado">
+               <padding>
+                  <Insets bottom="9.0" top="9.0" />
+               </padding></Label>
+            <TextField fx:id="campoPeriodo" promptText="Período da turma">
+               <VBox.margin>
+                  <Insets bottom="18.0" top="9.0" />
+               </VBox.margin>
+            </TextField>
+            <TableView fx:id="horariosSelecionadosView" prefHeight="200.0">
+              <columns>
+                <TableColumn fx:id="salaCol" prefWidth="75.0" text="Sala">
+                     <columns>
+                        <TableColumn fx:id="predioCol" prefWidth="75.0" text="Predio" />
+                        <TableColumn fx:id="andarCol" prefWidth="75.0" text="Andar" />
+                        <TableColumn fx:id="salaNomeCol" prefWidth="75.0" text="Nome" />
+                     </columns>
+                  </TableColumn>
+                <TableColumn fx:id="horarioCol" prefWidth="75.0" text="Horário" />
+              </columns>
+            </TableView>
          </children>
         </VBox>
     </HBox>

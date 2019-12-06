@@ -10,7 +10,7 @@ License Type: Evaluation
 			<generator class="native">
 			</generator>
 		</id>
-		<property name="cpf" column="cpf" unique="true" type="string" length="14" not-null="true" lazy="false"/>
+		<property name="cpf" column="cpf" unique="true" type="string" length="20" not-null="true" lazy="false"/>
 		<property name="data_nascimento" column="data_nascimento" type="date" not-null="true" lazy="false"/>
 		<property name="email" column="email" type="string" length="255" not-null="true" lazy="false"/>
 		<property name="endereco" column="endereco" type="string" length="255" not-null="true" lazy="false"/>

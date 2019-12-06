@@ -39,6 +39,8 @@ public class ListaProfessoresController implements Initializable {
     @FXML
     private TableColumn<Professor, String> editCol;
     @FXML
+    private TableColumn<Professor, String> areaNomeCol;
+    @FXML
     private TableColumn<Professor, String> classesCol;
     @FXML
     private TableColumn<Professor, String> nomeCol;
@@ -71,6 +73,7 @@ public class ListaProfessoresController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         nomeCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getNome());});
+        areaNomeCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getArea_disciplina().getNome());});
         cpfCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getCpf());});
         emailCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getEmail());});
         enderecoCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getPessoa().getEndereco());});

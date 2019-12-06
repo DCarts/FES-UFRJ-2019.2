@@ -74,6 +74,8 @@ public class Disciplina {
 	
 	private String descricao;
 	
+	private int creditos;
+	
 	private java.util.Set ORM_disciplina1 = new java.util.HashSet();
 	
 	private java.util.Set ORM_disciplina = new java.util.HashSet();
@@ -118,6 +120,14 @@ public class Disciplina {
 	
 	public String getDescricao() {
 		return descricao;
+	}
+	
+	public void setCreditos(int value) {
+		this.creditos = value;
+	}
+	
+	public int getCreditos() {
+		return creditos;
 	}
 	
 	private void setORM_Disciplina1(java.util.Set value) {

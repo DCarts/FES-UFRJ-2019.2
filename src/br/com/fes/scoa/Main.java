@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class Main extends Application {
 	
@@ -42,6 +43,21 @@ public class Main extends Application {
         });
         primaryStage.show();
         Platform.runLater(primaryStage::requestFocus);
+    }
+
+    public static String lineConcat(List<String> strlist) {
+        StringBuilder sb = new StringBuilder();
+
+        int i = 0;
+        for (; i < strlist.size()-1; i++) {
+            sb.append(strlist.get(i));
+            sb.append('\n');
+        }
+        if (strlist.size() > 0) {
+            sb.append(strlist.get(i));
+        }
+
+        return sb.toString();
     }
 
     public static void main(String[] args) {

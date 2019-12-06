@@ -1,8 +1,5 @@
 package utils;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Spinner;
@@ -10,6 +7,9 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.InputEvent;
 import javafx.util.StringConverter;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class TimeSpinner extends Spinner<LocalTime> {
 

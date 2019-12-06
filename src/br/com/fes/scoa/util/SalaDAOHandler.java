@@ -1,6 +1,8 @@
 package br.com.fes.scoa.util;
 
-import br.com.fes.scoa.model.*;
+import br.com.fes.scoa.model.Sala;
+import br.com.fes.scoa.model.SalaCriteria;
+import br.com.fes.scoa.model.SalaDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.hibernate.criterion.MatchMode;
@@ -22,23 +24,22 @@ public class SalaDAOHandler {
         return sala;
     }
 
-    public static void alocaTurmaNaSala(Sala sala, Turma turma, Horariodeaula hora){
-/*  @TODO isso ae
-
-        SalasTurmas alocacao = new SalasTurmas(sala, turma, hora);
-
-        EntityManager em = Main.em;
-
-        em.persist(alocacao);
-
-        JPAUtil.commit(em);*/
-
-    }
-
     public static void remover(List<Sala> lista) throws PersistentException {
         for (Sala sala : lista) {
             SalaDAO.deleteAndDissociate(sala);
         }
+    }
+
+    public static String getPredio(String cod) {
+        return cod.split("::")[0];
+    }
+
+    public static String getAndar(String cod) {
+        return cod.split("::")[1];
+    }
+
+    public static String getSalaNome(String cod) {
+        return cod.split("::")[2];
     }
 
     public static ObservableList<Sala> buscar(String text) throws PersistentException {

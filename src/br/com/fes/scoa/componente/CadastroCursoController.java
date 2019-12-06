@@ -2,12 +2,14 @@ package br.com.fes.scoa.componente;
 
 import br.com.fes.scoa.model.Curso;
 import br.com.fes.scoa.model.CursoDAO;
+import br.com.fes.scoa.model.SCOAPersistentManager;
 import br.com.fes.scoa.util.CursoDAOHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.StageStyle;
+import org.orm.PersistentException;
 
 import java.net.URL;
 import java.util.Optional;
@@ -34,7 +36,7 @@ public class CadastroCursoController implements Initializable {
     private final String successDialogHeader;
     private final String successDialogContent;
     private final String errorDialogTitle;
-    private final String errorDialogContent;
+    private final String errorDialogHeader;
 
     public CadastroCursoController(Curso original) {
         this.original = original;
@@ -46,7 +48,7 @@ public class CadastroCursoController implements Initializable {
             successDialogHeader = "Curso atualizado:";
             successDialogContent = "O curso foi atualizado com sucesso.";
             errorDialogTitle = "Erro na atualização";
-            errorDialogContent = "Cheque o console para mais informações.";
+            errorDialogHeader = "Erro na atualização.";
         }
         else {
             confirmDialogTitle = "Confirmar cadastro";
@@ -56,7 +58,7 @@ public class CadastroCursoController implements Initializable {
             successDialogHeader = "Curso cadastrado:";
             successDialogContent = "Ocurso foi cadastrado com sucesso.";
             errorDialogTitle = "Erro no cadastro";
-            errorDialogContent = "Cheque o console para mais informações.";
+            errorDialogHeader = "Erro no cadastro.";
         }
     }
 
@@ -116,16 +118,26 @@ public class CadastroCursoController implements Initializable {
                 successAlert.setHeaderText(successDialogHeader);
                 successAlert.setContentText(successDialogContent);
                 successAlert.show();
+                botaoEnviar.getScene().getWindow().hide();
             } catch (Exception err) {
+                try {
+                    if (SCOAPersistentManager.instance().getSession().getTransaction().isActive()) {
+                        SCOAPersistentManager.instance().getSession().getTransaction().rollback();
+                    }
+                    SCOAPersistentManager.instance().getSession().close();
+                } catch (PersistentException e) {
+                    e.printStackTrace();
+                }
                 Alert errAlert = new Alert(Alert.AlertType.ERROR);
                 errAlert.setTitle(errorDialogTitle);
-                errAlert.setHeaderText(err.toString());
-                errAlert.setContentText(errorDialogContent);
-                err.printStackTrace();
+                Throwable cause = err;
+                while (cause.getCause() != null) cause = cause.getCause();
+                errAlert.setHeaderText(errorDialogHeader);
+                errAlert.setContentText(cause.getMessage());
                 errAlert.show();
             }
             finally {
-                botaoEnviar.getScene().getWindow().hide();
+                setEditable(true);
             }
         }
         else {

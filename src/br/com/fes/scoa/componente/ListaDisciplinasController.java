@@ -3,6 +3,7 @@ package br.com.fes.scoa.componente;
 import br.com.fes.scoa.model.Disciplina;
 import br.com.fes.scoa.util.DisciplinaDAOHandler;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,7 +39,15 @@ public class ListaDisciplinasController implements Initializable {
     @FXML
     private TableColumn<Disciplina, String> editCol;
     @FXML
+    private TableColumn<Disciplina, String> cursoNomeCol;
+    @FXML
+    private TableColumn<Disciplina, String> areaNomeCol;
+    @FXML
     private TableColumn<Disciplina, String> nomeCol;
+    @FXML
+    private TableColumn<Disciplina, String> codigoCol;
+    @FXML
+    private TableColumn<Disciplina, String> creditosCol;
     @FXML
     private TableColumn<Disciplina, String> descricaoCol;
 
@@ -61,10 +70,12 @@ public class ListaDisciplinasController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        nomeCol.setCellValueFactory(
-                new PropertyValueFactory<>("nome"));
-        descricaoCol.setCellValueFactory(
-                new PropertyValueFactory<>("descricao"));
+        cursoNomeCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getCurso().getNome());});
+        areaNomeCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getArea_disciplina().getNome());});
+        nomeCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getNome());});
+        codigoCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getCodigo());});
+        creditosCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(String.valueOf(param.getValue().getCreditos()));});
+        descricaoCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getDescricao());});
         if (doSelect) {
             botaoRemover.setDisable(true);
             botaoRemover.setText("Selecionar");

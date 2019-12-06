@@ -75,6 +75,7 @@ public class DisciplinaSetCollection extends org.orm.util.ORMSet {
 	 * <li>codigo</li>
 	 * <li>nome</li>
 	 * <li>descricao</li>
+	 * <li>creditos</li>
 	 * </ul>
 	 * @return The persistent objects sorted array
 	 */
@@ -89,6 +90,7 @@ public class DisciplinaSetCollection extends org.orm.util.ORMSet {
 	 * <li>codigo</li>
 	 * <li>nome</li>
 	 * <li>descricao</li>
+	 * <li>creditos</li>
 	 * </ul>
 	 * @param ascending true for ascending, false for descending
 	 * @return The persistent objects sorted array

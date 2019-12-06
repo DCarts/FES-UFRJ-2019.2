@@ -195,8 +195,10 @@ public class CadastroProfessorController implements Initializable {
                 botaoEnviar.getScene().getWindow().hide();
             } catch (Exception err) {
                 try {
-                    if (SCOAPersistentManager.instance().getSession().getTransaction().isActive())
+                    if (SCOAPersistentManager.instance().getSession().getTransaction().isActive()) {
                         SCOAPersistentManager.instance().getSession().getTransaction().rollback();
+                    }
+                    SCOAPersistentManager.instance().getSession().close();
                 } catch (PersistentException e) {
                     e.printStackTrace();
                 }

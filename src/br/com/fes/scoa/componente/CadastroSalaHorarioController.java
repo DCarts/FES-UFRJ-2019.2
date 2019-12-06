@@ -1,6 +1,7 @@
 package br.com.fes.scoa.componente;
 
 import br.com.fes.scoa.model.Horariodeaula;
+import br.com.fes.scoa.model.SCOAPersistentManager;
 import br.com.fes.scoa.model.Sala;
 import br.com.fes.scoa.util.HorariodeaulaDAOHandler;
 import javafx.application.Platform;
@@ -15,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
+import org.orm.PersistentException;
 import utils.TimeSpinner;
 
 import java.io.IOException;
@@ -70,7 +72,10 @@ public class CadastroSalaHorarioController implements Initializable {
 
         @Override
         public String toString(Dia dia) {
-            return dia.getNome();
+            if (dia != null)
+                return dia.getNome();
+            else
+                return "";
         }
 
         @Override
@@ -168,12 +173,21 @@ public class CadastroSalaHorarioController implements Initializable {
 
 
 
-                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                /*Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle(successDialogTitle);
                 successAlert.setHeaderText(successDialogHeader);
                 successAlert.setContentText(successDialogContent);
-                successAlert.show();
+                successAlert.show();*/
+                botaoEnviar.getScene().getWindow().hide();
             } catch (Exception err) {
+                try {
+                    if (SCOAPersistentManager.instance().getSession().getTransaction().isActive()) {
+                        SCOAPersistentManager.instance().getSession().getTransaction().rollback();
+                    }
+                    SCOAPersistentManager.instance().getSession().close();
+                } catch (PersistentException e) {
+                    e.printStackTrace();
+                }
                 Alert errAlert = new Alert(Alert.AlertType.ERROR);
                 errAlert.setTitle(errorDialogTitle);
                 errAlert.setHeaderText(err.toString());
@@ -182,7 +196,7 @@ public class CadastroSalaHorarioController implements Initializable {
                 errAlert.show();
             }
             finally {
-                botaoEnviar.getScene().getWindow().hide();
+                setEditable(true);
             }
 
         }
@@ -230,6 +244,7 @@ public class CadastroSalaHorarioController implements Initializable {
         campoDia.setEditable(edit);
         campoInicio.setEditable(edit);
         campoFim.setEditable(edit);
+        botaoSelecionarSala.setDisable(!edit);
         botaoEnviar.setDisable(!edit);
     }
 }

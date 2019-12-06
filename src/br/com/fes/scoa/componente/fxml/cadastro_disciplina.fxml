@@ -31,6 +31,7 @@
          <Button fx:id="botaoSelecionarArea" layoutX="20.0" layoutY="30.0" mnemonicParsing="false" onAction="#selecionaArea" text="Selecionar área" />
             <Label text="Nome" />
          <Label text="Código" />
+         <Label text="Créditos" />
             <Label text="Descrição" />
         </VBox>
         <VBox spacing="12.0" HBox.hgrow="ALWAYS">
@@ -49,6 +50,7 @@
          </Label>
             <TextField fx:id="campoNome" promptText="Nome" />
          <TextField fx:id="campoCodigo" promptText="Código da disciplina" />
+         <TextField fx:id="campoCreditos" promptText="Créditos" />
             <TextArea fx:id="campoDescricao" />
         </VBox>
     </HBox>

@@ -1,8 +1,12 @@
 package br.com.fes.scoa.componente;
 
 import br.com.fes.scoa.model.*;
+import br.com.fes.scoa.util.AlocacaoDAOHandler;
+import br.com.fes.scoa.util.HorariodeaulaDAOHandler;
+import br.com.fes.scoa.util.SalaDAOHandler;
 import br.com.fes.scoa.util.TurmaDAOHandler;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,14 +18,23 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.orm.PersistentException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
+import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class CadastroTurmaController implements Initializable {
+
+
+    @FXML
+    public TextField campoPeriodo;
 
     @FXML
     public Button botaoSelecionarDisciplina;
@@ -40,19 +53,22 @@ public class CadastroTurmaController implements Initializable {
     private final String labelProfessorEmptyText = "Nenhum professor selecionado";
 
     @FXML
-    public Button botaoSelecionarSala;
-
-    @FXML
-    public Label labelSalaSelecionada;
-    private Sala salaSelecionado = null;
-    private final String labelSalaEmptyText = "Nenhuma sala selecionada";
-
-    @FXML
     public Button botaoAdicionarHorario;
 
     @FXML
-    public ListView<Horariodeaula> horariosSelecionadosView;
-    private final ObservableList<Horariodeaula> horariosSelecionados = FXCollections.observableArrayList();
+    private TableColumn<SimpleEntry<Sala,Horariodeaula>, String> salaCol;
+    @FXML
+    public TableColumn<SimpleEntry<Sala,Horariodeaula>, String> predioCol;
+    @FXML
+    public TableColumn<SimpleEntry<Sala,Horariodeaula>, String> andarCol;
+    @FXML
+    public TableColumn<SimpleEntry<Sala,Horariodeaula>, String> salaNomeCol;
+    @FXML
+    public TableColumn<SimpleEntry<Sala,Horariodeaula>, String> horarioCol;
+    @FXML
+    private TableView<SimpleEntry<Sala,Horariodeaula>> horariosSelecionadosView;
+
+    private final ObservableList<SimpleEntry<Sala,Horariodeaula>> horariosSelecionados = FXCollections.observableArrayList();
 
     @FXML
     public Button botaoEnviar;
@@ -94,13 +110,46 @@ public class CadastroTurmaController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        horarioCol.setCellValueFactory(param -> {
+            return new ReadOnlyStringWrapper(HorariodeaulaDAOHandler.horarioToString(param.getValue().getValue()));
+        });
+        andarCol.setCellValueFactory(param -> {
+            return new ReadOnlyStringWrapper(SalaDAOHandler.getAndar(param.getValue().getKey().getCodLocalizacao()));
+        });
+        salaNomeCol.setCellValueFactory(param -> {
+            return new ReadOnlyStringWrapper(SalaDAOHandler.getSalaNome(param.getValue().getKey().getCodLocalizacao()));
+        });
+        predioCol.setCellValueFactory(param -> {
+            return new ReadOnlyStringWrapper(SalaDAOHandler.getPredio(param.getValue().getKey().getCodLocalizacao()));
+        });
+
+        campoPeriodo.textProperty().addListener((observable, oldValue, newValue) -> {
+            if ((oldValue == null && newValue != null)
+                || oldValue != null && !oldValue.equals(newValue)) {
+                horariosSelecionados.clear();
+            }
+            testaPodeAdicionarHorario();
+        });
         horariosSelecionadosView.setItems(horariosSelecionados);
         if (original != null) {
-            // @TODO setar valores pros originais
-
+            professorSelecionado = original.getProfessor();
+            labelProfessorSelecionado.setText(professorSelecionado.getPessoa().getNome());
+            disciplinaSelecionada = original.getDisciplina();
+            labelDisciplinaSelecionada.setText(disciplinaSelecionada.getNome());
+            try {
+                horariosSelecionados.addAll(AlocacaoDAOHandler.getHorariosOf(original).stream().map(ast -> new AbstractMap.SimpleEntry<Sala,Horariodeaula>(ast.getSala(), ast.getHora())).collect(Collectors.toList()));
+            } catch (PersistentException e) {
+                e.printStackTrace();
+            }
             botaoEnviar.setText("Salvar");
         }
 
+    }
+
+    private void testaPodeAdicionarHorario() {
+            botaoAdicionarHorario.setDisable(campoPeriodo.getCharacters().toString().trim().isEmpty()
+                    || disciplinaSelecionada == null
+                    || professorSelecionado == null);
     }
 
     @FXML
@@ -118,9 +167,10 @@ public class CadastroTurmaController implements Initializable {
             stage.showAndWait();
             ListaDisciplinasController controller = loader.getController();
             Disciplina selected = controller.getSelectedItem();
+            if (disciplinaSelecionada != selected)
+                horariosSelecionados.clear();
             disciplinaSelecionada = selected;
             if (selected != null) {
-                // @TODO fazer selecao
                 labelDisciplinaSelecionada.setText(selected.getNome());
             }
             else {
@@ -135,7 +185,7 @@ public class CadastroTurmaController implements Initializable {
             err.printStackTrace();
             errAlert.show();
         }
-
+        testaPodeAdicionarHorario();
     }
 
     @FXML
@@ -146,16 +196,17 @@ public class CadastroTurmaController implements Initializable {
             loader.setControllerFactory((t) -> new ListaProfessoresController(true));
             Parent root = loader.load();
             Stage stage = new Stage();
-            stage.setTitle("Adicionar horário");
+            stage.setTitle("Selecionar professor");
             stage.setScene(new Scene(root));
             stage.initOwner(botaoEnviar.getScene().getWindow());
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
             ListaProfessoresController controller = loader.getController();
             Professor selected = controller.getSelectedItem();
+            if (professorSelecionado != selected)
+                horariosSelecionados.clear();
             professorSelecionado = selected;
             if (selected != null) {
-                // @TODO fazer selecao
                 labelProfessorSelecionado.setText(selected.getPessoa().getNome());
             }
             else {
@@ -170,7 +221,7 @@ public class CadastroTurmaController implements Initializable {
             err.printStackTrace();
             errAlert.show();
         }
-
+        testaPodeAdicionarHorario();
     }
 
     @FXML
@@ -187,16 +238,56 @@ public class CadastroTurmaController implements Initializable {
             Platform.runLater(stage::requestFocus);
             stage.showAndWait();
             CadastroSalaHorarioController controller = loader.getController();
-            Horariodeaula novo = controller.getNovo();
-            if (novo != null) {
-                if (horariosSelecionados.contains(novo)) {
-                    // @TODO este horario ja esta selecionado
-                    return;
+            Horariodeaula novohorario = controller.getNovo();
+            Sala novasala = controller.getSala();
+            if (novohorario != null && novasala != null) {
+                for (SimpleEntry<Sala,Horariodeaula> e : horariosSelecionados) {
+                    if (e.getKey().getId() == novasala.getId()
+                            && e.getValue().getDia().equals(novohorario.getDia())) {
+                        Time start = e.getValue().getHorarioInicio();
+                        Time end = e.getValue().getHorarioFim();
+                        if (!(start.after(novohorario.getHorarioFim()) || end.before(novohorario.getHorarioInicio()))) {
+                            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+                            errAlert.setTitle(errorDialogTitle);
+                            errAlert.setHeaderText("Conflito de horário");
+                            errAlert.setContentText("Você já está cadastrando um horário incompatível com esse.");
+                            errAlert.show();
+                            return;
+                        }
+                    }
                 }
-                horariosSelecionados.add(novo);
+                for (Horariodeaula h : AlocacaoDAOHandler.getHorariosOf(professorSelecionado, campoPeriodo.getCharacters().toString())) {
+                    if (h.getDia().equals(novohorario.getDia())) {
+                        Time start = h.getHorarioInicio();
+                        Time end = h.getHorarioFim();
+                        if (!(start.after(novohorario.getHorarioFim()) || end.before(novohorario.getHorarioInicio()))) {
+                            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+                            errAlert.setTitle(errorDialogTitle);
+                            errAlert.setHeaderText("Conflito de horário");
+                            errAlert.setContentText("O professor selecionado já tem alguma turma aula no horário selecionado.");
+                            errAlert.show();
+                            return;
+                        }
+                    }
+                }
+                for (Horariodeaula h : AlocacaoDAOHandler.getHorariosOf(novasala, campoPeriodo.getCharacters().toString())) {
+                    if (h.getDia().equals(novohorario.getDia())) {
+                        Time start = h.getHorarioInicio();
+                        Time end = h.getHorarioFim();
+                        if (!(start.after(novohorario.getHorarioFim()) || end.before(novohorario.getHorarioInicio()))) {
+                            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+                            errAlert.setTitle(errorDialogTitle);
+                            errAlert.setHeaderText("Conflito de horário");
+                            errAlert.setContentText("A sala selecionado já tem alguma turma aula no horário selecionado.");
+                            errAlert.show();
+                            return;
+                        }
+                    }
+                }
+                horariosSelecionados.add(new SimpleEntry<>(novasala, novohorario));
             }
 
-        } catch (IOException err) {
+        } catch (Exception err) {
             Alert errAlert = new Alert(Alert.AlertType.ERROR);
             errAlert.setTitle(errorDialogTitle);
             errAlert.setHeaderText(err.toString());
@@ -224,6 +315,14 @@ public class CadastroTurmaController implements Initializable {
             errAlert.show();
             return;
         }
+        if (campoPeriodo.getCharacters().toString().trim().isEmpty()) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR);
+            errAlert.setTitle(errorDialogTitle);
+            errAlert.setHeaderText("Período não selecionado");
+            errAlert.setContentText("Você precisa digitar um período!");
+            errAlert.show();
+            return;
+        }
         if (horariosSelecionados.isEmpty()) {
             Alert errAlert = new Alert(Alert.AlertType.ERROR);
             errAlert.setTitle(errorDialogTitle);
@@ -232,7 +331,6 @@ public class CadastroTurmaController implements Initializable {
             errAlert.show();
             return;
         }
-        // @TODO testar selecao
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(confirmDialogTitle);
         alert.setHeaderText(confirmDialogHeader);
@@ -246,13 +344,16 @@ public class CadastroTurmaController implements Initializable {
                 if (original != null) {
                     original.setProfessor(professorSelecionado);
                     original.setDisciplina(disciplinaSelecionada);
+                    original.setPeriodo(campoPeriodo.getCharacters().toString());
                     //@todo original.setSala(salaSelecionado);
                     //@todo original.setHorario(horariosSelecionados);
                     TurmaDAO.save(original);
                 } else {
                     TurmaDAOHandler.cadastraTurma(
                             disciplinaSelecionada,
-                            professorSelecionado
+                            professorSelecionado,
+                            campoPeriodo.getCharacters().toString(),
+                            horariosSelecionados
                     );
                 }
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -260,7 +361,16 @@ public class CadastroTurmaController implements Initializable {
                 successAlert.setHeaderText(successDialogHeader);
                 successAlert.setContentText(successDialogContent);
                 successAlert.show();
+                botaoEnviar.getScene().getWindow().hide();
             } catch (Exception err) {
+                try {
+                    if (SCOAPersistentManager.instance().getSession().getTransaction().isActive()) {
+                        SCOAPersistentManager.instance().getSession().getTransaction().rollback();
+                    }
+                    SCOAPersistentManager.instance().getSession().close();
+                } catch (PersistentException e) {
+                    e.printStackTrace();
+                }
                 Alert errAlert = new Alert(Alert.AlertType.ERROR);
                 errAlert.setTitle(errorDialogTitle);
                 errAlert.setHeaderText(err.toString());
@@ -269,7 +379,7 @@ public class CadastroTurmaController implements Initializable {
                 errAlert.show();
             }
             finally {
-                botaoEnviar.getScene().getWindow().hide();
+                setEditable(true);
             }
 
         }
@@ -283,7 +393,6 @@ public class CadastroTurmaController implements Initializable {
         botaoAdicionarHorario.setDisable(!edit);
         botaoSelecionarDisciplina.setDisable(!edit);
         botaoSelecionarProfessor.setDisable(!edit);
-        botaoSelecionarSala.setDisable(!edit);
         botaoEnviar.setDisable(!edit);
     }
 }

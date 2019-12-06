@@ -1,14 +1,5 @@
 package br.com.fes.scoa.teste;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import br.com.fes.scoa.modelo.*;
-import br.com.fes.scoa.util.*;
-
-import java.time.LocalDate;
-
 public class TesteConta {
 	
 	public static void main(String[] args) {

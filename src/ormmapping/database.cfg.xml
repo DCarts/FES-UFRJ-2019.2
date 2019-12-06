@@ -31,21 +31,6 @@
     <ServerName></ServerName>
     <SelectedForm>true</SelectedForm>
   </Setting>
-  <Setting type="1048576">
-    <Driver>MySQL5 (Connector/J Driver)</Driver>
-    <DriverFiles>&lt;&lt;MySQL Connector/J 8.0.18&gt;&gt;</DriverFiles>
-    <Dialect>org.hibernate.dialect.MySQL5Dialect</Dialect>
-    <DriverClass>com.mysql.cj.jdbc.Driver</DriverClass>
-    <URL>jdbc:mysql://localhost:3306/scoadb</URL>
-    <UserName>root</UserName>
-    <EncryptedPassword>8D4331EAD6D021B177698A3886C46ABAD9C6180D46076C6483F285B387AE3A65</EncryptedPassword>
-    <HostName>localhost</HostName>
-    <PortNO>3306</PortNO>
-    <DBName>scoadb</DBName>
-    <ServiceName></ServiceName>
-    <ServerName></ServerName>
-    <SelectedForm>true</SelectedForm>
-  </Setting>
   <Setting type="1024">
     <Driver></Driver>
     <DriverFiles></DriverFiles>
@@ -57,6 +42,21 @@
     <HostName></HostName>
     <PortNO></PortNO>
     <DBName></DBName>
+    <ServiceName></ServiceName>
+    <ServerName></ServerName>
+    <SelectedForm>true</SelectedForm>
+  </Setting>
+  <Setting type="1048576">
+    <Driver>MySQL5 (Connector/J Driver)</Driver>
+    <DriverFiles>&lt;&lt;MySQL Connector/J 8.0.18&gt;&gt;</DriverFiles>
+    <Dialect>org.hibernate.dialect.MySQL5Dialect</Dialect>
+    <DriverClass>com.mysql.cj.jdbc.Driver</DriverClass>
+    <URL>jdbc:mysql://localhost:3306/scoadb</URL>
+    <UserName>root</UserName>
+    <EncryptedPassword>8D4331EAD6D021B177698A3886C46ABAD9C6180D46076C6483F285B387AE3A65</EncryptedPassword>
+    <HostName>localhost</HostName>
+    <PortNO>3306</PortNO>
+    <DBName>scoadb</DBName>
     <ServiceName></ServiceName>
     <ServerName></ServerName>
     <SelectedForm>true</SelectedForm>

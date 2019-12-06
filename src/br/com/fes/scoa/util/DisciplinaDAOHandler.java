@@ -11,11 +11,12 @@ import java.util.List;
 
 public class DisciplinaDAOHandler {
 	
-	public static Disciplina cadastraDisciplina(String nome, String codigo, String descricao, Area_disciplina area, Curso curso) throws PersistentException {
+	public static Disciplina cadastraDisciplina(String nome, String codigo, String creditos, String descricao, Area_disciplina area, Curso curso) throws PersistentException {
 		Disciplina disciplina = DisciplinaDAO.createDisciplina();
 
 		disciplina.setNome(nome);
 		disciplina.setCodigo(nome);
+		disciplina.setCreditos(Integer.parseInt(creditos));
 		disciplina.setDescricao(descricao);
 		disciplina.setArea_disciplina(area);
 		disciplina.setCurso(curso);

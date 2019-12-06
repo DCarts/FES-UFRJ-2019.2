@@ -28,6 +28,7 @@ public class DisciplinaDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression codigo;
 	public final StringExpression nome;
 	public final StringExpression descricao;
+	public final IntegerExpression creditos;
 	public final CollectionExpression disciplina1;
 	public final CollectionExpression disciplina;
 	public final CollectionExpression disciplina2;
@@ -44,6 +45,7 @@ public class DisciplinaDetachedCriteria extends AbstractORMDetachedCriteria {
 		codigo = new StringExpression("codigo", this.getDetachedCriteria());
 		nome = new StringExpression("nome", this.getDetachedCriteria());
 		descricao = new StringExpression("descricao", this.getDetachedCriteria());
+		creditos = new IntegerExpression("creditos", this.getDetachedCriteria());
 		disciplina1 = new CollectionExpression("ORM_Disciplina1", this.getDetachedCriteria());
 		disciplina = new CollectionExpression("ORM_Disciplina", this.getDetachedCriteria());
 		disciplina2 = new CollectionExpression("ORM_Disciplina2", this.getDetachedCriteria());
@@ -61,6 +63,7 @@ public class DisciplinaDetachedCriteria extends AbstractORMDetachedCriteria {
 		codigo = new StringExpression("codigo", this.getDetachedCriteria());
 		nome = new StringExpression("nome", this.getDetachedCriteria());
 		descricao = new StringExpression("descricao", this.getDetachedCriteria());
+		creditos = new IntegerExpression("creditos", this.getDetachedCriteria());
 		disciplina1 = new CollectionExpression("ORM_Disciplina1", this.getDetachedCriteria());
 		disciplina = new CollectionExpression("ORM_Disciplina", this.getDetachedCriteria());
 		disciplina2 = new CollectionExpression("ORM_Disciplina2", this.getDetachedCriteria());

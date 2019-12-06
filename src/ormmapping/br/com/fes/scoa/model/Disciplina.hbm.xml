@@ -17,6 +17,7 @@ License Type: Evaluation
 		<property name="codigo" column="codigo" unique="true" type="string" length="16" not-null="true" lazy="false"/>
 		<property name="nome" column="nome" type="string" length="255" not-null="true" lazy="false"/>
 		<property name="descricao" column="descricao" type="string" length="255" not-null="true" lazy="false"/>
+		<property name="creditos" column="creditos" type="integer" length="11" not-null="true" lazy="false"/>
 		<set name="ORM_Disciplina1" table="equivalencias" lazy="true" cascade="save-update,lock" inverse="true">
 			<key column="disciplina2_id" not-null="true"/>
 			<many-to-many column="disciplina1_id" class="br.com.fes.scoa.model.Disciplina">

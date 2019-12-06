@@ -1,11 +1,12 @@
 package br.com.fes.scoa.componente;
 
-import br.com.fes.scoa.model.Horariodeaula;
+import br.com.fes.scoa.Main;
 import br.com.fes.scoa.model.Professor;
 import br.com.fes.scoa.model.Turma;
+import br.com.fes.scoa.util.HorariodeaulaDAOHandler;
 import br.com.fes.scoa.util.ProfessorDAOHandler;
+import br.com.fes.scoa.util.SalaDAOHandler;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,12 +14,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
-import javafx.util.Callback;
 import org.orm.PersistentException;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class TurmasProfessorController implements Initializable {
@@ -62,53 +63,25 @@ public class TurmasProfessorController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        disciplinaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return new ReadOnlyStringWrapper(r.getValue().getDisciplina().getNome());
-            }
+        disciplinaCol.setCellValueFactory(param -> {return new ReadOnlyStringWrapper(param.getValue().getDisciplina().getNome());});
+        horaCol.setCellValueFactory(param -> {
+            return new ReadOnlyStringWrapper(Main.lineConcat(Stream.of(param.getValue().alocacao_sala_turma.toArray()).map(
+                    ast -> HorariodeaulaDAOHandler.horarioToString(ast.getHora())).collect(Collectors.toList())));
         });
-        salaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return new ReadOnlyStringWrapper("derp");
-            }
+        andarCol.setCellValueFactory(param -> {
+            return new ReadOnlyStringWrapper(Main.lineConcat(Stream.of(param.getValue().alocacao_sala_turma.toArray()).map(
+                    ast -> SalaDAOHandler.getAndar(ast.getSala().getCodLocalizacao())).collect(Collectors.toList())));
         });
-        predioCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return new ReadOnlyStringWrapper("derp");
-            }
+        salaNomeCol.setCellValueFactory(param -> {
+            return new ReadOnlyStringWrapper(Main.lineConcat(Stream.of(param.getValue().alocacao_sala_turma.toArray()).map(
+                    ast -> SalaDAOHandler.getSalaNome(ast.getSala().getCodLocalizacao())).collect(Collectors.toList())));
         });
-        andarCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return new ReadOnlyStringWrapper("derp");
-            }
-        });
-        salaNomeCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return new ReadOnlyStringWrapper("derp");
-            }
-        });
-        horaCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Turma, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Turma, String> r) {
-                return new ReadOnlyStringWrapper("derp");
-            }
+        predioCol.setCellValueFactory(param -> {
+            return new ReadOnlyStringWrapper(Main.lineConcat(Stream.of(param.getValue().alocacao_sala_turma.toArray()).map(
+                    ast -> SalaDAOHandler.getPredio(ast.getSala().getCodLocalizacao())).collect(Collectors.toList())));
         });
 
         atualizarLista();
-    }
-    
-    private String horaAsString(List<Horariodeaula> horarios) {
-    	StringBuilder sb = new StringBuilder();
-    	
-    	int i = 0;
-    	for (; i < horarios.size()-1; i++) {
-    		sb.append(horarios.get(i).toString());
-    		sb.append('\n');
-    	}
-    	if (horarios.size() > 0) {
-    		sb.append(horarios.get(i));
-    	}
-    	
-    	return sb.toString();
     }
 
     public void onRemoverSelecionados(ActionEvent actionEvent) {}

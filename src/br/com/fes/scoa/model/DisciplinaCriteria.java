@@ -27,6 +27,7 @@ public class DisciplinaCriteria extends AbstractORMCriteria {
 	public final StringExpression codigo;
 	public final StringExpression nome;
 	public final StringExpression descricao;
+	public final IntegerExpression creditos;
 	public final CollectionExpression disciplina1;
 	public final CollectionExpression disciplina;
 	public final CollectionExpression disciplina2;
@@ -43,6 +44,7 @@ public class DisciplinaCriteria extends AbstractORMCriteria {
 		codigo = new StringExpression("codigo", this);
 		nome = new StringExpression("nome", this);
 		descricao = new StringExpression("descricao", this);
+		creditos = new IntegerExpression("creditos", this);
 		disciplina1 = new CollectionExpression("ORM_Disciplina1", this);
 		disciplina = new CollectionExpression("ORM_Disciplina", this);
 		disciplina2 = new CollectionExpression("ORM_Disciplina2", this);

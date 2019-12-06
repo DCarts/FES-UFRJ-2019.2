@@ -39,4 +39,8 @@ public class HorariodeaulaDAOHandler {
 
         return horario;
     }
+
+    public static String horarioToString(Horariodeaula h) {
+        return h.getDia() + ", " + h.getHorarioInicio().toString() + " a " + h.getHorarioFim().toString() + ".";
+    }
 }

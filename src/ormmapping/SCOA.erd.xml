@@ -96,6 +96,17 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
+    <Column name="creditos">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
   </Entity>
   <Entity name="equivalencias" Unlogged="false" PKClustered="0">
     <Column name="disciplina1_id">
@@ -185,7 +196,7 @@
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
       <Type>27</Type>
-      <Length>14</Length>
+      <Length>20</Length>
       <Nullable>false</Nullable>
       <IDGenerator>native</IDGenerator>
       <Unique>true</Unique>
@@ -834,8 +845,13 @@
     </RefColumns>
   </ForeignKey>
   <Procedure name="validarCPF" function="true">
-    <CreateStmt>CREATE FUNCTION `validarCpf`(CPF CHAR(14)) RETURNS double DETERMINISTIC BEGIN DECLARE INDICE INT; DECLARE SOMA INT; DECLARE DIG1 INT; DECLARE DIG2 INT; DECLARE CPF_TEMP VARCHAR(11); DECLARE DIGITOS_IGUAIS CHAR(1); DECLARE RESULTADO CHAR(1); SET RESULTADO = FALSE; /* Verificando se os dígitos são iguais */ SET CPF_TEMP = SUBSTRING(CPF,1,1); SET INDICE = 1; SET DIGITOS_IGUAIS = 'S'; IF (LENGTH(CPF)&gt;11) THEN SET DIGITOS_IGUAIS = 'S'; ELSE SET DIG1=LENGTH(CPF); WHILE (DIG1&lt;=12) DO SET CPF=CONCAT("0",CPF); SET DIG1=DIG1+1; END WHILE; SET CPF=RIGHT(CPF,11); WHILE (INDICE &lt;= 11) DO IF (SUBSTRING(CPF,INDICE,1) &lt;&gt; CPF_TEMP) Then SET DIGITOS_IGUAIS = 'N'; END IF; SET INDICE = INDICE + 1; END WHILE; END IF; /*Caso os dígitos não sejam todos iguais Começo o calculo do dígitos*/ IF (DIGITOS_IGUAIS = 'N') THEN /*Cálculo do 1º dígito*/ SET SOMA = 0; SET INDICE = 1; WHILE (INDICE &lt;= 9) DO SET Soma = Soma + CAST(SUBSTRING(CPF,INDICE,1) AS UNSIGNED) * (11 - INDICE); SET INDICE = INDICE + 1; END WHILE; SET DIG1 = 11 - (SOMA % 11); IF (DIG1 &gt; 9) THEN SET DIG1 = 0; END IF; -- Cálculo do 2º dígito } SET SOMA = 0; SET INDICE = 1; WHILE (INDICE &lt;= 10) DO SET Soma = Soma + CAST(SUBSTRING(CPF,INDICE,1) AS UNSIGNED) * (12 - INDICE); SET INDICE = INDICE + 1; END WHILE; SET DIG2 = 11 - (SOMA % 11); IF DIG2 &gt; 9 THEN SET DIG2 = 0; END IF; -- Validando IF (DIG1 = SUBSTRING(CPF,LENGTH(CPF)-1,1)) AND (DIG2 = SUBSTRING(CPF,LENGTH(CPF),1)) THEN SET RESULTADO = TRUE; ELSE SET RESULTADO = FALSE; END IF; END IF; RETURN RESULTADO; END</CreateStmt>
+    <CreateStmt>CREATE FUNCTION `validarCpf`(CPF CHAR(20)) RETURNS double DETERMINISTIC BEGIN DECLARE INDICE INT; DECLARE SOMA INT; DECLARE DIG1 INT; DECLARE DIG2 INT; DECLARE CPF_TEMP VARCHAR(11); DECLARE DIGITOS_IGUAIS CHAR(1); DECLARE RESULTADO CHAR(1); SET RESULTADO = FALSE; /* Verificando se os dígitos são iguais */ SET CPF_TEMP = SUBSTRING(CPF,1,1); SET INDICE = 1; SET DIGITOS_IGUAIS = 'S'; IF (LENGTH(CPF)&gt;11) THEN SET DIGITOS_IGUAIS = 'S'; ELSE SET DIG1=LENGTH(CPF); WHILE (DIG1&lt;=12) DO SET CPF=CONCAT("0",CPF); SET DIG1=DIG1+1; END WHILE; SET CPF=RIGHT(CPF,11); WHILE (INDICE &lt;= 11) DO IF (SUBSTRING(CPF,INDICE,1) &lt;&gt; CPF_TEMP) Then SET DIGITOS_IGUAIS = 'N'; END IF; SET INDICE = INDICE + 1; END WHILE; END IF; /*Caso os dígitos não sejam todos iguais Começo o calculo do dígitos*/ IF (DIGITOS_IGUAIS = 'N') THEN /*Cálculo do 1º dígito*/ SET SOMA = 0; SET INDICE = 1; WHILE (INDICE &lt;= 9) DO SET Soma = Soma + CAST(SUBSTRING(CPF,INDICE,1) AS UNSIGNED) * (11 - INDICE); SET INDICE = INDICE + 1; END WHILE; SET DIG1 = 11 - (SOMA % 11); IF (DIG1 &gt; 9) THEN SET DIG1 = 0; END IF; -- Cálculo do 2º dígito } SET SOMA = 0; SET INDICE = 1; WHILE (INDICE &lt;= 10) DO SET Soma = Soma + CAST(SUBSTRING(CPF,INDICE,1) AS UNSIGNED) * (12 - INDICE); SET INDICE = INDICE + 1; END WHILE; SET DIG2 = 11 - (SOMA % 11); IF DIG2 &gt; 9 THEN SET DIG2 = 0; END IF; -- Validando IF (DIG1 = SUBSTRING(CPF,LENGTH(CPF)-1,1)) AND (DIG2 = SUBSTRING(CPF,LENGTH(CPF),1)) THEN SET RESULTADO = TRUE; ELSE SET RESULTADO = FALSE; END IF; END IF; RETURN RESULTADO; END</CreateStmt>
     <Parameter name="CPF " type="char" direction="in"/>
+  </Procedure>
+  <Procedure name="loga_usuario" function="true">
+    <CreateStmt>CREATE FUNCTION `loga_usuario`(pessoa_id INT(11), senha_digitada VARCHAR(255)) RETURNS double READS SQL DATA BEGIN DECLARE SENHA_DIGITADA_HASHED VARCHAR(255); DECLARE SENHA_REAL_HASHED VARCHAR(255); DECLARE SENHA_ESTA_CORRETA CHAR(1); SET SENHA_ESTA_CORRETA = FALSE; INSERT INTO SENHA_REAL_HASHED SELECT TO_BASE64(SHA2(senha, 256)) FROM pessoa WHERE id=pessoa_id; INSERT INTO SENHA_DIGITADA_HASHED SELECT TO_BASE64(SHA2(senha_digitada, 256)); -- Validando IF (SENHA_DIGITADA_HASHED = SENHA_REAL_HASHED) THEN SET SENHA_ESTA_CORRETA = TRUE; ELSE SET SENHA_ESTA_CORRETA = FALSE; END IF; RETURN SENHA_ESTA_CORRETA; END</CreateStmt>
+    <Parameter name="user_id" type="int" direction="in"/>
+    <Parameter name="senha" type="varchar" direction="in"/>
   </Procedure>
   <Trigger name="aloca_turma_pra_sala_test">
     <CreateStmt>CREATE TRIGGER aloca_turma_pra_sala_test BEFORE INSERT ON alocacao_sala_turma FOR EACH ROW BEGIN DECLARE temp_turmas_count_1 INT; DECLARE temp_turmas_count_2 INT; DECLARE new_periodo VARCHAR(255); DECLARE new_professor_id VARCHAR(255); DECLARE new_dia VARCHAR(255); DECLARE new_horastart time(6); DECLARE new_horaend time(6); CREATE TEMPORARY TABLE temp_turmas_1 (id int); CREATE TEMPORARY TABLE temp_turmas_2 (id int); SELECT dia INTO new_dia FROM horariodeaula WHERE id=new.hora_id; SELECT horarioInicio INTO new_horastart FROM horariodeaula WHERE id=new.hora_id; SELECT horarioFim INTO new_horaend FROM horariodeaula WHERE id=new.hora_id; SELECT periodo INTO new_periodo FROM turma WHERE id=new.turma_id; SELECT professor_id INTO new_professor_id FROM turma WHERE id=new.turma_id; INSERT INTO temp_turmas_1 SELECT turma_id FROM alocacao_sala_turma JOIN turma ON turma.id=turma_id JOIN horariodeaula as hora on hora.id = hora_id WHERE sala_id = new.sala_id AND dia=new_dia AND ((new_horastart &gt; hora.horarioInicio AND new_horastart &lt; hora.horarioFim) OR (new_horaend &gt; hora.horarioInicio AND new_horaend &lt; hora.horarioFim) OR (new_horastart &lt; hora.horarioInicio AND new_horaend &gt; hora.horarioFim)) AND periodo = new_periodo; SELECT count(*) INTO temp_turmas_count_1 FROM temp_turmas_1; INSERT INTO temp_turmas_2 SELECT turma_id FROM alocacao_sala_turma JOIN turma ON id=turma_id WHERE professor_id = new_professor_id AND dia=new_dia AND ((new_horastart &gt; hora.horarioInicio AND new_horastart &lt; hora.horarioFim) OR (new_horaend &gt; hora.horarioInicio AND new_horaend &lt; hora.horarioFim) OR (new_horastart &lt; hora.horarioInicio AND new_horaend &gt; hora.horarioFim)) AND periodo = new_periodo; SELECT count(*) INTO temp_turmas_count_2 FROM temp_turmas_2; DROP TEMPORARY TABLE temp_turmas_1; DROP TEMPORARY TABLE temp_turmas_2; IF temp_turmas_count_1 &gt; 0 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Esta sala já esta ocupada no horario desejado.'; END IF; IF temp_turmas_count_2 &gt; 0 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O professor da disciplina já esta ocupado no horario desejado.'; END IF; END</CreateStmt>

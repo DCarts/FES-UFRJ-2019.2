@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
-import java.util.Base64;
 import java.util.List;
 
 public class AlunoDAOHandler {
@@ -29,11 +28,16 @@ public class AlunoDAOHandler {
 
 		Date data_nascimento = Date.valueOf(str_data_nascimento);
 
-		byte[] encodedhash = null;
+		String hashed_pass;
 		try {
+			byte[] encodedhash = null;
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			encodedhash = digest.digest(
 					senha.getBytes(StandardCharsets.UTF_8));
+			StringBuilder sb = new StringBuilder(encodedhash.length * 2);
+			for(byte b: encodedhash)
+				sb.append(String.format("%02x", b));
+			hashed_pass = sb.toString();
 		} catch (NoSuchAlgorithmException e) {
 			throw new PersistentException(e);
 		}
@@ -44,7 +48,7 @@ public class AlunoDAOHandler {
 		pessoa.setCpf(cpf);
 		pessoa.setEndereco(endereco);
 		pessoa.setEmail(email);
-		pessoa.setSenha(Base64.getEncoder().encodeToString(encodedhash));
+		pessoa.setSenha(hashed_pass);
 
 		Aluno aluno = AlunoDAO.createAluno();
 		aluno.setPessoa(pessoa);
