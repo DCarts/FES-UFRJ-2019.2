@@ -22,9 +22,11 @@ import org.orm.PersistentException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 
 public class ListaDisciplinasController implements Initializable {
@@ -59,9 +61,14 @@ public class ListaDisciplinasController implements Initializable {
 
     private final boolean doSelect;
     private Disciplina selectedItem = null;
+    private List<Disciplina> selectedItems = new ArrayList<Disciplina>();
 
     public Disciplina getSelectedItem() {
         return selectedItem;
+    }
+
+    public List<Disciplina> getSelectedItems() {
+        return selectedItems;
     }
 
     public ListaDisciplinasController(boolean doSelect) {
@@ -79,8 +86,10 @@ public class ListaDisciplinasController implements Initializable {
         if (doSelect) {
             botaoRemover.setDisable(true);
             botaoRemover.setText("Selecionar");
+            tabela.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             tabela.getSelectionModel().selectedItemProperty().addListener((a, b, newSelection) -> {
                 selectedItem = newSelection;
+                selectedItems = new ArrayList<>(tabela.getSelectionModel().getSelectedItems());
                 if (newSelection != null) {
                     botaoRemover.setDisable(false);
                 }
